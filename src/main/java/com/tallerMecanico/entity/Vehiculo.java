@@ -3,6 +3,7 @@ package com.tallerMecanico.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -38,7 +39,7 @@ public class Vehiculo {
 	private String matricula;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "modeloId")
-	@JsonIgnore
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Modelo modelo;
 	private String anioModelo;
 	private String color;
