@@ -2,7 +2,6 @@ package com.tallerMecanico.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -42,7 +41,8 @@ public class Cliente {
     private Usuario usuario;
 	@OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "clienteId")
-	@JsonBackReference
+	// @JsonBackReference
+	@JsonManagedReference
     private List<Vehiculo> vehiculos;
 		
 }

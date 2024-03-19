@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,7 +44,7 @@ public class Usuario {
 	private List<Rol> rol = new ArrayList<>();
 	@OneToOne(mappedBy = "usuario")
 	@JsonBackReference
-    private Cliente cliente;
+	private Cliente cliente;
 	@OneToOne(mappedBy = "usuario")
     private Empleado empleado;
 }
