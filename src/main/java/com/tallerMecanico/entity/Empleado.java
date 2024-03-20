@@ -24,7 +24,7 @@ public class Empleado {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idEmpleado;
-	private String Nombre;
+	private String nombre;
 	private String apellidoPaterno;
 	private String apellidoMaterno;
 	private long nss;
