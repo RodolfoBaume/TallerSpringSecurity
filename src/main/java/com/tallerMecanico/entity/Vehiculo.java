@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,7 +40,8 @@ public class Vehiculo {
 	private Modelo modelo;
 	private String anioModelo;
 	private String color;
-	@Enumerated(EnumType.STRING)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "tipoMotorId")
 	private TipoMotor tipoMotor;
 	private String imagen;
 	@ManyToOne
@@ -53,5 +52,4 @@ public class Vehiculo {
 	@OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "vehiculoId")
     private List<OrdenServicio> ordenServicio;
-	
 }

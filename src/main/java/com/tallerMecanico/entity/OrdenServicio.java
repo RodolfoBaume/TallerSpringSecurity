@@ -41,8 +41,10 @@ public class OrdenServicio {
 	private String falla;
 	private String kilometraje;
 	private String observaciones;
+	
 	@Enumerated(EnumType.STRING)
 	private StatusServicio statusServicio;
+	
 	@OneToOne(mappedBy = "ordenServicio")
 	private Factura factura;
 	@ManyToOne(cascade = CascadeType.ALL)
