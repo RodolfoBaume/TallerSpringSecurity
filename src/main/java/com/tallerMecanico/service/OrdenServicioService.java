@@ -38,7 +38,7 @@ public class OrdenServicioService implements IOrdenServicioService {
 		ordenServicioEntity.setFalla(ordenServicio.falla());
 		ordenServicioEntity.setKilometraje(ordenServicio.kilometraje());
 		ordenServicioEntity.setObservaciones(ordenServicio.observaciones());
-		ordenServicioEntity.setStatusServicio(ordenServicio.statusServicio());
+		ordenServicioEntity.setEstatusServicio(ordenServicio.estatusServicio());
 		ordenServicioEntity.setVehiculo(ordenServicio.vehiculo());
 		return ordenServicioRepository.save(ordenServicioEntity);
 	}
@@ -58,7 +58,7 @@ public class OrdenServicioService implements IOrdenServicioService {
 		ordenServicioEntity.setFalla(ordenServicio.falla());
 		ordenServicioEntity.setKilometraje(ordenServicio.kilometraje());
 		ordenServicioEntity.setObservaciones(ordenServicio.observaciones());
-		ordenServicioEntity.setStatusServicio(ordenServicio.statusServicio());
+		ordenServicioEntity.setEstatusServicio(ordenServicio.estatusServicio());
 		ordenServicioEntity.setVehiculo(ordenServicio.vehiculo());
 		return ordenServicioRepository.save(ordenServicioEntity);
 	}
