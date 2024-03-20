@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
+import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.UsuarioDto;
 import com.tallerMecanico.entity.Usuario;
 
@@ -13,8 +14,7 @@ public interface IUsuarioService {
 	
 	Usuario findById(Long idUsuario);
 	
-	// Usuario createUsuario(UsuarioDto usuario);
-	ResponseEntity<String> registrarUsuario(UsuarioDto dtoRegistro, String role);
+	ResponseEntity<RegistroResponseDto> registrarUsuario(UsuarioDto dtoRegistro, String role);
 	
 	Usuario deleteUsuario(Long idUsuario);
 	

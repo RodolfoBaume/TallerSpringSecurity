@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.UsuarioDto;
 import com.tallerMecanico.entity.Usuario;
 import com.tallerMecanico.service.IUsuarioService;
@@ -110,7 +111,7 @@ public class UsuarioController {
 	
 	//Método para poder registrar usuarios con role "user"
     @PostMapping("/auth/register")
-    public ResponseEntity<String> registrarUsuario(@RequestBody UsuarioDto dtoRegistro,
+    public ResponseEntity<RegistroResponseDto> registrarUsuario(@RequestBody UsuarioDto dtoRegistro,
             @RequestParam String role) {
     	return usuarioService.registrarUsuario(dtoRegistro, role);
     }

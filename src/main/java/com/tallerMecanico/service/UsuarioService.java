@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.UsuarioDto;
 import com.tallerMecanico.entity.Rol;
 import com.tallerMecanico.entity.Usuario;
@@ -55,27 +56,26 @@ public class UsuarioService implements IUsuarioService {
 	}
 */
 	// register
-	public ResponseEntity<String> registrarUsuario(UsuarioDto dtoRegistro, String role) {
-		if (usuarioRepository.existsByEmail(dtoRegistro.email())) {
-			return new ResponseEntity<>("El usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<RegistroResponseDto> registrarUsuario(UsuarioDto dtoRegistro, String role) {
+	    if (usuarioRepository.existsByEmail(dtoRegistro.email())) {
+	        return new ResponseEntity<>(new RegistroResponseDto("El usuario ya existe, intenta con otro", null), HttpStatus.BAD_REQUEST);
+	    }
 
-		Usuario usuario = new Usuario();
-		usuario.setEmail(dtoRegistro.email()); 
-		usuario.setPassword(dtoRegistro.password());
-		//usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
+	    Usuario usuario = new Usuario();
+	    usuario.setEmail(dtoRegistro.email()); 
+	    usuario.setPassword(dtoRegistro.password());
 
-		Rol roles = rolRepository.findByNombre(role).orElse(null);
+	    Rol roles = rolRepository.findByNombre(role).orElse(null);
 
-		if (roles == null) {
-			return new ResponseEntity<>("Rol no válido", HttpStatus.BAD_REQUEST);
-		}
+	    if (roles == null) {
+	        return new ResponseEntity<>(new RegistroResponseDto("Rol no válido", null), HttpStatus.BAD_REQUEST);
+	    }
 
-		usuario.setRol(Collections.singletonList(roles)); 
-		usuarioRepository.save(usuario);
+	    usuario.setRol(Collections.singletonList(roles)); 
+	    usuarioRepository.save(usuario);
 
-		String mensaje = "Registro exitoso. ID del usuario: " + usuario.getIdUsuario();
-		return new ResponseEntity<>(mensaje, HttpStatus.OK);
+	    RegistroResponseDto responseDto = new RegistroResponseDto("Registro exitoso", usuario.getIdUsuario());
+	    return new ResponseEntity<>(responseDto, HttpStatus.OK);
 	}
 
 	
