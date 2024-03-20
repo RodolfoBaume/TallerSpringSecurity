@@ -74,7 +74,8 @@ public class UsuarioService implements IUsuarioService {
 		usuario.setRol(Collections.singletonList(roles)); 
 		usuarioRepository.save(usuario);
 
-		return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
+		String mensaje = "Registro exitoso. ID del usuario: " + usuario.getIdUsuario();
+		return new ResponseEntity<>(mensaje, HttpStatus.OK);
 	}
 
 	
