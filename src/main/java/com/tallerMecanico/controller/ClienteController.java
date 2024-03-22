@@ -21,10 +21,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.ClienteDto;
+import com.tallerMecanico.dto.RegistroResponseDto;
+import com.tallerMecanico.dto.RegistroUsuarioClienteDto;
 import com.tallerMecanico.entity.Cliente;
 import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.repository.IVehiculoRepository;
 import com.tallerMecanico.service.IClienteService;
+import com.tallerMecanico.service.IUsuarioService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -34,6 +37,8 @@ public class ClienteController {
 
 	@Autowired
 	private IClienteService clienteService;
+	@Autowired
+	private IUsuarioService usuarioService;
 
 	@Autowired
 	private IVehiculoRepository vehiculoRepository;
@@ -96,23 +101,33 @@ public class ClienteController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
+
 	// Crear
 	@PostMapping("/clientes")
 	public ResponseEntity<?> create(@RequestBody ClienteDto cliente) {
-		Cliente clienteNew = null;
-		Map<String, Object> response = new HashMap<>();
+	    Cliente clienteNew = null;
+	    Map<String, Object> response = new HashMap<>();
 
-		try {
-			clienteNew = this.clienteService.createCliente(cliente);
-		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al realizar el insert en base de datos");
-			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	    try {
+	        // Asegúrate de obtener el idUsuario necesario aquí (puedes obtenerlo de donde proceda)
+	        Long idUsuario = cliente.usuario() != null ? cliente.usuario().getIdUsuario() : null;
 
-		response.put("mensaje", "Cliente creado con éxito, con el ID " + clienteNew.getIdCliente());
-		response.put("Cliente", clienteNew);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	        // Verifica si se obtuvo correctamente el idUsuario antes de llamar al servicio
+	        if (idUsuario != null) {
+	            clienteNew = this.clienteService.createCliente(cliente, idUsuario);
+
+	            response.put("mensaje", "Cliente creado con éxito, con el ID " + clienteNew.getIdCliente());
+	            response.put("Cliente", clienteNew);
+	            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	        } else {
+	            response.put("mensaje", "Error: Falta el ID de usuario en el clienteDto enviado");
+	            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+	        }
+	    } catch (DataAccessException e) {
+	        response.put("mensaje", "Error al realizar el insert en la base de datos");
+	        response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
+	        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 	}
 
 	// Modificar
@@ -133,4 +148,35 @@ public class ClienteController {
 		response.put("cliente", clienteNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
+	
+	// registrar usuario cliente
+	@PostMapping("/registroUsuarioCliente")
+	public ResponseEntity<?> registrarUsuarioYCliente(@RequestBody RegistroUsuarioClienteDto registroDto) {
+	    Map<String, Object> response = new HashMap<>();
+
+	    try {
+	        ResponseEntity<RegistroResponseDto> registroUsuarioResponse = usuarioService.registrarUsuario(registroDto.getUsuario(), "CLIENTE");
+	        RegistroResponseDto usuarioResponse = registroUsuarioResponse.getBody();
+
+	        // Verificar si el ID de usuario no es nulo
+	        if (usuarioResponse != null && usuarioResponse.getIdUsuario() != null) {
+	            // Crear el cliente y asociarle el ID del usuario
+	            Long idUsuario = usuarioResponse.getIdUsuario();
+	            Cliente nuevoCliente = clienteService.createCliente(registroDto.getCliente(), idUsuario);
+
+	            response.put("mensaje", "Usuario y cliente creados con éxito");
+	            response.put("Usuario", usuarioResponse);
+	            response.put("Cliente", nuevoCliente);
+	            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	        } else {
+	            response.put("mensaje", "Error al obtener el ID de usuario desde la respuesta");
+	            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    } catch (DataAccessException e) {
+	        response.put("mensaje", "Error al realizar la operación en la base de datos");
+	        response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
+	        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+	
 }

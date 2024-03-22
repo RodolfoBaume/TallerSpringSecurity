@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tallerMecanico.dto.ClienteDto;
 import com.tallerMecanico.entity.Cliente;
+import com.tallerMecanico.entity.Usuario;
 import com.tallerMecanico.repository.IClienteRepository;
 
 @Service
@@ -32,17 +33,25 @@ public class ClienteService implements IClienteService {
 
 	// Crear
 	@Transactional
-	public Cliente createCliente(ClienteDto cliente) {
-		Cliente clienteEntity = new Cliente();
-		clienteEntity.setNombre(cliente.nombre());
-		clienteEntity.setApellidoPaterno(cliente.apellidoPaterno());
-		clienteEntity.setApellidoMaterno(cliente.apellidoMaterno());
-		clienteEntity.setDomicilio(cliente.domicilio());
-		clienteEntity.setTelefono(cliente.telefono());
-		clienteEntity.setVehiculos(cliente.vehiculos());
-		return clienteRepository.save(clienteEntity);
+	public Cliente createCliente(ClienteDto cliente, Long idUsuario) {
+	    Cliente clienteEntity = new Cliente();
+	    clienteEntity.setNombre(cliente.nombre());
+	    clienteEntity.setApellidoPaterno(cliente.apellidoPaterno());
+	    clienteEntity.setApellidoMaterno(cliente.apellidoMaterno());
+	    clienteEntity.setDomicilio(cliente.domicilio());
+	    clienteEntity.setTelefono(cliente.telefono());
+	    
+	    // Asignar el idUsuario al cliente
+	    Usuario usuario = new Usuario(); // Debes cargar el usuario del repositorio utilizando su id, o bien asegurarte de que el clienteDto contenga la información completa del usuario
+	    usuario.setIdUsuario(idUsuario);
+	    clienteEntity.setUsuario(usuario);
+
+	    clienteEntity.setVehiculos(cliente.vehiculos());
+	    
+	    return clienteRepository.save(clienteEntity);
 	}
 
+	
 	// Eliminar
 	public Cliente deleteCliente(Long idCliente) {
 		clienteRepository.deleteById(idCliente);

@@ -11,7 +11,7 @@ public interface IClienteService {
 	
 	Cliente findById(Long idCliente);
 	
-	Cliente createCliente(ClienteDto cliente);
+	Cliente createCliente(ClienteDto cliente, Long idUsuario);
 	
 	Cliente deleteCliente(Long idCliente);
 	

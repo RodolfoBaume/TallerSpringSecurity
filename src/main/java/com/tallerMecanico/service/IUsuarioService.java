@@ -19,4 +19,6 @@ public interface IUsuarioService {
 	Usuario deleteUsuario(Long idUsuario);
 	
 	Usuario updateUsuario(Long idUsuario, UsuarioDto usuario);
+	
+	
 }

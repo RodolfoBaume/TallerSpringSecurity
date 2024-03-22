@@ -65,20 +65,25 @@ public class UsuarioService implements IUsuarioService {
 	    usuario.setEmail(dtoRegistro.email()); 
 	    usuario.setPassword(dtoRegistro.password());
 
-	    Rol roles = rolRepository.findByNombre(role).orElse(null);
+	    Rol rol = rolRepository.findByNombre(role).orElse(null);
 
-	    if (roles == null) {
+	    if (rol == null) {
 	        return new ResponseEntity<>(new RegistroResponseDto("Rol no válido", null), HttpStatus.BAD_REQUEST);
 	    }
 
-	    usuario.setRol(Collections.singletonList(roles)); 
+	    usuario.setRol(Collections.singletonList(rol)); 
 	    usuarioRepository.save(usuario);
 
-	    RegistroResponseDto responseDto = new RegistroResponseDto("Registro exitoso", usuario.getIdUsuario());
-	    return new ResponseEntity<>(responseDto, HttpStatus.OK);
-	}
+	    // Obtener el usuario recién creado con ID generado
+	    Usuario usuarioGuardado = usuarioRepository.findByEmail(dtoRegistro.email());
 
-	
+	    if (usuarioGuardado != null) {
+	        RegistroResponseDto responseDto = new RegistroResponseDto("Registro exitoso", usuarioGuardado.getIdUsuario());
+	        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(new RegistroResponseDto("Error al obtener el ID del usuario", null), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
 	
 	// Eliminar
 	public Usuario deleteUsuario(Long idUsuario) {
