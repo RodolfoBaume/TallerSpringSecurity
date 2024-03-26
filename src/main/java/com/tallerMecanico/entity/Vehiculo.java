@@ -38,7 +38,7 @@ public class Vehiculo {
 	@JoinColumn(name = "modeloId")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Modelo modelo;
-	private String anioModelo;
+	private int anioModelo;
 	private String color;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "tipoMotorId")

@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.EmpleadoDto;
+import com.tallerMecanico.dto.RegistroResponseDto;
+import com.tallerMecanico.dto.RegistroUsuarioEmpleadoDto;
 import com.tallerMecanico.entity.Empleado;
 import com.tallerMecanico.service.IEmpleadoService;
+import com.tallerMecanico.service.IUsuarioService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -32,6 +35,8 @@ public class EmpleadoController {
 
 	@Autowired
 	private IEmpleadoService empleadoService;
+	@Autowired
+	private IUsuarioService usuarioService;
 
 	// Consulta todos
 	@GetMapping("/empleados")
@@ -61,47 +66,6 @@ public class EmpleadoController {
 		return new ResponseEntity<Empleado>(empleado, HttpStatus.OK);
 	}
 
-	// Eliminar por id
-	@DeleteMapping("/empleados/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id) {
-
-		Map<String, Object> response = new HashMap<>();
-
-		try {
-			Empleado empleadoDelete = this.empleadoService.findById(id);
-			if (empleadoDelete == null) {
-				response.put("mensaje", "Error al eliminar. La marca no existe en base de datos");
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-
-			empleadoService.deleteEmpleado(id);
-		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar en base de datos");
-			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		response.put("mensaje", "Cliente eliminado con éxito");
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
-	}
-
-	// Crear
-	@PostMapping("/empleados")
-	public ResponseEntity<?> create(@RequestBody EmpleadoDto empleado) {
-		Empleado empleadoNew = null;
-		Map<String, Object> response = new HashMap<>();
-
-		try {
-			empleadoNew = this.empleadoService.createEmpleado(empleado);
-		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al realizar el insert en base de datos");
-			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-		response.put("mensaje", "Empleado creado con éxito, con el ID " + empleadoNew.getIdEmpleado());
-		response.put("Empleado", empleadoNew);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
-	}
 
 	// Modificar
 	@PutMapping("/empleados/{id}")
@@ -121,4 +85,47 @@ public class EmpleadoController {
 		response.put("empleado", empleadoNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
+
+	// registrar usuario empleado
+	@PostMapping("/empleados")
+	public ResponseEntity<?> registrarUsuarioYEmpleado(@RequestBody RegistroUsuarioEmpleadoDto registroDto) {
+		Map<String, Object> response = new HashMap<>();
+
+		try {
+			ResponseEntity<RegistroResponseDto> registroUsuarioResponse = usuarioService
+					.registrarUsuario(registroDto.getUsuario(), "EMPLEADO");
+			RegistroResponseDto usuarioResponse = registroUsuarioResponse.getBody();
+
+			// Verificar si el ID de usuario no es nulo
+			if (usuarioResponse != null && usuarioResponse.getIdUsuario() != null) {
+				// Crear el empleado y asociarle el ID del usuario
+				Long idUsuario = usuarioResponse.getIdUsuario();
+				Empleado nuevoEmpleado = empleadoService.createEmpleado(registroDto.getEmpleado(), idUsuario);
+
+				response.put("mensaje", "Usuario y empleado creados con éxito");
+				response.put("Usuario", usuarioResponse);
+				response.put("Empleado", nuevoEmpleado);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+			} else {
+				response.put("mensaje", "Error al obtener el ID de usuario desde la respuesta");
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al realizar la operación en la base de datos");
+			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	// Eliminar empleado
+	@DeleteMapping("/empleados/{id}")
+	public ResponseEntity<String> eliminarEmpleado(@PathVariable Long id) {
+		try {
+			empleadoService.deleteEmpleado(id);
+			return new ResponseEntity<>("Empleado eliminado exitosamente", HttpStatus.OK);
+		} catch (Error e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}
+
 }

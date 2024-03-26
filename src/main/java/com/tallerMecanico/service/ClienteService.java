@@ -12,12 +12,16 @@ import com.tallerMecanico.dto.ClienteDto;
 import com.tallerMecanico.entity.Cliente;
 import com.tallerMecanico.entity.Usuario;
 import com.tallerMecanico.repository.IClienteRepository;
+import com.tallerMecanico.repository.IUsuarioRepository;
 
 @Service
 public class ClienteService implements IClienteService {
 
 	@Autowired
 	private IClienteRepository clienteRepository;
+	
+	@Autowired
+	private IUsuarioRepository usuarioRepository;
 
 	// Consulta todos
 	@Transactional(readOnly = true)
@@ -53,10 +57,39 @@ public class ClienteService implements IClienteService {
 
 	
 	// Eliminar
+	/*
 	public Cliente deleteCliente(Long idCliente) {
 		clienteRepository.deleteById(idCliente);
 		return null;
 	}
+	*/
+	
+	//Eliminar Cliente y usuario
+	@Transactional
+	public Cliente deleteCliente(Long idCliente) {
+        // Buscar el cliente por su ID
+        Cliente cliente = clienteRepository.findById(idCliente).orElse(null);
+        if (cliente == null) {
+            // Si el cliente no existe, retornar o manejar el caso según corresponda
+            return cliente;
+        }
+
+        // Obtener el usuario asociado al cliente
+        Usuario usuario = cliente.getUsuario();
+        if (usuario != null) {
+            // Eliminar los roles asignados al usuario
+            usuario.getRol().clear(); // Eliminar todos los roles asignados al usuario
+         // Guardar el usuario para que se actualicen las relaciones
+            usuarioRepository.save(usuario);
+            // Eliminar el usuario
+            usuarioRepository.delete(usuario);
+        }
+
+        // Ahora se puede eliminar el cliente
+        clienteRepository.delete(cliente);
+		return cliente;
+    }
+	
 
 	// Modificar
 	@Transactional
@@ -71,4 +104,5 @@ public class ClienteService implements IClienteService {
 		clienteEntity.setVehiculos(cliente.vehiculos());
 		return clienteRepository.save(clienteEntity);
 	}
+
 }

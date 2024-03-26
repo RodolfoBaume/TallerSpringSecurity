@@ -9,7 +9,7 @@ import com.tallerMecanico.entity.TipoMotor;
 import com.tallerMecanico.entity.Vehiculo;
 
 
-public record VehiculoDto(long idVehiculo, String vin, String matricula, Modelo modelo, String anioModelo, String color, TipoMotor tipoMotor, String imagen, Cliente cliente, List<OrdenServicio> ordenServicio) {
+public record VehiculoDto(long idVehiculo, String vin, String matricula, Modelo modelo, int anioModelo, String color, TipoMotor tipoMotor, String imagen, Cliente cliente, List<OrdenServicio> ordenServicio) {
 
 	public VehiculoDto(Vehiculo vehiculo) {
 		this(vehiculo.getIdVehiculo(), vehiculo.getVin(), vehiculo.getMatricula(), vehiculo.getModelo(), vehiculo.getAnioModelo(), vehiculo.getColor(), vehiculo.getTipoMotor(), vehiculo.getImagen(), vehiculo.getCliente(),vehiculo.getOrdenServicio());

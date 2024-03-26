@@ -37,11 +37,9 @@ public class Cliente {
 	private String telefono;
 	@OneToOne
     @JoinColumn(name = "usuario_id")
-	@JsonManagedReference
     private Usuario usuario;
 	@OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "clienteId")
-	// @JsonBackReference
 	@JsonManagedReference
     private List<Vehiculo> vehiculos;
 		

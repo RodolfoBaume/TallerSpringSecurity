@@ -11,7 +11,7 @@ public interface IEmpleadoService {
 	
 	Empleado findById(Long idEmpleado);
 	
-	Empleado createEmpleado(EmpleadoDto empleado);
+	Empleado createEmpleado(EmpleadoDto empleado, Long idUsuario);
 	
 	Empleado deleteEmpleado(Long idEmpleado);
 	

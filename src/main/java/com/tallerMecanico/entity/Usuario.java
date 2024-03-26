@@ -3,8 +3,7 @@ package com.tallerMecanico.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,8 +42,9 @@ public class Usuario {
 	, inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id_rol"))
 	private List<Rol> rol = new ArrayList<>();
 	@OneToOne(mappedBy = "usuario")
-	@JsonBackReference
+    @JsonIgnore
 	private Cliente cliente;
 	@OneToOne(mappedBy = "usuario")
+    @JsonIgnore
     private Empleado empleado;
 }

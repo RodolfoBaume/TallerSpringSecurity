@@ -79,6 +79,7 @@ public class ClienteController {
 
 
 	// Eliminar por id
+	/*
 	@DeleteMapping("/clientes/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 
@@ -100,9 +101,11 @@ public class ClienteController {
 		response.put("mensaje", "Cliente eliminado con éxito");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-
+*/
+	
 
 	// Crear
+	/*
 	@PostMapping("/clientes")
 	public ResponseEntity<?> create(@RequestBody ClienteDto cliente) {
 	    Cliente clienteNew = null;
@@ -129,7 +132,8 @@ public class ClienteController {
 	        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
-
+*/
+	
 	// Modificar
 	@PutMapping("/clientes/{id}")
 	public ResponseEntity<?> modify(@PathVariable Long id, @RequestBody ClienteDto cliente) {
@@ -149,8 +153,10 @@ public class ClienteController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
+	// crear Cliente
 	// registrar usuario cliente
-	@PostMapping("/registroUsuarioCliente")
+	//@PostMapping("/registroUsuarioCliente")
+	@PostMapping("/clientes")
 	public ResponseEntity<?> registrarUsuarioYCliente(@RequestBody RegistroUsuarioClienteDto registroDto) {
 	    Map<String, Object> response = new HashMap<>();
 
@@ -179,4 +185,15 @@ public class ClienteController {
 	    }
 	}
 	
+	
+	//Eliminar cliente
+	@DeleteMapping("/clientes/{id}")
+    public ResponseEntity<String> eliminarCliente(@PathVariable Long id) {
+        try {
+            clienteService.deleteCliente(id);
+            return new ResponseEntity<>("Cliente eliminado exitosamente", HttpStatus.OK);
+        } catch (Error e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }

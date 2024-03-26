@@ -29,7 +29,7 @@ public class Empleado {
 	private String apellidoMaterno;
 	private long nss;
 	private String curp;
-	private String RFC;
+	private String rfc;
 	private String puesto;
 	private String observaciones;
 	@OneToOne
