@@ -6,6 +6,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.EstatusServicioDto;
 import com.tallerMecanico.entity.EstatusServicio;
-import com.tallerMecanico.service.IEstatusServicioService;
+import com.tallerMecanico.service.EstatusServicioService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -31,13 +35,20 @@ import com.tallerMecanico.service.IEstatusServicioService;
 public class EstatusServicioController {
 
 	@Autowired
-	private IEstatusServicioService estatusServicioService;
+	private EstatusServicioService estatusServicioService;
 
 	// Consulta todos
 	@GetMapping("/estatusServicios")
 	@ResponseStatus(HttpStatus.OK)
 	public List<EstatusServicio> consulta() {
 		return estatusServicioService.findAll();
+	}
+
+	// Consulta paginación
+	@GetMapping("/estatusServicios/page/{page}")
+	public Page<EstatusServicio> consultaPage(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idEstatusServicio").ascending());
+		return estatusServicioService.findAllPage(pageable);
 	}
 
 	// Consulta por id
@@ -98,7 +109,8 @@ public class EstatusServicioController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "Estatus Servicio creado con éxito, con el ID " + estatusServicioNew.getIdEstatusServicio());
+		response.put("mensaje",
+				"Estatus Servicio creado con éxito, con el ID " + estatusServicioNew.getIdEstatusServicio());
 		response.put("Estatus Servicio", estatusServicioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
@@ -117,7 +129,8 @@ public class EstatusServicioController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "Estatus Servicio modificado con éxito, con el ID " + estatusServicioNew.getIdEstatusServicio());
+		response.put("mensaje",
+				"Estatus Servicio modificado con éxito, con el ID " + estatusServicioNew.getIdEstatusServicio());
 		response.put("Estatus Servicio", estatusServicioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}

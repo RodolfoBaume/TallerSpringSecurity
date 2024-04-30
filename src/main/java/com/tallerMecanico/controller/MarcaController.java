@@ -6,6 +6,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +28,7 @@ import com.tallerMecanico.dto.MarcaDto;
 import com.tallerMecanico.entity.Marca;
 import com.tallerMecanico.entity.Modelo;
 import com.tallerMecanico.repository.IModeloRepository;
-import com.tallerMecanico.service.IMarcaService;
+import com.tallerMecanico.service.MarcaService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -33,7 +37,7 @@ import com.tallerMecanico.service.IMarcaService;
 public class MarcaController {
 
 	@Autowired
-	private IMarcaService marcaService;
+	private MarcaService marcaService;
 	@Autowired
 	private IModeloRepository modeloRepository;
 
@@ -42,6 +46,13 @@ public class MarcaController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<Marca> consulta() {
 		return marcaService.findAll();
+	}
+
+	// Consulta paginación
+	@GetMapping("/marcas/page/{page}")
+	public Page<Marca> consultaPage(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idMarca").ascending());
+		return marcaService.findAllPage(pageable);
 	}
 
 	// Consulta por id
@@ -64,13 +75,13 @@ public class MarcaController {
 		}
 		return new ResponseEntity<Marca>(marca, HttpStatus.OK);
 	}
-	
+
 	// Consultar los modelos por marca
 	@GetMapping("marcas/{idMarca}/modelos")
-    public List<Modelo> getModelosByMarca(@PathVariable Long idMarca) {
-        return modeloRepository.findByMarca_IdMarca(idMarca);
-    }
-	
+	public List<Modelo> getModelosByMarca(@PathVariable Long idMarca) {
+		return modeloRepository.findByMarca_IdMarca(idMarca);
+	}
+
 	// Eliminar por id
 	@DeleteMapping("/marcas/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {

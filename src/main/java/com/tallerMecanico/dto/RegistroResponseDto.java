@@ -1,15 +1,6 @@
 package com.tallerMecanico.dto;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class RegistroResponseDto {
 
 	private String mensaje;
@@ -19,4 +10,21 @@ public class RegistroResponseDto {
         this.mensaje = mensaje;
         this.idUsuario = idUsuario;
     }
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+
+	public Long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+    
 }

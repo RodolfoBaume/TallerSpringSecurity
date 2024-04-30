@@ -6,6 +6,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.RolDto;
 import com.tallerMecanico.entity.Rol;
-import com.tallerMecanico.service.IRolService;
+import com.tallerMecanico.service.RolService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -31,13 +35,20 @@ import com.tallerMecanico.service.IRolService;
 public class RolController {
 
 	@Autowired
-	private IRolService rolService;
+	private RolService rolService;
 
 	// Consulta todos
 	@GetMapping("/roles")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Rol> consulta() {
 		return rolService.findAll();
+	}
+
+	// Consulta paginación
+	@GetMapping("/roles/page/{page}")
+	public Page<Rol> consultaPage(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idRol").ascending());
+		return rolService.findAllPage(pageable);
 	}
 
 	// Consulta por id
@@ -60,7 +71,6 @@ public class RolController {
 		}
 		return new ResponseEntity<Rol>(rol, HttpStatus.OK);
 	}
-
 
 	// Eliminar por id
 	@DeleteMapping("/roles/{id}")

@@ -6,6 +6,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.TipoMotorDto;
 import com.tallerMecanico.entity.TipoMotor;
-import com.tallerMecanico.service.ITipoMotorService;
+import com.tallerMecanico.service.TipoMotorService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -31,13 +35,20 @@ import com.tallerMecanico.service.ITipoMotorService;
 public class TipoMotorController {
 
 	@Autowired
-	private ITipoMotorService tipoMotorService;
+	private TipoMotorService tipoMotorService;
 
 	// Consulta todos
 	@GetMapping("/tiposMotor")
 	@ResponseStatus(HttpStatus.OK)
 	public List<TipoMotor> consulta() {
 		return tipoMotorService.findAll();
+	}
+
+	// Consulta paginación
+	@GetMapping("/tiposMotor/page/{page}")
+	public Page<TipoMotor> consultaPage(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idTipoMotor").ascending());
+		return tipoMotorService.findAllPage(pageable);
 	}
 
 	// Consulta por id

@@ -1,0 +1,499 @@
+id_modelo,marca_id,modelo
+1,1,INTEGRA
+2,1,Mdx
+3,1,NSX
+4,1,Rdx
+5,1,TLX
+6,2,Giulia
+7,2,Stelvio
+8,2,TONALE
+9,3,A1*
+10,3,A3-
+11,3,A4
+12,3,A5 Coupe
+13,3,A5 Sportback
+14,3,A6
+15,3,A7
+16,3,A8
+17,3,e-tron
+18,3,Q 3
+19,3,Q2
+20,3,Q3 SB
+21,3,Q5
+22,3,Q7-
+23,3,Q8
+24,3,R8
+25,4,Bentayga
+26,5,iX
+27,5,iX1
+28,5,iX3
+29,5,i4
+30,5,i5
+31,5,Serie 1 Hatch
+32,5,Serie 2
+33,5,Serie 3
+34,5,Serie 4
+35,5,Serie 5
+36,5,Serie 7
+37,5,Serie 8
+38,5,XM
+39,5,X1
+40,5,X2
+41,5,X3
+42,5,X4
+43,5,X5
+44,5,X6
+45,5,X7
+46,5,Z4-
+47,6,Arrizo 8
+48,6,Tiggo 2
+49,6,Tiggo 4
+50,6,Tiggo 7
+51,6,Tiggo 8
+52,6,Tiggo 8 Pro e+
+53,7,Attitude
+54,7,Challenger
+55,7,Charger
+56,7,Crew Cab-
+57,7,Durango
+58,7,Grand Cherokee
+59,7,Jeep Compass
+60,7,Jeep Compass-
+61,7,Journey
+62,7,JT 
+63,7,Promaster
+64,7,Promaster Rapid
+65,7,RAM 4000
+66,7,RAM 700
+67,7,Renegade
+68,7,Wagoneer
+69,7,Wrangler
+70,8,Argo
+71,8,Ducato
+72,8,FASTBACK
+73,8,Mobi
+74,8,Pulse
+75,9,Bronco
+76,9,Bronco Sport
+77,9,Edge
+78,9,Escape HEV
+79,9,E-Transit
+80,9,Expedition
+81,9,Explorer
+82,9,F 250 Super Duty
+83,9,F-350
+84,9,F-450
+85,9,F-550
+86,9,Lobo Crew Cab
+87,9,Maverick
+88,9,Mustang
+89,9,Mustang Mach-E
+90,9,New F150 / F-150
+91,9,Ranger
+92,9,Territory
+93,9,Transit
+94,9,Transit Courier
+95,10,Acadia
+96,10,Ats 4p
+97,10,Avalanche UUV
+98,10,Aveo
+99,10,Aveo-
+100,10,Aveo HB
+101,10,Beat
+102,10,Beat 4 PTAS.
+103,10,Blazer
+104,10,Bolt
+105,10,Bolt EUV
+106,10,Camaro
+107,10,Camaro Convertible
+108,10,Canyon Crew Cab 4x4
+109,10,Captiva Sport
+110,10,Captiva SUV
+111,10,Cavalier 4 Ptas
+112,10,Chevrolet Express Cargo Van
+113,10,Chevrolet Express Cutaway
+114,10,Chevrolet Express Passenger Van
+115,10,Chevy 3 Ptas
+116,10,Chevy 4 PTAS
+117,10,Cheyenne  Doble Cabina
+118,10,Cheyenne Cabina Regular
+119,10,Cheyenne Doble Cabina
+120,10,Colorado Doble Cabina
+121,10,Corvette
+122,10,Corvette 2  Pts. Convertible
+123,10,Cruze 4 PTAS-
+124,10,Cruze 4 Ptas
+125,10,Cruze 5 Ptas
+126,10,Cts 2 Ptas
+127,10,Cts 4 Ptas
+128,10,Enclave
+129,10,Encore
+130,10,Envision SUV
+131,10,Envista SUV
+132,10,Epica
+133,10,Equinox EV
+134,10,Equinox SUV-
+135,10,Equinox Suv
+136,10,Escalade ESV SUV AWD
+137,10,Escalade ESV SUV AWD
+138,10,Escalade EXT UUV 4X4
+139,10,Escalade Suv
+140,10,GMC Sierra Cabina Regular
+141,10,GMC Sierra Doble Cabina
+142,10,Groove SUV
+143,10,"Kodiak Chassis Cab Class 7 PBV33,000"
+144,10,Lacrosse
+145,10,Lyriq SUV 
+146,10,Malibu 4 Ptas
+147,10,Matiz 5 Ptas
+148,10,Montana Crew Cab
+149,10,Onix
+150,10,Onix
+151,10,Regal
+152,10,Sierra Cabina Regular
+153,10,Sierra Doble Cabina
+154,10,Sierra Doble Cabina
+155,10,Silverado Cabina Regular
+156,10,Silverado Cabina Regular
+157,10,Silverado Doble Cabina
+158,10,Silverado 1500 Cabina Regular
+159,10,Silverado 1500 Cabina Regular-
+160,10,Silverado 2500 Cabina Extendida
+161,10,Silverado 2500 Cabina Regular
+162,10,Silverado 2500 Cabina Regular-
+163,10,Silverado 2500 Doble Cabina-
+164,10,Silverado 3500 Chassis Cab
+165,10,Silverado 3500 HD Chassis Cab Heavy Duty
+166,10,Sonic-
+167,10,Sonic 5 PTS
+168,10,Sonic 5 PTS-
+169,10,Spark
+170,10,Spark EV 5 Ptas.
+171,10,Spark NG
+172,10,SRX SUV-
+173,10,Suburban Suv
+174,10,S10
+175,10,S10 Max Cabina Regular
+176,10,S10 Max Chassis
+177,10,S10 Max Doble Cabina
+178,10,Tahoe
+179,10,Terrain SUV-
+180,10,Terrain Suv
+181,10,Tornado Pickup
+182,10,Tornado Van
+183,10,Tracker
+184,10,Traverse Suv
+185,10,Trax
+186,10,Verano
+187,10,Volt 4 Ptas.
+188,10,Xt4 Suv
+189,10,XT5 SUV
+190,10,Yukon Suv
+191,10,Yukon XL
+192,11,Accord-
+193,11,BR-V
+194,11,Civic
+195,11,CR-V
+196,11,Honda City
+197,11,Honda Pilot
+198,11,HR-V-
+199,11,Insight Hybrid
+200,11,Odyssey
+201,12,Accent Hatchback
+202,12,Accent Sedan
+203,12,Creta
+204,12,Elantra
+205,12,Genesis
+206,12,Grand I10
+207,12,Grand I10 Sedán
+208,12,HB20 HATCHBACK
+209,12,HB20 SEDAN
+210,12,Ioniq
+211,12,IX35
+212,12,Palisade
+213,12,Santa Fe
+214,12,Santa FE 7 P
+215,12,Sonata
+216,12,Starex
+217,12,Tucson
+218,12,Veloster
+219,13,Infiniti
+220,13,QX30
+221,13,QX50
+222,13,QX55
+223,13,QX60
+224,13,QX70
+225,13,QX80
+226,13,Q50
+227,13,Q60
+228,13,Q70
+229,14,ELF 200
+230,14,ELF 300
+231,14,ELF100
+232,15,E J7
+233,15,E SUNRAY
+234,15,E Sunray City
+235,15,E X350
+236,15,E 10X
+237,15,ESei4 Pro
+238,15,Frison
+239,15,J7
+240,15,Sei2
+241,15,Sei4 Pro
+242,15,Sei6 Pro
+243,15,SEI7 PRO
+244,15,SUNRAY
+245,15,X 200
+246,15,X250
+247,15,X350
+248,16,F-Pace
+249,16,F-Type
+250,17,EV6
+251,17,Forte
+252,17,Forte-
+253,17,Forte Hatchback
+254,17,KIA K3 Hatchback
+255,17,KIA K3 Sedán
+256,17,KIA Niro
+257,17,Kia Río Hatchback-
+258,17,KIA Río Sedan-
+259,17,Seltos
+260,17,Seltos-
+261,17,Sorento
+262,17,Soul
+263,17,SPORTAGE
+264,17,Stinger
+265,18,Defender
+266,18,Discovery Sport
+267,18,Range Rover
+268,18,Range Rover Evoque
+269,18,Range Rover Sport
+270,18,Range Rover Velar
+271,19,ES
+272,19,IS
+273,19,LC
+274,19,LS
+275,19,LX
+276,19,NX
+277,19,RX
+278,19,TX
+279,19,UX
+280,20,AVIATOR
+281,20,Aviator Grand Touring
+282,20,Corsair
+283,20,NAUTILUS
+284,20,Navigator
+285,21,CX-3
+286,21,CX-3
+287,21,CX-30
+288,21,CX-5
+289,21,CX-50
+290,21,Cx-7
+291,21,CX-9
+292,21,CX-90
+293,21,Mazda 2
+294,21,Mazda 2 Hatchback
+295,21,Mazda 2 Sedán
+296,21,Mazda 3 Hatchback
+297,21,Mazda 3 Hatchback
+298,21,Mazda 3 Sedán
+299,21,Mazda 3 Sedán-
+300,21,Mazda 5
+301,21,Mazda 6
+302,21,Mx-5
+303,22,AMG GT
+304,22,CLA
+305,22,Clase A hatchback
+306,22,Clase A Sedan
+307,22,Clase C coupe
+308,22,Clase C Sedan
+309,22,Clase E coupe
+310,22,Clase E sedan
+311,22,Clase G
+312,22,Clase GLE
+313,22,Clase GLS
+314,22,Clase S coupe
+315,22,Clase S sedan
+316,22,Clase SL
+317,22,Clase V
+318,22,CLS
+319,22,EQA
+320,22,EQB
+321,22,EQC
+322,22,EQE
+323,22,EQE SUV
+324,22,EQS
+325,22,EQS SUV
+326,22,GLA
+327,22,GLB
+328,22,GLC
+329,22,SLC
+330,22,Sprinter
+331,23,eHS
+332,23,GT
+333,23,HS
+334,23,MG One
+335,23,MG5
+336,23,RX5
+337,23,RX8
+338,23,ZS
+339,23,ZSEV
+340,24,MINI CLUBMAN
+341,24,MINI CONVERTIBLE
+342,24,MINI COUNTRYMAN
+343,24,MINI E
+344,24,MINI 3 PTAS
+345,24,MINI 5 PTAS
+346,25,L200
+347,25,Mirage G4
+348,25,Montero Sport
+349,25,Outlander PHEV
+350,25,Xpander
+351,26,BAIC BJ40
+352,26,BAIC D20
+353,26,BAIC X35
+354,26,BAIC X55
+355,26,CHANGAN ALSVIN
+356,26,CHANGAN CS35PLUS
+357,26,CHANGAN CS55PLUS
+358,26,CHANGAN UNI-K 
+359,26,DFSK E5
+360,26,DFSK 500
+361,26,DFSK 600
+362,26,JMC VIGUS
+363,27,Altima
+364,27,Armada
+365,27,Cabstar Mediano
+366,27,Frontier V6
+367,27,GT-R
+368,27,Juke
+369,27,Kicks
+370,27,Leaf
+371,27,March
+372,27,Maxima
+373,27,Murano
+374,27,Note
+375,27,NP300
+376,27,NV 200 Cargo
+377,27,NV 200 NY TAXI
+378,27,NV2500 V6 Toldo Alto
+379,27,Pathfinder
+380,27,Sentra
+381,27,Tiida Sedan
+382,27,Titan
+383,27,Urvan Panel
+384,27,Urvan Pasajeros
+385,27,Versa
+386,27,Xtrail
+387,27,Z
+388,27,370 Z
+389,28,C5
+390,28,O5
+391,29,E-Partner
+392,29,Expert Cargo Van
+393,29,LANDTREK
+394,29,Manager Hdi
+395,29,Partner
+396,29,RIFTER
+397,29,2008
+398,29,3008
+399,30,Cayenne
+400,30,Cayman
+401,30,Macan
+402,30,Panamera
+403,30,Taycan
+404,30,718 Boxster
+405,30,911 Carrera / Turbo / GT
+406,31,Duster
+407,31,Kangoo
+408,31,Koleos
+409,31,Kwid
+410,31,Kwid e-Tech
+411,31,Logan
+412,31,Oroch
+413,31,Stepway
+414,32,Arona
+415,32,Ateca
+416,32,CUPRA Formentor
+417,32,Ibiza 4 Ptas
+418,32,Leon
+419,32,Tarraco
+420,33,Crosstrek
+421,33,Crosstrek MHEV
+422,33,Forester
+423,33,Outback
+424,33,Subaru BRZ
+425,33,WRX
+426,33,WRX STI
+427,33,XV
+428,34,Baleno
+429,34,Ciaz
+430,34,Ertiga
+431,34,FRONX
+432,34,Grand Vitara
+433,34,Ignis
+434,34,JIMNY
+435,34,S Cross
+436,34,Swift
+437,35,Avanza
+438,35,Camry
+439,35,C-HR
+440,35,Corolla
+441,35,Corolla Cross
+442,35,GR Supra
+443,35,GR Yaris
+444,35,Hiace P
+445,35,Hiace V
+446,35,Highlander
+447,35,Hilux Dc
+448,35,Lcruiser
+449,35,Prius
+450,35,Prius-C
+451,35,RAIZE
+452,35,Rav4
+453,35,Sequoia
+454,35,Sienna
+455,35,Tacoma
+456,35,Tacoma-
+457,35,Tundra
+458,35,Yaris Hatchback
+459,35,Yaris Sedan
+460,35,Yaris-R
+461,36,Amarok
+462,36,Beetle
+463,36,Beetle Cabrio
+464,36,Crafter
+465,36,Crafter chasis
+466,36,Cross Sport
+467,36,Crossfox
+468,36,e-Crafter
+469,36,Gol
+470,36,Gol Sedan
+471,36,Golf
+472,36,Golf-
+473,36,Golf Variant-/Crossgolf
+474,36,GTI
+475,36,Jetta
+476,36,Nivus
+477,36,Nuevo Jetta
+478,36,Nuevo Jetta TDI
+479,36,Passat
+480,36,Polo 4 Ptas
+481,36,Polo 4 Ptas
+482,36,Saveiro
+483,36,Taigun
+484,36,Taos
+485,36,T-Cross
+486,36,Teramont
+487,36,Tiguan-
+488,36,Touareg
+489,36,Transporter Carga
+490,36,Transporter Pasajeros
+491,36,UP!
+492,36,Vento
+493,36,Virtus
+494,36,Volkswagen Caddy
+495,37,C40
+496,37,XC40
+497,37,XC60 II
+498,37,XC90 II

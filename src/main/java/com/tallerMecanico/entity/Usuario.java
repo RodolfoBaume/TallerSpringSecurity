@@ -17,17 +17,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
@@ -35,9 +25,9 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usuario")
 	private long idUsuario;
-	private String email;
+	private String username;
 	private String password;
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
 	, inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id_rol"))
 	private List<Rol> rol = new ArrayList<>();
@@ -47,4 +37,69 @@ public class Usuario {
 	@OneToOne(mappedBy = "usuario")
     @JsonIgnore
     private Empleado empleado;
+	
+	
+	public Usuario() {
+		super();
+	}
+
+	public Usuario(long idUsuario, String username, String password, List<Rol> rol, Cliente cliente,
+			Empleado empleado) {
+		super();
+		this.idUsuario = idUsuario;
+		this.username = username;
+		this.password = password;
+		this.rol = rol;
+		this.cliente = cliente;
+		this.empleado = empleado;
+	}
+
+	public long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public List<Rol> getRol() {
+		return rol;
+	}
+
+	public void setRol(List<Rol> rol) {
+		this.rol = rol;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public Empleado getEmpleado() {
+		return empleado;
+	}
+
+	public void setEmpleado(Empleado empleado) {
+		this.empleado = empleado;
+	}	
+	
 }

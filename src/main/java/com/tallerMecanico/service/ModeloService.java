@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,12 @@ public class ModeloService implements IModeloService {
 		return (List<Modelo>) modeloRepository.findAll(Sort.by("idModelo"));
 	}
 
+	// consulta todos para paginación
+	@Transactional(readOnly = true)
+	public Page<Modelo> findAllPage(Pageable pageable) {
+		return modeloRepository.findAll(pageable);
+	}
+
 	// consulta por id
 	@Transactional(readOnly = true)
 	public Modelo findById(Long idModelo) {
@@ -35,6 +43,7 @@ public class ModeloService implements IModeloService {
 	public Modelo createModelo(ModeloDto modelo) {
 		Modelo modeloEntity = new Modelo();
 		modeloEntity.setModelo(modelo.modelo());
+		modeloEntity.setMarca(modelo.marca());
 		return modeloRepository.save(modeloEntity);
 	}
 
@@ -50,6 +59,7 @@ public class ModeloService implements IModeloService {
 		Modelo modeloEntity = modeloRepository.findById(idModelo)
 				.orElseThrow(() -> new NoSuchElementException("Modelo no encontrado con el ID: " + idModelo));
 		modeloEntity.setModelo(modelo.modelo());
+		modeloEntity.setMarca(modelo.marca());
 		return modeloRepository.save(modeloEntity);
 	}
 }

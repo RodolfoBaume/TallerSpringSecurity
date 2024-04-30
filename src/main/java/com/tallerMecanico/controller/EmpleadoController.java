@@ -6,6 +6,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,8 +28,8 @@ import com.tallerMecanico.dto.EmpleadoDto;
 import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.RegistroUsuarioEmpleadoDto;
 import com.tallerMecanico.entity.Empleado;
-import com.tallerMecanico.service.IEmpleadoService;
-import com.tallerMecanico.service.IUsuarioService;
+import com.tallerMecanico.service.EmpleadoService;
+import com.tallerMecanico.service.UsuarioAuthService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -34,15 +38,22 @@ import com.tallerMecanico.service.IUsuarioService;
 public class EmpleadoController {
 
 	@Autowired
-	private IEmpleadoService empleadoService;
+	private EmpleadoService empleadoService;
 	@Autowired
-	private IUsuarioService usuarioService;
+	private UsuarioAuthService usuarioService;
 
 	// Consulta todos
 	@GetMapping("/empleados")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Empleado> consulta() {
 		return empleadoService.findAll();
+	}
+
+	// Consulta paginación
+	@GetMapping("/empleados/page/{page}")
+	public Page<Empleado> consultaPage(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idEmpleado").ascending());
+		return empleadoService.findAllPage(pageable);
 	}
 
 	// Consulta por id
@@ -65,7 +76,6 @@ public class EmpleadoController {
 		}
 		return new ResponseEntity<Empleado>(empleado, HttpStatus.OK);
 	}
-
 
 	// Modificar
 	@PutMapping("/empleados/{id}")
@@ -107,7 +117,7 @@ public class EmpleadoController {
 				response.put("Empleado", nuevoEmpleado);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 			} else {
-				response.put("mensaje", "Error al obtener el ID de usuario desde la respuesta");
+				response.put("mensaje", "Error al obtener el ID de usuario desde la respuesta, " + usuarioResponse.getMensaje());
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		} catch (DataAccessException e) {
@@ -119,12 +129,16 @@ public class EmpleadoController {
 
 	// Eliminar empleado
 	@DeleteMapping("/empleados/{id}")
-	public ResponseEntity<String> eliminarEmpleado(@PathVariable Long id) {
+	public ResponseEntity<?> eliminarEmpleado(@PathVariable Long id) {
+		Map<String, Object> response = new HashMap<>();
+		
 		try {
 			empleadoService.deleteEmpleado(id);
-			return new ResponseEntity<>("Empleado eliminado exitosamente", HttpStatus.OK);
+			response.put("mensaje", "Registro Eliminado");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		} catch (Error e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+			response.put("mensaje", "Error al realizar la operación en la base de datos");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 	}
 

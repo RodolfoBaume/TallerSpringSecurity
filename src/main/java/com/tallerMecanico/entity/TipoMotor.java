@@ -5,17 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
+
 @Entity
 @Table(name = "tipoMotor")
 public class TipoMotor {
@@ -23,4 +14,31 @@ public class TipoMotor {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idTipoMotor;
 	private String tipoMotor;
+	
+	public TipoMotor() {
+		super();
+	}
+
+	public TipoMotor(long idTipoMotor, String tipoMotor) {
+		super();
+		this.idTipoMotor = idTipoMotor;
+		this.tipoMotor = tipoMotor;
+	}
+
+	public long getIdTipoMotor() {
+		return idTipoMotor;
+	}
+
+	public void setIdTipoMotor(long idTipoMotor) {
+		this.idTipoMotor = idTipoMotor;
+	}
+
+	public String getTipoMotor() {
+		return tipoMotor;
+	}
+
+	public void setTipoMotor(String tipoMotor) {
+		this.tipoMotor = tipoMotor;
+	}
+	
 }

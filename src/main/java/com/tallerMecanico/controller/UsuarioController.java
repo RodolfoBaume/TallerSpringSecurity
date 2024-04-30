@@ -6,6 +6,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,8 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.UsuarioDto;
 import com.tallerMecanico.entity.Usuario;
-import com.tallerMecanico.service.IUsuarioService;
-
+import com.tallerMecanico.service.UsuarioService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -34,13 +37,20 @@ import com.tallerMecanico.service.IUsuarioService;
 public class UsuarioController {
 
 	@Autowired
-	private IUsuarioService usuarioService;
+	private UsuarioService usuarioService;
 
 	// Consulta todos
 	@GetMapping("/usuarios")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Usuario> consulta() {
 		return usuarioService.findAll();
+	}
+
+	// Consulta paginación
+	@GetMapping("/usuarios/page/{page}")
+	public Page<Usuario> consultaPage(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idUsuario").ascending());
+		return usuarioService.findAllPage(pageable);
 	}
 
 	// Consulta por id
@@ -88,34 +98,31 @@ public class UsuarioController {
 	}
 
 	/*
-	// Crear
-	@PostMapping("/usuarios")
-	public ResponseEntity<?> create(@RequestBody UsuarioDto usuario) {
-		Usuario usuarioNew = null;
-		Map<String, Object> response = new HashMap<>();
+	 * // Crear
+	 * 
+	 * @PostMapping("/usuarios") public ResponseEntity<?> create(@RequestBody
+	 * UsuarioDto usuario) { Usuario usuarioNew = null; Map<String, Object> response
+	 * = new HashMap<>();
+	 * 
+	 * try { usuarioNew = this.usuarioService.createUsuario(usuario); } catch
+	 * (DataAccessException e) { response.put("mensaje",
+	 * "Error al realizar el insert en base de datos"); response.put("error",
+	 * e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
+	 * return new ResponseEntity<Map<String, Object>>(response,
+	 * HttpStatus.INTERNAL_SERVER_ERROR); }
+	 * 
+	 * response.put("mensaje", "Usuario creado con éxito, con el ID " +
+	 * usuarioNew.getIdUsuario()); response.put("Usuario", usuarioNew); return new
+	 * ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED); }
+	 */
 
-		try {
-			usuarioNew = this.usuarioService.createUsuario(usuario);
-		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al realizar el insert en base de datos");
-			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-		response.put("mensaje", "Usuario creado con éxito, con el ID " + usuarioNew.getIdUsuario());
-		response.put("Usuario", usuarioNew);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	// Método para poder registrar usuarios con role "user"
+	@PostMapping("/auth/register")
+	public ResponseEntity<RegistroResponseDto> registrarUsuario(@RequestBody UsuarioDto dtoRegistro,
+			@RequestParam String role) {
+		return usuarioService.registrarUsuario(dtoRegistro, role);
 	}
-*/
-	
-	
-	//Método para poder registrar usuarios con role "user"
-    @PostMapping("/auth/register")
-    public ResponseEntity<RegistroResponseDto> registrarUsuario(@RequestBody UsuarioDto dtoRegistro,
-            @RequestParam String role) {
-    	return usuarioService.registrarUsuario(dtoRegistro, role);
-    }
-	
+
 	// Modificar
 	@PutMapping("/usuarios/{id}")
 	public ResponseEntity<?> modify(@PathVariable Long id, @RequestBody UsuarioDto usuario) {

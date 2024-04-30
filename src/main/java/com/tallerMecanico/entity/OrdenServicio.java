@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 import jakarta.persistence.FetchType;
@@ -18,19 +23,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
+
 @Entity
 @Table(name = "ordenesServicios")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idOrdenServicio")
 public class OrdenServicio {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,9 +41,129 @@ public class OrdenServicio {
 	private EstatusServicio estatusServicio;
 	@OneToOne(mappedBy = "ordenServicio")
 	private Factura factura;
-	@ManyToOne(cascade = CascadeType.ALL)
+	
+	@ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "vehiculoId")
-    private Vehiculo vehiculo;
+	//@JsonBackReference
+    //@JsonManagedReference
+	private Vehiculo vehiculo;
+	
 	@OneToMany(mappedBy = "ordenServicio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleOrdenServicio> detalleOrdenServicios = new ArrayList<>();
+	@Column(columnDefinition = "TEXT") // tipo text
+	private String comentarios;
+	
+	@ManyToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "empleadoId")
+	private Empleado empleado;
+
+	public OrdenServicio() {
+		super();
+	}
+
+	public OrdenServicio(long idOrdenServicio, Date fechaOrden, String falla, String kilometraje, String observaciones,
+			EstatusServicio estatusServicio, Factura factura, Vehiculo vehiculo,
+			List<DetalleOrdenServicio> detalleOrdenServicios, String comentarios, Empleado empleado) {
+		super();
+		this.idOrdenServicio = idOrdenServicio;
+		this.fechaOrden = fechaOrden;
+		this.falla = falla;
+		this.kilometraje = kilometraje;
+		this.observaciones = observaciones;
+		this.estatusServicio = estatusServicio;
+		this.factura = factura;
+		this.vehiculo = vehiculo;
+		this.detalleOrdenServicios = detalleOrdenServicios;
+		this.comentarios = comentarios;
+		this.empleado = empleado;
+	}
+
+	public long getIdOrdenServicio() {
+		return idOrdenServicio;
+	}
+
+	public void setIdOrdenServicio(long idOrdenServicio) {
+		this.idOrdenServicio = idOrdenServicio;
+	}
+
+	public Date getFechaOrden() {
+		return fechaOrden;
+	}
+
+	public void setFechaOrden(Date fechaOrden) {
+		this.fechaOrden = fechaOrden;
+	}
+
+	public String getFalla() {
+		return falla;
+	}
+
+	public void setFalla(String falla) {
+		this.falla = falla;
+	}
+
+	public String getKilometraje() {
+		return kilometraje;
+	}
+
+	public void setKilometraje(String kilometraje) {
+		this.kilometraje = kilometraje;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+
+	public EstatusServicio getEstatusServicio() {
+		return estatusServicio;
+	}
+
+	public void setEstatusServicio(EstatusServicio estatusServicio) {
+		this.estatusServicio = estatusServicio;
+	}
+
+	public Factura getFactura() {
+		return factura;
+	}
+
+	public void setFactura(Factura factura) {
+		this.factura = factura;
+	}
+
+	public Vehiculo getVehiculo() {
+		return vehiculo;
+	}
+
+	public void setVehiculo(Vehiculo vehiculo) {
+		this.vehiculo = vehiculo;
+	}
+
+	public List<DetalleOrdenServicio> getDetalleOrdenServicios() {
+		return detalleOrdenServicios;
+	}
+
+	public void setDetalleOrdenServicios(List<DetalleOrdenServicio> detalleOrdenServicios) {
+		this.detalleOrdenServicios = detalleOrdenServicios;
+	}
+
+	public String getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(String comentarios) {
+		this.comentarios = comentarios;
+	}
+
+	public Empleado getEmpleado() {
+		return empleado;
+	}
+
+	public void setEmpleado(Empleado empleado) {
+		this.empleado = empleado;
+	}
+	
 }

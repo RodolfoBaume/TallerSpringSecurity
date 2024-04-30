@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +25,30 @@ public class OrdenServicioService implements IOrdenServicioService {
 	public List<OrdenServicio> findAll() {
 		return (List<OrdenServicio>) ordenServicioRepository.findAll(Sort.by("idOrdenServicio"));
 	}
+	
+	// consulta todos para paginación
+	@Transactional(readOnly = true)
+	public Page<OrdenServicio> findAllPage(Pageable pageable) {
+		return ordenServicioRepository.findAll(pageable);
+	}
 
 	// consulta por id
 	@Transactional(readOnly = true)
 	public OrdenServicio findById(Long idOrdenServicio) {
 		return ordenServicioRepository.findById(idOrdenServicio).orElse(null);
 	}
-
+	
+	/*
+	@Transactional(readOnly = true)
+	public OrdenServicio findById(Long idOrdenServicio) {
+	    OrdenServicio ordenServicio = ordenServicioRepository.findById(idOrdenServicio)
+	            .orElseThrow(() -> new NoSuchElementException("Orden de Servicio no encontrada con el ID: " + idOrdenServicio));
+	    // Cargar explícitamente el vehículo para evitar que sea nulo en la serialización
+	    ordenServicio.getVehiculo(); // Esto carga el vehículo asociado a la orden de servicio
+	    return ordenServicio;
+	}
+*/
+	
 	// Crear
 	@Transactional
 	public OrdenServicio createOrdenServicio(OrdenServicioDto ordenServicio) {
@@ -39,7 +58,10 @@ public class OrdenServicioService implements IOrdenServicioService {
 		ordenServicioEntity.setKilometraje(ordenServicio.kilometraje());
 		ordenServicioEntity.setObservaciones(ordenServicio.observaciones());
 		ordenServicioEntity.setEstatusServicio(ordenServicio.estatusServicio());
+		ordenServicioEntity.setFactura(ordenServicio.factura());
 		ordenServicioEntity.setVehiculo(ordenServicio.vehiculo());
+		ordenServicioEntity.setComentarios(ordenServicio.comentarios());
+		ordenServicioEntity.setEmpleado(ordenServicio.empleado());
 		return ordenServicioRepository.save(ordenServicioEntity);
 	}
 
@@ -59,7 +81,11 @@ public class OrdenServicioService implements IOrdenServicioService {
 		ordenServicioEntity.setKilometraje(ordenServicio.kilometraje());
 		ordenServicioEntity.setObservaciones(ordenServicio.observaciones());
 		ordenServicioEntity.setEstatusServicio(ordenServicio.estatusServicio());
+		ordenServicioEntity.setFactura(ordenServicio.factura());
 		ordenServicioEntity.setVehiculo(ordenServicio.vehiculo());
+		ordenServicioEntity.setComentarios(ordenServicio.comentarios());
+		ordenServicioEntity.setEmpleado(ordenServicio.empleado());
+		
 		return ordenServicioRepository.save(ordenServicioEntity);
 	}
 }
