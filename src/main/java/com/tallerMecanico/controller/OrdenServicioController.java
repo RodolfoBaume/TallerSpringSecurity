@@ -112,7 +112,7 @@ public class OrdenServicioController {
 
 		response.put("mensaje",
 				"Orden de Servicio creada con éxito, con el ID " + ordenServicioNew.getIdOrdenServicio());
-		response.put("Orden de Servicio", ordenServicioNew);
+		response.put("ordenServicio", ordenServicioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
@@ -132,7 +132,7 @@ public class OrdenServicioController {
 
 		response.put("mensaje",
 				"Orden de Servicio modificada con éxito, con el ID " + ordenServicioNew.getIdOrdenServicio());
-		response.put("Orden de Servicio", ordenServicioNew);
+		response.put("ordenServicio", ordenServicioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 }
