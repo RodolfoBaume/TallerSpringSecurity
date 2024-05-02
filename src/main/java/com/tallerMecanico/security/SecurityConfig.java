@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration // Le indica al contenedor de spring que esta es una clase de seguridad al momento de arrancar la aplicación
 @EnableWebSecurity //Indicamos que se activa la seguridad web en nuestra aplicación y además esta será una clase la cuál contendrá toda la configuración referente a la seguridad
@@ -46,27 +47,23 @@ public class SecurityConfig {
 	// Vamos a crear un bean el cual va a establecer una cadena de filtros de seguridad en nuestra aplicación. Y es aquí donde determinaremos los permisos según los roles de los usuarios para acceder a nuestra aplicación.
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-		.csrf().disable()
-        .exceptionHandling() //Permitimos el manejo de excepciones
-        .authenticationEntryPoint(jwtAuthenticationEntryPoint) //Nos establece un punto de entrada personalizado de autenticación para el manejo de autenticaciones no autorizadas
-        .and()
-        .sessionManagement() //Permite la gestión de sessiones
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeHttpRequests() //Toda petición http debe ser autorizada
-        .requestMatchers("/api/auth/**").permitAll()
-        .requestMatchers("/api/*").permitAll()
-        /*
-        .requestMatchers(HttpMethod.POST, "/api/celular/crear").hasAuthority("ADMIN")
-        .requestMatchers(HttpMethod.GET,"/api/celular/listar").hasAnyAuthority("ADMIN" , "USER")
-        .requestMatchers(HttpMethod.GET,"/api/celular/listarId/**").hasAnyAuthority("ADMIN" , "USER")
-        .requestMatchers(HttpMethod.DELETE,"/api/celular/eliminar/**").hasAuthority("ADMIN")
-        .requestMatchers(HttpMethod.PUT, "/api/celular/actualizar").hasAuthority("ADMIN")
-        */
-        .anyRequest().authenticated()
-        .and()
-        .httpBasic();
+        http
+			.csrf(csrf -> csrf.disable())
+			.exceptionHandling(handling -> handling //Permitimos el manejo de excepciones
+					.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+			.sessionManagement(management -> management //Permite la gestión de sessiones
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.authorizeHttpRequests(requests -> requests //Toda petición http debe ser autorizada
+					.requestMatchers("/api/auth/**").permitAll()
+					.requestMatchers("/api/*").permitAll()
+					/*
+					.requestMatchers(HttpMethod.POST, "/api/celular/crear").hasAuthority("ADMIN")
+					
+					*/
+					.requestMatchers(HttpMethod.OPTIONS).permitAll()
+
+					.anyRequest().authenticated())
+			.httpBasic(withDefaults());
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}

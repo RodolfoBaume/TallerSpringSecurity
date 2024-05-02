@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +30,13 @@ public class UsuarioService implements IUsuarioService {
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
 	private IRolRepository rolRepository;
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-    public UsuarioService(IUsuarioRepository usuarioRepository, IRolRepository rolRepository) {
+    public UsuarioService(IUsuarioRepository usuarioRepository, IRolRepository rolRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
+		this.passwordEncoder = passwordEncoder; 
     }
 
 	// Consulta todos
@@ -69,10 +73,9 @@ public class UsuarioService implements IUsuarioService {
 	    if (usuarioRepository.existsByUsername(dtoRegistro.username())) {
 	        return new ResponseEntity<>(new RegistroResponseDto("El usuario ya existe, intenta con otro", null), HttpStatus.BAD_REQUEST);
 	    }
-
 	    Usuario usuario = new Usuario();
 	    usuario.setUsername(dtoRegistro.username()); 
-	    usuario.setPassword(dtoRegistro.password());
+	    usuario.setPassword(passwordEncoder.encode(dtoRegistro.password()));
 
 	    Rol rol = rolRepository.findByNombre(role).orElse(null);
 

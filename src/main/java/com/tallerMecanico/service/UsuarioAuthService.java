@@ -54,6 +54,7 @@ public class UsuarioAuthService {
 		Usuario usuarios = new Usuario();
 		usuarios.setUsername(registroDto.username());
 		usuarios.setPassword(passwordEncoder.encode(registroDto.password()));
+		System.out.println("<<usuario nuevo>>>>"+usuarios.toString());
 
 		Rol roles = rolesRepository.findByNombre(role).orElse(null);
 
