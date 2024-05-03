@@ -44,11 +44,17 @@ public class RestAuthController {
     //Método para poder logear un usuario y obtener un token
     @PostMapping("/login")
     public ResponseEntity<AuthRespuestaDto> login(@RequestBody LoginDto dtoLogin) {
-        return usuarioAuthService.login(dtoLogin);
+        ResponseEntity<AuthRespuestaDto> resp =null;
+        try {
+            resp = usuarioAuthService.login(dtoLogin);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return resp;
     }
     
     
-    @GetMapping("/usuarioActual")
+    @GetMapping("/current-user")
     public ResponseEntity<UsuarioActualDto> usuarioActual(Principal principal) {
         return usuarioAuthService.obtenerUsuarioActual(principal);
     }
