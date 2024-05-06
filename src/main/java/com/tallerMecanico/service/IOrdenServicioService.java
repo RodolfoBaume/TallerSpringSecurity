@@ -22,4 +22,6 @@ public interface IOrdenServicioService {
 	
 	OrdenServicio updateOrdenServicio(Long idOrdenServicio, OrdenServicioDto ordenServicio);
 	
+	List<OrdenServicio> obtenerPorEstatusServicio(String estatus);
+	
 }

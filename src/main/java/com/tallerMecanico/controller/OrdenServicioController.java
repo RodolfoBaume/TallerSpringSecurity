@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -135,4 +136,20 @@ public class OrdenServicioController {
 		response.put("ordenServicio", ordenServicioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
+	
+	
+	@GetMapping("/ordenesServicio/estatus/{estatus}")
+    public List<OrdenServicio> obtenerPorEstatus(@PathVariable String estatus) {
+        return ordenServicioService.obtenerPorEstatusServicio(estatus);
+    }
+    
+	
+	/*
+	@GetMapping("/ordenesServicio/estatus/{estatus}")
+    public ResponseEntity<List<OrdenServicio>> obtenerPorEstatus(@RequestParam String estatus) {
+        List<OrdenServicio> ordenes = ordenServicioService.obtenerPorEstatusServicio(estatus);
+        return ResponseEntity.ok(ordenes);
+    }
+    */
+	
 }

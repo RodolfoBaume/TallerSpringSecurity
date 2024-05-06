@@ -88,4 +88,9 @@ public class OrdenServicioService implements IOrdenServicioService {
 		
 		return ordenServicioRepository.save(ordenServicioEntity);
 	}
+	
+	public List<OrdenServicio> obtenerPorEstatusServicio(String estatus) {
+        return ordenServicioRepository.findByEstatusServicio(estatus);
+    }
+	
 }
