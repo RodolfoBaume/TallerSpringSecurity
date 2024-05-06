@@ -32,7 +32,7 @@ public class Cliente {
 	@OneToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany
     @JoinColumn(name = "clienteId")
 	//@JsonManagedReference
     private List<Vehiculo> vehiculos;

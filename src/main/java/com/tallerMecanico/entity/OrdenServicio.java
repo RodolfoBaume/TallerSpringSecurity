@@ -42,18 +42,18 @@ public class OrdenServicio {
 	@OneToOne(mappedBy = "ordenServicio")
 	private Factura factura;
 	
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
     @JoinColumn(name = "vehiculoId")
 	//@JsonBackReference
     //@JsonManagedReference
 	private Vehiculo vehiculo;
 	
-	@OneToMany(mappedBy = "ordenServicio", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "ordenServicio", orphanRemoval = true)
     private List<DetalleOrdenServicio> detalleOrdenServicios = new ArrayList<>();
 	@Column(columnDefinition = "TEXT") // tipo text
 	private String comentarios;
 	
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	@JoinColumn(name = "empleadoId")
 	private Empleado empleado;
 

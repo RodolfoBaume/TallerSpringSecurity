@@ -42,7 +42,7 @@ public class Vehiculo {
     @JoinColumn(name = "clienteId")
 	//@JsonBackReference
     private Cliente cliente;
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany
     @JoinColumn(name = "vehiculoId")
 	//@JsonManagedReference
 	//@JsonBackReference
