@@ -40,7 +40,7 @@ public class Vehiculo {
 	private String imagen;
 	@ManyToOne
     @JoinColumn(name = "clienteId")
-	@JsonBackReference
+	//@JsonBackReference
     private Cliente cliente;
 	@OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "vehiculoId")
