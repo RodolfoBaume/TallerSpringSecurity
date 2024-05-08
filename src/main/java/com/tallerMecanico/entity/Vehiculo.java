@@ -21,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "vehiculos")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVehiculo")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVehiculo")
 public class Vehiculo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +38,11 @@ public class Vehiculo {
 	@JoinColumn(name = "tipoMotorId")
 	private TipoMotor tipoMotor;
 	private String imagen;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "clienteId")
 	//@JsonBackReference
-    private Cliente cliente;
+    //@JsonManagedReference
+	private Cliente cliente;
 	@OneToMany
     @JoinColumn(name = "vehiculoId")
 	//@JsonManagedReference
