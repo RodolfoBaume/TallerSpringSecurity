@@ -2,12 +2,9 @@ package com.tallerMecanico.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,10 +30,8 @@ public class Cliente {
 	@OneToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-	@OneToMany
-    @JoinColumn(name = "clienteId")
-	//@JsonManagedReference
-	//@JsonBackReference
+	@OneToMany(mappedBy = "cliente")
+    //@JoinColumn(name = "clienteId")
     private List<Vehiculo> vehiculos;
 	
 	

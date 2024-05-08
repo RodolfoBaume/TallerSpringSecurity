@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
@@ -27,7 +25,6 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ordenesServicios")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idOrdenServicio")
 public class OrdenServicio {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,18 +38,15 @@ public class OrdenServicio {
 	private EstatusServicio estatusServicio;
 	@OneToOne(mappedBy = "ordenServicio")
 	private Factura factura;
-	
-	@ManyToOne
+	@JsonIgnoreProperties(ignoreUnknown = true, value = {"vehiculo"})
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehiculoId")
-	//@JsonBackReference
-    //@JsonManagedReference
-	private Vehiculo vehiculo;
-	
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVehiculo")
+	private Vehiculo vehiculo;	
 	@OneToMany(mappedBy = "ordenServicio", orphanRemoval = true)
     private List<DetalleOrdenServicio> detalleOrdenServicios = new ArrayList<>();
 	@Column(columnDefinition = "TEXT") // tipo text
 	private String comentarios;
-	
 	@ManyToOne
 	@JoinColumn(name = "empleadoId")
 	private Empleado empleado;
