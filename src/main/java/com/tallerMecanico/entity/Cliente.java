@@ -30,8 +30,9 @@ public class Cliente {
 	@OneToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-	@OneToMany(mappedBy = "cliente")
-    //@JoinColumn(name = "clienteId")
+	@OneToMany
+	//(mappedBy = "cliente")
+    @JoinColumn(name = "clienteId")
     private List<Vehiculo> vehiculos;
 	
 	

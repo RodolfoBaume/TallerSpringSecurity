@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
@@ -38,7 +37,6 @@ public class OrdenServicio {
 	private EstatusServicio estatusServicio;
 	@OneToOne(mappedBy = "ordenServicio")
 	private Factura factura;
-	@JsonIgnoreProperties(ignoreUnknown = true, value = {"vehiculo"})
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehiculoId")
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVehiculo")

@@ -36,7 +36,9 @@ public class Vehiculo {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "clienteId")
 	private Cliente cliente;
-	@OneToMany(mappedBy = "vehiculo")
+	@OneToMany
+	//(mappedBy = "vehiculo")
+	@JoinColumn(name = "vehiculoId")
     private List<OrdenServicio> ordenServicio;
 	
 	public Vehiculo() {
