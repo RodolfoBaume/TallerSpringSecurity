@@ -44,6 +44,13 @@ public class VehiculoController {
 		return vehiculoService.findAll();
 	}
 
+	// Consulta todos
+	@GetMapping("/vehiculos/orden")
+	@ResponseStatus(HttpStatus.OK)
+	public List<Vehiculo> consultas() {
+		return vehiculoService.obtenerTodosLosVehiculosConOrdenServicio();
+	}
+
 	// Consulta paginación
 	@GetMapping("/vehiculos/page/{page}")
 	public Page<Vehiculo> consultaPage(@PathVariable Integer page) {

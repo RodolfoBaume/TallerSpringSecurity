@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
@@ -22,8 +26,11 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 
+
+
 @Entity
 @Table(name = "ordenesServicios")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idOrdenServicio")
 public class OrdenServicio {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,11 +44,15 @@ public class OrdenServicio {
 	private EstatusServicio estatusServicio;
 	@OneToOne(mappedBy = "ordenServicio")
 	private Factura factura;
+	@JsonIgnoreProperties(ignoreUnknown = true, value= { "ordenServicio" })
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehiculoId")
-	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVehiculo")
+	//@JsonIgnore
+	//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVehiculo")
+	//@JsonIdentityReference(alwaysAsId = true)
+	//@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Vehiculo vehiculo;	
-	@OneToMany(mappedBy = "ordenServicio", orphanRemoval = true)
+	@OneToMany(mappedBy = "ordenServicio",  orphanRemoval = true)
     private List<DetalleOrdenServicio> detalleOrdenServicios = new ArrayList<>();
 	@Column(columnDefinition = "TEXT") // tipo text
 	private String comentarios;

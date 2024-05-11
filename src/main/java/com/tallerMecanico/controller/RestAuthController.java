@@ -23,7 +23,7 @@ import com.tallerMecanico.service.UsuarioAuthService;
 
 
 @RestController
-@CrossOrigin("*")
+//@CrossOrigin("*")
 @RequestMapping("/api/auth")
 public class RestAuthController {
 	

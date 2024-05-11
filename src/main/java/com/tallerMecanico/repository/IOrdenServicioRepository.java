@@ -14,4 +14,10 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
 
 	@Query("SELECT o FROM OrdenServicio o WHERE o.estatusServicio.estatusServicio = :estatus")
     List<OrdenServicio> findByEstatusServicio(@Param("estatus") String estatus);
+	
+	@Query("SELECT os FROM OrdenServicio os JOIN FETCH os.vehiculo WHERE os.idOrdenServicio = :id")
+    OrdenServicio findByIdWithVehiculo(Long id);
+	
+	@Query("SELECT os FROM OrdenServicio os LEFT JOIN FETCH os.vehiculo")
+    List<OrdenServicio> findAllWithVehiculo();
 }

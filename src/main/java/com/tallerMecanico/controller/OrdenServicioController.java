@@ -45,6 +45,20 @@ public class OrdenServicioController {
 		return ordenServicioService.findAll();
 	}
 
+	// Consulta todos
+	@GetMapping("/ordenesServicio/vehiculo")
+    public ResponseEntity<List<OrdenServicio>> consultarTodos() {
+        List<OrdenServicio> ordenesServicio = ordenServicioService.buscarTodosConVehiculo();
+        /*
+        if (!ordenesServicio.isEmpty()) {
+            return new ResponseEntity<>(ordenesServicio, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        */
+        return new ResponseEntity<>(ordenesServicio, HttpStatus.OK);
+    }
+
 	// Consulta paginación
 	@GetMapping("/ordenesServicio/page/{page}")
 	public Page<OrdenServicio> consultaPage(@PathVariable Integer page) {
@@ -136,20 +150,18 @@ public class OrdenServicioController {
 		response.put("ordenServicio", ordenServicioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
-	
+
 	@GetMapping("/ordenesServicio/estatus/{estatus}")
-    public List<OrdenServicio> obtenerPorEstatus(@PathVariable String estatus) {
-        return ordenServicioService.obtenerPorEstatusServicio(estatus);
-    }
-    
-	
+	public List<OrdenServicio> obtenerPorEstatus(@PathVariable String estatus) {
+		return ordenServicioService.obtenerPorEstatusServicio(estatus);
+	}
+
 	/*
-	@GetMapping("/ordenesServicio/estatus/{estatus}")
-    public ResponseEntity<List<OrdenServicio>> obtenerPorEstatus(@RequestParam String estatus) {
-        List<OrdenServicio> ordenes = ordenServicioService.obtenerPorEstatusServicio(estatus);
-        return ResponseEntity.ok(ordenes);
-    }
-    */
-	
+	 * @GetMapping("/ordenesServicio/estatus/{estatus}") public
+	 * ResponseEntity<List<OrdenServicio>> obtenerPorEstatus(@RequestParam String
+	 * estatus) { List<OrdenServicio> ordenes =
+	 * ordenServicioService.obtenerPorEstatusServicio(estatus); return
+	 * ResponseEntity.ok(ordenes); }
+	 */
+
 }

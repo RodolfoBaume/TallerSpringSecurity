@@ -1,9 +1,9 @@
 -- Insertar usuarios
 
 -- Insertar en la tabla usuarios
-INSERT INTO usuarios (email, password)
+INSERT INTO usuarios (username, password)
 SELECT 'usuario1@gmail.com', '12345'
-WHERE NOT EXISTS (SELECT * FROM usuarios WHERE email = 'usuario1@gmail.com');
+WHERE NOT EXISTS (SELECT * FROM usuarios WHERE username = 'usuario1@gmail.com');
 
 -- Insertar en la tabla usuarios_roles si la combinación usuario_id y rol_id no existe
 INSERT INTO usuarios_roles (usuario_id, rol_id) 

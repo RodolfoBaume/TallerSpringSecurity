@@ -26,6 +26,12 @@ public class VehiculoService implements IVehiculoService{
 		return (List<Vehiculo>) vehiculoRepository.findAll(Sort.by("idVehiculo"));
 	}
 	
+	// vehiculos con orden de servicio
+	@Transactional(readOnly = true)
+	public List<Vehiculo> obtenerTodosLosVehiculosConOrdenServicio() {
+        return vehiculoRepository.findAllWithOrdenServicio();
+    }
+	
 	// consulta todos para paginación
 	@Transactional(readOnly = true)
 	public Page<Vehiculo> findAllPage(Pageable pageable) {

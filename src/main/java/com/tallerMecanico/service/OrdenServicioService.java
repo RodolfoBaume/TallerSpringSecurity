@@ -17,14 +17,31 @@ import com.tallerMecanico.repository.IOrdenServicioRepository;
 @Service
 public class OrdenServicioService implements IOrdenServicioService {
 
+	//@Autowired
+	private IOrdenServicioRepository ordenServicioRepository;	
+	
 	@Autowired
-	private IOrdenServicioRepository ordenServicioRepository;
+    public OrdenServicioService(IOrdenServicioRepository ordenServicioRepository) {
+        this.ordenServicioRepository = ordenServicioRepository;
+    }
 
 	// Consulta todos
 	@Transactional(readOnly = true)
 	public List<OrdenServicio> findAll() {
 		return (List<OrdenServicio>) ordenServicioRepository.findAll(Sort.by("idOrdenServicio"));
 	}
+	
+	
+	// consulta con vehiculo
+	@Transactional(readOnly = true)
+	public OrdenServicio buscarOrdenServicioConVehiculo(Long id) {
+        return ordenServicioRepository.findByIdWithVehiculo(id);
+    }
+	
+	@Transactional(readOnly = true)
+	public List<OrdenServicio> buscarTodosConVehiculo() {
+        return ordenServicioRepository.findAllWithVehiculo();
+    }
 	
 	// consulta todos para paginación
 	@Transactional(readOnly = true)
@@ -92,5 +109,8 @@ public class OrdenServicioService implements IOrdenServicioService {
 	public List<OrdenServicio> obtenerPorEstatusServicio(String estatus) {
         return ordenServicioRepository.findByEstatusServicio(estatus);
     }
+
+
+	
 	
 }

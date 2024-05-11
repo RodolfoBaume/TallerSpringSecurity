@@ -2,8 +2,11 @@ package com.tallerMecanico.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +19,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "vehiculos")
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVehiculo")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVehiculo")
 public class Vehiculo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +36,12 @@ public class Vehiculo {
 	@JoinColumn(name = "tipoMotorId")
 	private TipoMotor tipoMotor;
 	private String imagen;
+	@JsonIgnoreProperties(ignoreUnknown = true, value= { "vehiculos" })
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "clienteId")
+	//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idCliente")
 	private Cliente cliente;
-	@OneToMany
-	//(mappedBy = "vehiculo")
-	@JoinColumn(name = "vehiculoId")
+	@OneToMany(mappedBy = "vehiculo", fetch = FetchType.LAZY)
     private List<OrdenServicio> ordenServicio;
 	
 	public Vehiculo() {

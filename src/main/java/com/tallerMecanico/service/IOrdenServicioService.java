@@ -24,4 +24,9 @@ public interface IOrdenServicioService {
 	
 	List<OrdenServicio> obtenerPorEstatusServicio(String estatus);
 	
+	//temporal
+	OrdenServicio buscarOrdenServicioConVehiculo(Long id);
+	
+	List<OrdenServicio> buscarTodosConVehiculo();
+	
 }

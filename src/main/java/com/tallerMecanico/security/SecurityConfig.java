@@ -69,6 +69,8 @@ public class SecurityConfig {
 	}
     
 	/*
+	 * 
+	 * 
     
     .requestMatchers(HttpMethod.OPTIONS).permitAll()
     */
