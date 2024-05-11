@@ -43,6 +43,7 @@ public class EstatusServicioService implements IEstatusServicioService {
 	public EstatusServicio createEstatusServicio(EstatusServicioDto estatusServicio) {
 		EstatusServicio estatusServicioEntity = new EstatusServicio();
 		estatusServicioEntity.setEstatusServicio(estatusServicio.estatusServicio());
+		estatusServicioEntity.setDepartamento(estatusServicio.departamento());
 		return estatusServicioRepository.save(estatusServicioEntity);
 	}
 
@@ -58,6 +59,7 @@ public class EstatusServicioService implements IEstatusServicioService {
 		EstatusServicio estatusServicioEntity = estatusServicioRepository.findById(idEstatusServicio)
 				.orElseThrow(() -> new NoSuchElementException("Estatus de servicio no encontrado con el ID: " + idEstatusServicio));
 		estatusServicioEntity.setEstatusServicio(estatusServicio.estatusServicio());
+		estatusServicioEntity.setDepartamento(estatusServicio.departamento());
 		return estatusServicioRepository.save(estatusServicioEntity);
 	}
 }
