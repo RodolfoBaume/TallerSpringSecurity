@@ -22,7 +22,7 @@ public class DepartamentoService {
 	// Consulta todos
 		@Transactional(readOnly = true)
 		public List<Departamento> findAll() {
-			return (List<Departamento>) departamentoRepository.findAll(Sort.by("idMarca"));
+			return (List<Departamento>) departamentoRepository.findAll(Sort.by("idDepartamento"));
 		}
 
 		// consulta todos para paginación
