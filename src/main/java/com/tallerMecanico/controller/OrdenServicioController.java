@@ -181,5 +181,11 @@ public class OrdenServicioController {
 	 * ordenServicioService.obtenerPorEstatusServicio(estatus); return
 	 * ResponseEntity.ok(ordenes); }
 	 */
+	
+	//Ordenes Servicio por Departamento
+	@GetMapping("/ordenesServicio/departamento/{idDepartamento}")
+    public List<OrdenServicio> getOrdenesByDepartamento(@PathVariable Long idDepartamento) {
+        return ordenServicioService.getOrdenesByDepartamento(idDepartamento);
+    }
 
 }

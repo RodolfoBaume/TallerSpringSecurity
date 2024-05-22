@@ -192,5 +192,10 @@ public class OrdenServicioService implements IOrdenServicioService {
 
 		return ordenesServicioDTO;
 	}
+	
+	//OrdenServicio por departamento
+	public List<OrdenServicio> getOrdenesByDepartamento(Long idDepartamento) {
+        return ordenServicioRepository.findByDepartamentoId(idDepartamento);
+    }
 
 }
