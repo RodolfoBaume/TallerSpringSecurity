@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.OrdenServicioDto;
+import com.tallerMecanico.dto.OrdenServicioVehiculoDto;
 import com.tallerMecanico.entity.OrdenServicio;
 import com.tallerMecanico.service.OrdenServicioService;
 
@@ -39,7 +40,7 @@ public class OrdenServicioController {
 	private OrdenServicioService ordenServicioService;
 
 	// Consulta todos
-	@GetMapping("/ordenesServicio")
+	@GetMapping("/ordenesServicio2")
 	@ResponseStatus(HttpStatus.OK)
 	public List<OrdenServicio> consulta() {
 		return ordenServicioService.findAll();
@@ -58,14 +59,31 @@ public class OrdenServicioController {
         */
         return new ResponseEntity<>(ordenesServicio, HttpStatus.OK);
     }
+	
+	// con vehiculo
+	@GetMapping("/ordenesServicio")
+    public ResponseEntity<List<OrdenServicioVehiculoDto>> getAllOrdenesServicioDTO() {
+        List<OrdenServicioVehiculoDto> ordenesServicioDTO = ordenServicioService.getAllOrdenesServicioDTO();
+        return ResponseEntity.ok(ordenesServicioDTO);
+    }
 
 	// Consulta paginación
+	/*
 	@GetMapping("/ordenesServicio/page/{page}")
 	public Page<OrdenServicio> consultaPage(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("idOrdenServicio").ascending());
 		return ordenServicioService.findAllPage(pageable);
 	}
-
+	*/
+	
+	@GetMapping("/ordenesServicio/page/{page}")
+    public ResponseEntity<Page<OrdenServicioVehiculoDto>> consultaPage(@PathVariable Integer page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("idOrdenServicio").ascending());
+        Page<OrdenServicioVehiculoDto> ordenesServicioDTO = ordenServicioService.findAllPageDto(pageable);
+        return ResponseEntity.ok(ordenesServicioDTO);
+    }
+	
+	
 	// Consulta por id
 	@GetMapping("/ordenesServicio/{id}")
 	public ResponseEntity<?> consultaPorID(@PathVariable Long id) {
