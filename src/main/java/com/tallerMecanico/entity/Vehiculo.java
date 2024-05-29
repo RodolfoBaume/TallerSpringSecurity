@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +36,7 @@ public class Vehiculo {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "tipoMotorId")
 	private TipoMotor tipoMotor;
+	@Column(columnDefinition = "TEXT") // tipo text
 	private String imagen;
 	@JsonIgnoreProperties(ignoreUnknown = true, value= { "vehiculos" })
 	@ManyToOne(fetch = FetchType.EAGER)
