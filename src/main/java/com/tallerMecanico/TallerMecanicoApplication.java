@@ -46,6 +46,9 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 				executeSqlScript("data.sql");
 				loadCsvDataToMarcaTable("marcaAutos.csv");
 				loadCsvDataToModeloTable("modelosAutos.csv");
+				loadCsvDataToDepartamentosTable("departamentos.csv");
+				loadCsvDataToEstatusServicioTable("estatusServicio.csv");
+
 				executeSqlScript("data2.sql");
 		
 	}
@@ -63,6 +66,7 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 				scriptContent.append(line).append("\n");
 			}
 			// Ejecutar el script SQL
+			// System.out.println("--->>>>" + scriptContent.toString());
 			jdbcTemplate.execute(scriptContent.toString());
 		} catch (IOException e) {
 			throw new RuntimeException("Error al leer el archivo " + scriptFileName, e);
@@ -140,4 +144,79 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 		}
 	}
     
+
+	// Carga tabla de departamentos por medio de archivo CSV
+	private void loadCsvDataToDepartamentosTable(String csvFileName) throws SQLException {
+		try {
+			Resource resource = resourceLoader.getResource("classpath:" + csvFileName);
+			InputStream inputStream = resource.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+			// Omitir la primera línea que contiene los encabezados
+			String line = reader.readLine(); // Leer la primera línea y descartarla
+
+			while ((line = reader.readLine()) != null) {
+				String[] data = line.split(",");
+				if (data.length == 2) {
+					long idDepartamento = Long.parseLong(data[0].trim());
+					String departamento = data[1].trim();
+
+					// Verificar si el registro ya existe en la tabla
+					String searchQuery = "SELECT COUNT(*) FROM departamentos WHERE id_departamento = " + idDepartamento;
+					int count = jdbcTemplate.queryForObject(searchQuery, Integer.class);
+
+					// Si no existe, insertar el registro en la tabla
+					if (count == 0) {
+						String insertQuery = "INSERT INTO departamentos (id_departamento, departamento) VALUES (" + idDepartamento + ", '" + departamento
+								+ "')";
+						jdbcTemplate.update(insertQuery);
+					}
+				}
+			}
+
+			reader.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Error al cargar datos desde el archivo CSV a la tabla 'marcas'", e);
+		}
+	}
+
+	// Carga tabla de estatusServicio por medio de archivo CSV
+	private void loadCsvDataToEstatusServicioTable(String csvFileName) throws SQLException {
+		try {
+			Resource resource = resourceLoader.getResource("classpath:" + csvFileName);
+			InputStream inputStream = resource.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+			// Omitir la primera línea que contiene los encabezados
+			String line = reader.readLine(); // Leer la primera línea y descartarla
+
+			while ((line = reader.readLine()) != null) {
+				String[] data = line.split(",");
+				if (data.length == 3) { // Asegurarse que hay 3 elementos
+					long idEstatusServicio = Long.parseLong(data[0].trim());
+					String estatusServicio = data[1].trim();
+					long departamentoId = Long.parseLong(data[2].trim()); // Verificar que este sea el índice correcto
+
+					System.out.println("xxxxxx:  "+idEstatusServicio + " " + estatusServicio + " " + departamentoId);
+
+					// Verificar si el registro ya existe en la tabla
+					String searchQuery = "SELECT COUNT(*) FROM estatus_servicio WHERE id_estatus_servicio = " + idEstatusServicio;
+					int count = jdbcTemplate.queryForObject(searchQuery, Integer.class);
+
+					// Si no existe, insertar el registro en la tabla
+					if (count == 0) {
+						String insertQuery = "INSERT INTO estatus_servicio (id_estatus_servicio,  estatus_servicio, departamento_id) VALUES (" + idEstatusServicio
+								+ ", '" + estatusServicio + "', "  + departamentoId + ")";
+						jdbcTemplate.update(insertQuery);
+					}
+				}
+			}
+
+			reader.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Error al cargar datos desde el archivo CSV a la tabla 'estatusServicio'", e);
+		}
+	}
+
+
 }

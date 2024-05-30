@@ -1,18 +1,23 @@
 -- estatus servicios
-INSERT INTO estatus_servicio(estatus_servicio)
-SELECT 'Nuevo' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'Nuevo');
 
-INSERT INTO estatus_servicio(estatus_servicio)
-SELECT 'Pendiente' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'Pendiente');
 
-INSERT INTO estatus_servicio(estatus_servicio)
-SELECT 'Progreso' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'Progreso');
+-- INSERT INTO estatus_servicio(estatus_servicio)
+-- SELECT 'nuevo' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'nuevo');
 
-INSERT INTO estatus_servicio(estatus_servicio)
-SELECT 'Terminado' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'Terminado');
+-- INSERT INTO estatus_servicio(estatus_servicio)
+-- SELECT 'llamar' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'llamar');
 
-INSERT INTO estatus_servicio(estatus_servicio)
-SELECT 'Entregado' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'Entregado');
+-- INSERT INTO estatus_servicio(estatus_servicio)
+-- SELECT 'para entregar' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'para entregar');
+
+-- INSERT INTO estatus_servicio(estatus_servicio)
+-- SELECT 'mas de 1 mes' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'mas de 1 mes');
+
+-- INSERT INTO estatus_servicio(estatus_servicio)
+-- SELECT 'entregado' WHERE NOT EXISTS (SELECT * FROM estatus_servicio WHERE estatus_servicio = 'entregado');
+
+
+
 
 -- Tipo Motor
 INSERT INTO tipo_motor(tipo_motor)

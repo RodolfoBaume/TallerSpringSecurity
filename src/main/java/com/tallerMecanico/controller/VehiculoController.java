@@ -136,7 +136,7 @@ public class VehiculoController {
 		}
 
 		response.put("mensaje", "Vehiculo modificado con éxito, con el ID " + vehiculoNew.getIdVehiculo());
-		response.put("vehiculo", vehiculoNew);
+		response.put("Vehiculo", vehiculoNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 }

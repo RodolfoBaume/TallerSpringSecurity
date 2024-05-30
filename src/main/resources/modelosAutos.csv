@@ -52,19 +52,19 @@ id_modelo,marca_id,modelo
 51,6,Tiggo 8
 52,6,Tiggo 8 Pro e+
 53,7,Attitude
-54,7,Challenger
-55,7,Charger
+54,38,Challenger
+55,38,Charger
 56,7,Crew Cab-
-57,7,Durango
+57,38,Durango
 58,7,Grand Cherokee
 59,7,Jeep Compass
 60,7,Jeep Compass-
-61,7,Journey
+61,38,Journey
 62,7,JT 
 63,7,Promaster
 64,7,Promaster Rapid
-65,7,RAM 4000
-66,7,RAM 700
+65,38,RAM 4000
+66,38,RAM 700
 67,7,Renegade
 68,7,Wagoneer
 69,7,Wrangler
