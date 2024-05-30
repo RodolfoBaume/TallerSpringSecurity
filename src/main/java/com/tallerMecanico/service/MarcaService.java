@@ -23,7 +23,7 @@ public class MarcaService implements IMarcaService {
 	// Consulta todos
 	@Transactional(readOnly = true)
 	public List<Marca> findAll() {
-		return (List<Marca>) marcaRepository.findAll(Sort.by("idMarca"));
+		return (List<Marca>) marcaRepository.findAll(Sort.by("Marca"));
 	}
 
 	// consulta todos para paginación

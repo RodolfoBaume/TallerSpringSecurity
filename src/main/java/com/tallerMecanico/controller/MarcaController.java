@@ -51,7 +51,7 @@ public class MarcaController {
 	// Consulta paginación
 	@GetMapping("/marcas/page/{page}")
 	public Page<Marca> consultaPage(@PathVariable Integer page) {
-		Pageable pageable = PageRequest.of(page, 10, Sort.by("idMarca").ascending());
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("marca").ascending());
 		return marcaService.findAllPage(pageable);
 	}
 

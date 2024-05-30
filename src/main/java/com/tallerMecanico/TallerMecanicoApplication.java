@@ -43,13 +43,20 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		// Ejecutar el script SQL
-				executeSqlScript("data.sql");
-				loadCsvDataToMarcaTable("marcaAutos.csv");
-				loadCsvDataToModeloTable("modelosAutos.csv");
-				loadCsvDataToDepartamentosTable("departamentos.csv");
-				loadCsvDataToEstatusServicioTable("estatusServicio.csv");
 
-				executeSqlScript("data2.sql");
+			Boolean demo = false; 
+
+				executeSqlScript("data/common/catalogos.sql");
+				loadCsvDataToMarcaTable("data/common/marcaAutos.csv");
+				loadCsvDataToModeloTable("data/common/modelosAutos.csv");
+				loadCsvDataToDepartamentosTable("data/common/departamentos.csv");
+				loadCsvDataToEstatusServicioTable("data/common/estatusServicio.csv");
+				executeSqlScript("data/common/empleados.sql");
+
+				if (demo){
+
+					executeSqlScript("data/demo/clientes.sql");
+				}
 		
 	}
 	
