@@ -19,16 +19,18 @@ public class DetalleOrdenServicio {
 	@ManyToOne
 	@JoinColumn(name = "ordenServicioId")
 	private OrdenServicio ordenServicio;
+	private double costo;
 	
 	public DetalleOrdenServicio() {
 		super();
 	}
 	
-	public DetalleOrdenServicio(long idDetalleOrdenServicio, String descripcionServicio, OrdenServicio ordenServicio) {
+	public DetalleOrdenServicio(long idDetalleOrdenServicio, String descripcionServicio, OrdenServicio ordenServicio, Double costo) {
 		super();
 		this.idDetalleOrdenServicio = idDetalleOrdenServicio;
 		this.descripcionServicio = descripcionServicio;
 		this.ordenServicio = ordenServicio;
+		this.costo = costo;
 	}
 
 	public long getIdDetalleOrdenServicio() {
@@ -55,4 +57,14 @@ public class DetalleOrdenServicio {
 		this.ordenServicio = ordenServicio;
 	}
 
+	public double getCosto() {
+		return costo;
+	}
+
+	public void setCosto(double costo) {
+		this.costo = costo;
+	}
+
+
+	
 }
