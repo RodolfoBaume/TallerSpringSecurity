@@ -44,6 +44,7 @@ public class DetalleOrdenServicioService implements IDetalleOrdenServicioService
 		DetalleOrdenServicio detalleOrdenServicioEntity = new DetalleOrdenServicio();
 		detalleOrdenServicioEntity.setDescripcionServicio(detalleOrdenServicio.descripcionServicio());
 		detalleOrdenServicioEntity.setOrdenServicio(detalleOrdenServicio.ordenServicio());
+		detalleOrdenServicioEntity.setCosto(detalleOrdenServicio.costo());
 		return detalleOrdenServicioRepository.save(detalleOrdenServicioEntity);
 	}
 
