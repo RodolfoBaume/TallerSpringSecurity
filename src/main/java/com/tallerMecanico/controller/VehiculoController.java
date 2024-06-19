@@ -52,7 +52,14 @@ public class VehiculoController {
 	public List<IVehiculoConOrdenClosedView> consulta() {
 		return vehiculoService.findBy();
 	}
-
+	
+	// Consulta paginación nueva con proyeccion
+	@GetMapping("/vehiculos/page/{page}")
+	public Page<IVehiculoConOrdenClosedView>consultaPage(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idVehiculo").ascending());
+		return vehiculoService.findBy(pageable);
+	}	
+	
 	// Consulta todos
 	/*
 	@GetMapping("/vehiculos/orden")
@@ -63,11 +70,13 @@ public class VehiculoController {
 	*/
 
 	// Consulta paginación
+	/*
 	@GetMapping("/vehiculos/page/{page}")
 	public Page<Vehiculo> consultaPage(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("idVehiculo").ascending());
 		return vehiculoService.findAllPage(pageable);
 	}
+	*/
 
 	// Consulta por id
 	@GetMapping("/vehiculos/{id}")

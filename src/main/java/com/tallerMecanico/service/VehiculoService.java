@@ -41,6 +41,11 @@ public class VehiculoService implements IVehiculoService{
 	public List<IVehiculoConOrdenClosedView> findBy() {
 		return vehiculoRepository.findBy();
 	}
+	
+	@Transactional(readOnly = true)
+    public Page<IVehiculoConOrdenClosedView> findBy(Pageable pageable) {
+        return vehiculoRepository.findBy(pageable);
+    }
 
 	// vehiculo por id
 	//@Transactional

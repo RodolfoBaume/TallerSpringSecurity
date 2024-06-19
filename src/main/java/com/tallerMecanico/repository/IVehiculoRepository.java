@@ -3,6 +3,7 @@ package com.tallerMecanico.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,10 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 	List<Vehiculo> findByCliente_IdCliente(Long clienteId);
 
 	List<IVehiculoConOrdenClosedView>findBy();
+	
+	@Query("SELECT v FROM Vehiculo v")
+    Page<IVehiculoConOrdenClosedView> findBy(Pageable pageable);
+	
 	
 	@Query("SELECT v FROM Vehiculo v WHERE v.id = ?1")
 	Optional<IVehiculoConOrdenClosedView> findById(long id);
