@@ -16,7 +16,6 @@ public class EstatusServicio {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idEstatusServicio;
 	private String estatusServicio;
-	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "departamentoId")
 	private Departamento departamento;
@@ -55,6 +54,5 @@ public class EstatusServicio {
 	public void setDepartamento(Departamento departamento) {
 		this.departamento = departamento;
 	}
-	
-	
+
 }

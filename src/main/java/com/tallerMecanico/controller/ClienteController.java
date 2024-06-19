@@ -30,6 +30,7 @@ import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.RegistroUsuarioClienteDto;
 import com.tallerMecanico.entity.Cliente;
 import com.tallerMecanico.entity.Vehiculo;
+import com.tallerMecanico.projection.IClienteClosedView;
 import com.tallerMecanico.repository.IVehiculoRepository;
 import com.tallerMecanico.service.ClienteService;
 import com.tallerMecanico.service.UsuarioAuthService;
@@ -47,15 +48,24 @@ public class ClienteController {
 	@Autowired
 	private UsuarioAuthService usuarioService;
 
+	/*
 	@Autowired
 	private IVehiculoRepository vehiculoRepository;
-
+*/
+	
 	// Consulta todos
 	@GetMapping("/clientes")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Cliente> consulta() {
 		return clienteService.findAll();
 	}
+	
+	@GetMapping("/clientes/vehiculos")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<IClienteClosedView>> getAllClientesWithVehiculos() {
+        List<IClienteClosedView> clientes = clienteService.getAllClientesWithVehiculos();
+        return ResponseEntity.ok(clientes);
+    }
 
 	// Consulta paginación
 	@GetMapping("/clientes/page/{page}")
@@ -86,11 +96,13 @@ public class ClienteController {
 	}
 
 	// Consultar los vehiculos por cliente
+	/*
 	@GetMapping("clientes/{idCliente}/vehiculos")
 	public List<Vehiculo> getVehiculosByCliente(@PathVariable Long idCliente) {
 		return vehiculoRepository.findByCliente_IdCliente(idCliente);
 	}
-
+*/
+	
 	// Eliminar por id
 	/*
 	 * @DeleteMapping("/clientes/{id}") public ResponseEntity<?>
@@ -210,4 +222,7 @@ public class ClienteController {
     public List<Cliente> buscarClientes(@RequestParam String searchTerm) {
         return clienteService.buscarClientesPorNombreApellidoPaternoApellidoMaternoTelefono(searchTerm);
     }
+    
+    
+    
 }

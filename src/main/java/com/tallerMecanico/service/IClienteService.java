@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.tallerMecanico.dto.ClienteDto;
 import com.tallerMecanico.entity.Cliente;
+import com.tallerMecanico.projection.IClienteClosedView;
 
 public interface IClienteService {
 
@@ -24,4 +25,7 @@ public interface IClienteService {
 	
 	List<Cliente> buscarClientesPorNombreApellidoPaternoApellidoMaternoTelefono(String searchTerm);
 	
+	Page<IClienteClosedView> getAllClientesWithVehiculos(Pageable pageable);
+	
+	List<IClienteClosedView> getAllClientesWithVehiculos();
 }

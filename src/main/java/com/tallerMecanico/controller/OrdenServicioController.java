@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tallerMecanico.dto.OrdenServicioDto;
 import com.tallerMecanico.dto.OrdenServicioVehiculoDto;
 import com.tallerMecanico.entity.OrdenServicio;
+import com.tallerMecanico.projection.IOrdenServicioProjection;
 import com.tallerMecanico.service.OrdenServicioService;
 
 @RestController
@@ -38,6 +39,19 @@ public class OrdenServicioController {
 
 	@Autowired
 	private OrdenServicioService ordenServicioService;
+	
+	@GetMapping("/ordenesServicio/{id}")
+    public ResponseEntity<IOrdenServicioProjection> getOrdenServicioById(@PathVariable Long id) {
+        IOrdenServicioProjection ordenServicio = ordenServicioService.getOrdenServicioById(id);
+        return ResponseEntity.ok(ordenServicio);
+    }
+
+    @GetMapping("/ordenesServicio")
+    public ResponseEntity<List<IOrdenServicioProjection>> getAllOrdenesServicio() {
+        List<IOrdenServicioProjection> ordenesServicio = ordenServicioService.getAllOrdenesServicio();
+        return ResponseEntity.ok(ordenesServicio);
+    }
+
 
 	// Consulta todos
 	@GetMapping("/ordenesServicio2")
@@ -61,11 +75,13 @@ public class OrdenServicioController {
     }
 	
 	// con vehiculo
+	/*
 	@GetMapping("/ordenesServicio")
     public ResponseEntity<List<OrdenServicioVehiculoDto>> getAllOrdenesServicioDTO() {
         List<OrdenServicioVehiculoDto> ordenesServicioDTO = ordenServicioService.getAllOrdenesServicioDTO();
         return ResponseEntity.ok(ordenesServicioDTO);
     }
+    */
 
 	// Consulta paginación
 	/*
@@ -85,6 +101,7 @@ public class OrdenServicioController {
 	
 	
 	// Consulta por id
+	/*
 	@GetMapping("/ordenesServicio/{id}")
 	public ResponseEntity<?> consultaPorID(@PathVariable Long id) {
 
@@ -105,7 +122,8 @@ public class OrdenServicioController {
 		}
 		return new ResponseEntity<OrdenServicio>(ordenServicio, HttpStatus.OK);
 	}
-
+*/
+	
 	// Eliminar por id
 	@DeleteMapping("/ordenesServicio/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {

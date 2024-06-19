@@ -8,7 +8,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "empleados")
 public class Empleado {
@@ -24,7 +23,7 @@ public class Empleado {
 	private String puesto;
 	private String observaciones;
 	@OneToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuarioId")
     private Usuario usuario;
 	
 	public Empleado() {

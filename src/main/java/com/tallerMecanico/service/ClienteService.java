@@ -1,10 +1,12 @@
 package com.tallerMecanico.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tallerMecanico.dto.ClienteDto;
 import com.tallerMecanico.entity.Cliente;
 import com.tallerMecanico.entity.Usuario;
+import com.tallerMecanico.projection.ClienteClosedViewImpl;
+import com.tallerMecanico.projection.IClienteClosedView;
+import com.tallerMecanico.projection.IVehiculoClosedView;
 import com.tallerMecanico.repository.IClienteRepository;
 import com.tallerMecanico.repository.IUsuarioRepository;
 
@@ -59,7 +64,7 @@ public class ClienteService implements IClienteService {
 		usuario.setIdUsuario(idUsuario);
 		clienteEntity.setUsuario(usuario);
 
-		clienteEntity.setVehiculos(cliente.vehiculos());
+		//clienteEntity.setVehiculos(cliente.vehiculos());
 
 		return clienteRepository.save(clienteEntity);
 	}
@@ -106,7 +111,7 @@ public class ClienteService implements IClienteService {
 		clienteEntity.setApellidoMaterno(cliente.apellidoMaterno());
 		clienteEntity.setDomicilio(cliente.domicilio());
 		clienteEntity.setTelefono(cliente.telefono());
-		clienteEntity.setVehiculos(cliente.vehiculos());
+		//clienteEntity.setVehiculos(cliente.vehiculos());
 		return clienteRepository.save(clienteEntity);
 	}
 
@@ -114,5 +119,49 @@ public class ClienteService implements IClienteService {
 	public List<Cliente> buscarClientesPorNombreApellidoPaternoApellidoMaternoTelefono(String searchTerm) {
         return clienteRepository.findByNombreApellidoPaternoApellidoMaternoTelefonoLike(searchTerm);
     }
+
+	// Clientes paginación con vehiculo
+		public Page<IClienteClosedView> getAllClientesWithVehiculos(Pageable pageable) {
+		    Page<IClienteClosedView> clientesProxies = clienteRepository.findAllClientes(pageable);
+		    List<IClienteClosedView> clientes = new ArrayList<>();
+
+		    for (IClienteClosedView clienteProxy : clientesProxies) {
+		        ClienteClosedViewImpl cliente = new ClienteClosedViewImpl();
+		        cliente.setIdCliente(clienteProxy.getIdCliente());
+		        cliente.setNombre(clienteProxy.getNombre());
+		        cliente.setApellidoPaterno(clienteProxy.getApellidoPaterno());
+		        cliente.setApellidoMaterno(clienteProxy.getApellidoMaterno());
+		        cliente.setDomicilio(clienteProxy.getDomicilio());
+		        cliente.setTelefono(clienteProxy.getTelefono());
+
+		        List<IVehiculoClosedView> vehiculos = clienteRepository.findVehiculosByClienteId(cliente.getIdCliente());
+		        cliente.setVehiculos(vehiculos);
+
+		        clientes.add(cliente);
+		    }
+		    return new PageImpl<>(clientes, pageable, clientesProxies.getTotalElements());
+		}
+		
+		// Clientes 
+		public List<IClienteClosedView> getAllClientesWithVehiculos() {
+	        List<IClienteClosedView> clientesProxies = clienteRepository.findAllClientes();
+	        List<IClienteClosedView> clientes = new ArrayList<>();
+
+	        for (IClienteClosedView clienteProxy : clientesProxies) {
+	            ClienteClosedViewImpl cliente = new ClienteClosedViewImpl();
+	            cliente.setIdCliente(clienteProxy.getIdCliente());
+	            cliente.setNombre(clienteProxy.getNombre());
+	            cliente.setApellidoPaterno(clienteProxy.getApellidoPaterno());
+	            cliente.setApellidoMaterno(clienteProxy.getApellidoMaterno());
+	            cliente.setDomicilio(clienteProxy.getDomicilio());
+	            cliente.setTelefono(clienteProxy.getTelefono());
+
+	            List<IVehiculoClosedView> vehiculos = clienteRepository.findVehiculosByClienteId(cliente.getIdCliente());
+	            cliente.setVehiculos(vehiculos);
+
+	            clientes.add(cliente);
+	        }
+	        return clientes;
+	    }
 	
 }

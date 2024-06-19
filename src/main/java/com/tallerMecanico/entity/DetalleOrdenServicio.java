@@ -8,7 +8,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "detalleOrdenServicios")
 public class DetalleOrdenServicio {
@@ -24,8 +23,9 @@ public class DetalleOrdenServicio {
 	public DetalleOrdenServicio() {
 		super();
 	}
-	
-	public DetalleOrdenServicio(long idDetalleOrdenServicio, String descripcionServicio, OrdenServicio ordenServicio, Double costo) {
+
+	public DetalleOrdenServicio(long idDetalleOrdenServicio, String descripcionServicio, OrdenServicio ordenServicio,
+			double costo) {
 		super();
 		this.idDetalleOrdenServicio = idDetalleOrdenServicio;
 		this.descripcionServicio = descripcionServicio;
@@ -64,7 +64,5 @@ public class DetalleOrdenServicio {
 	public void setCosto(double costo) {
 		this.costo = costo;
 	}
-
-
 	
 }

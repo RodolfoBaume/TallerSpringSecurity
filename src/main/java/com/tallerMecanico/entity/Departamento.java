@@ -13,7 +13,7 @@ public class Departamento {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idDepartamento;
 	private String departamento;
-		
+	
 	public Departamento() {
 		super();
 	}
@@ -38,6 +38,6 @@ public class Departamento {
 
 	public void setDepartamento(String departamento) {
 		this.departamento = departamento;
-	} 
-	
+	}
+
 }

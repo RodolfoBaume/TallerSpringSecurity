@@ -15,10 +15,10 @@ public class VehiculoOrdenDto {
 	private String color;
 	private TipoMotor tipoMotor;
 	private String imagen;
-	private Cliente cliente;
+	//private Cliente cliente;
 
 	public VehiculoOrdenDto(long idVehiculo, String vin, String matricula, ModeloOrdenDto modelo, int anioModelo,
-			String color, TipoMotor tipoMotor, String imagen, Cliente cliente) {
+			String color, TipoMotor tipoMotor, String imagen) {
 		super();
 		this.idVehiculo = idVehiculo;
 		this.vin = vin;
@@ -28,7 +28,7 @@ public class VehiculoOrdenDto {
 		this.color = color;
 		this.tipoMotor = tipoMotor;
 		this.imagen = imagen;
-		this.cliente = cliente;
+		//this.cliente = cliente;
 	}
 
 
@@ -111,7 +111,7 @@ public class VehiculoOrdenDto {
 		this.imagen = imagen;
 	}
 
-
+/*
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -120,6 +120,6 @@ public class VehiculoOrdenDto {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-
+*/
     
 }

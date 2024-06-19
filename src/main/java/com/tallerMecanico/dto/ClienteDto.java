@@ -1,10 +1,8 @@
 package com.tallerMecanico.dto;
 
-import java.util.List;
 
 import com.tallerMecanico.entity.Cliente;
 import com.tallerMecanico.entity.Usuario;
-import com.tallerMecanico.entity.Vehiculo;
 
 
 public record ClienteDto(
@@ -14,11 +12,11 @@ public record ClienteDto(
 		String apellidoMaterno, 
 		String domicilio, 
 		String telefono, 
-		Usuario usuario, 
-		List<Vehiculo> vehiculos) {
+		Usuario usuario
+		) {
 	
 	public ClienteDto(Cliente cliente) {
-		this(cliente.getIdCliente(), cliente.getNombre(), cliente.getApellidoPaterno(), cliente.getApellidoMaterno(), cliente.getDomicilio(), cliente.getTelefono(), cliente.getUsuario(), cliente.getVehiculos());
+		this(cliente.getIdCliente(), cliente.getNombre(), cliente.getApellidoPaterno(), cliente.getApellidoMaterno(), cliente.getDomicilio(), cliente.getTelefono(), cliente.getUsuario() );
 	}
 
 }

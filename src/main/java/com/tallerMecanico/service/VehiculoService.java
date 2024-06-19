@@ -12,7 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tallerMecanico.dto.VehiculoDto;
 import com.tallerMecanico.entity.Vehiculo;
+import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
 import com.tallerMecanico.repository.IVehiculoRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class VehiculoService implements IVehiculoService{
@@ -27,10 +30,24 @@ public class VehiculoService implements IVehiculoService{
 	}
 	
 	// vehiculos con orden de servicio
+	/*
 	@Transactional(readOnly = true)
 	public List<Vehiculo> obtenerTodosLosVehiculosConOrdenServicio() {
         return vehiculoRepository.findAllWithOrdenServicio();
     }
+	*/
+	
+	@Transactional
+	public List<IVehiculoConOrdenClosedView> findBy() {
+		return vehiculoRepository.findBy();
+	}
+
+	// vehiculo por id
+	//@Transactional
+	public IVehiculoConOrdenClosedView getVehiculoById(long id) {
+		return vehiculoRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Vehiculo not found with id " + id));
+	}
 	
 	// consulta todos para paginación
 	@Transactional(readOnly = true)
@@ -55,8 +72,8 @@ public class VehiculoService implements IVehiculoService{
 		vehiculoEntity.setTipoMotor(vehiculo.tipoMotor());
 		vehiculoEntity.setImagen(vehiculo.imagen());
 		vehiculoEntity.setModelo(vehiculo.modelo());
-		vehiculoEntity.setOrdenServicio(vehiculo.ordenServicio());
-		vehiculoEntity.setCliente(vehiculo.cliente());
+		//vehiculoEntity.setOrdenServicio(vehiculo.ordenServicio());
+		//vehiculoEntity.setCliente(vehiculo.cliente());
 		return vehiculoRepository.save(vehiculoEntity);
 	}
 
@@ -78,8 +95,8 @@ public class VehiculoService implements IVehiculoService{
 		vehiculoEntity.setTipoMotor(vehiculo.tipoMotor());
 		vehiculoEntity.setImagen(vehiculo.imagen());
 		vehiculoEntity.setModelo(vehiculo.modelo());
-		vehiculoEntity.setOrdenServicio(vehiculo.ordenServicio());
-		vehiculoEntity.setCliente(vehiculo.cliente());
+		//vehiculoEntity.setOrdenServicio(vehiculo.ordenServicio());
+		//vehiculoEntity.setCliente(vehiculo.cliente());
 		return vehiculoRepository.save(vehiculoEntity);
 	}
 }

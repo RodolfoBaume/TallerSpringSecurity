@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.tallerMecanico.dto.VehiculoDto;
 import com.tallerMecanico.entity.Vehiculo;
+import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
 
 public interface IVehiculoService {
 
@@ -21,5 +22,10 @@ public interface IVehiculoService {
 	Vehiculo deleteVehiculo(Long idVehiculo);
 	
 	Vehiculo updateVehiculo(Long idVehiculo, VehiculoDto vehiculo);
+	
+	
+	List<IVehiculoConOrdenClosedView> findBy();
+	
+	IVehiculoConOrdenClosedView getVehiculoById(long id);
 	
 }

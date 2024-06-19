@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "marcas")
 public class Marca {
@@ -40,6 +39,5 @@ public class Marca {
 	public void setMarca(String marca) {
 		this.marca = marca;
 	}
-	
-	
+
 }

@@ -11,15 +11,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tallerMecanico.dto.ModeloDto;
 import com.tallerMecanico.dto.ModeloOrdenDto;
 import com.tallerMecanico.dto.OrdenServicioDto;
 import com.tallerMecanico.dto.OrdenServicioVehiculoDto;
-import com.tallerMecanico.dto.VehiculoDto;
 import com.tallerMecanico.dto.VehiculoOrdenDto;
 import com.tallerMecanico.entity.Modelo;
 import com.tallerMecanico.entity.OrdenServicio;
-import com.tallerMecanico.entity.Vehiculo;
+import com.tallerMecanico.projection.IOrdenServicioProjection;
 import com.tallerMecanico.repository.IOrdenServicioRepository;
 
 @Service
@@ -32,6 +30,16 @@ public class OrdenServicioService implements IOrdenServicioService {
 	public OrdenServicioService(IOrdenServicioRepository ordenServicioRepository) {
 		this.ordenServicioRepository = ordenServicioRepository;
 	}
+	
+	
+	public IOrdenServicioProjection getOrdenServicioById(Long idOrdenServicio) {
+		return ordenServicioRepository.findProjectedById(idOrdenServicio);
+	}
+
+	public List<IOrdenServicioProjection> getAllOrdenesServicio() {
+		return ordenServicioRepository.findAllProjected();
+	}
+	
 
 	// Consulta todos
 	@Transactional(readOnly = true)
@@ -76,8 +84,7 @@ public class OrdenServicioService implements IOrdenServicioService {
 					ordenServicio.getVehiculo().getAnioModelo(),
 					ordenServicio.getVehiculo().getColor(), 
 					ordenServicio.getVehiculo().getTipoMotor(),
-					ordenServicio.getVehiculo().getImagen(), 
-					ordenServicio.getVehiculo().getCliente()));
+					ordenServicio.getVehiculo().getImagen()));
 			dto.setComentarios(ordenServicio.getComentarios());
 			dto.setEmpleado(ordenServicio.getEmpleado());
 
@@ -181,8 +188,7 @@ public class OrdenServicioService implements IOrdenServicioService {
 					ordenServicio.getVehiculo().getAnioModelo(),
 					ordenServicio.getVehiculo().getColor(), 
 					ordenServicio.getVehiculo().getTipoMotor(),
-					ordenServicio.getVehiculo().getImagen(), 
-					ordenServicio.getVehiculo().getCliente()));
+					ordenServicio.getVehiculo().getImagen()));
 			ordenServicioDTO.setComentarios(ordenServicio.getComentarios());
 			// ordenServicioDTO.setEmpleadoNombre(ordenServicio.getEmpleado().getNombre());
 			// // Ejemplo de obtener el nombre del empleado

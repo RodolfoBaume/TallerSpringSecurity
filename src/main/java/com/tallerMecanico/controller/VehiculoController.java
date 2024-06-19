@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.VehiculoDto;
 import com.tallerMecanico.entity.Vehiculo;
+import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
 import com.tallerMecanico.service.VehiculoService;
 
 @RestController
@@ -38,18 +39,28 @@ public class VehiculoController {
 	private VehiculoService vehiculoService;
 
 	// Consulta todos
+	/*
 	@GetMapping("/vehiculos")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Vehiculo> consulta() {
 		return vehiculoService.findAll();
 	}
+	*/
+	
+	@GetMapping("/vehiculos")
+	@ResponseStatus(HttpStatus.OK)
+	public List<IVehiculoConOrdenClosedView> consulta() {
+		return vehiculoService.findBy();
+	}
 
 	// Consulta todos
+	/*
 	@GetMapping("/vehiculos/orden")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Vehiculo> consultas() {
 		return vehiculoService.obtenerTodosLosVehiculosConOrdenServicio();
 	}
+	*/
 
 	// Consulta paginación
 	@GetMapping("/vehiculos/page/{page}")

@@ -1,16 +1,12 @@
 package com.tallerMecanico.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -25,21 +21,17 @@ public class Factura {
 	@OneToOne
 	@JoinColumn(name="ordenServicio_id")
 	private OrdenServicio ordenServicio;
-	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleFactura> detalleFacturas = new ArrayList<>();
 	
 	public Factura() {
 		super();
 	}
 
-	public Factura(long idFactura, Date fechaFactura, double monto, OrdenServicio ordenServicio,
-			List<DetalleFactura> detalleFacturas) {
+	public Factura(long idFactura, Date fechaFactura, double monto, OrdenServicio ordenServicio) {
 		super();
 		this.idFactura = idFactura;
 		this.fechaFactura = fechaFactura;
 		this.monto = monto;
 		this.ordenServicio = ordenServicio;
-		this.detalleFacturas = detalleFacturas;
 	}
 
 	public long getIdFactura() {
@@ -73,13 +65,5 @@ public class Factura {
 	public void setOrdenServicio(OrdenServicio ordenServicio) {
 		this.ordenServicio = ordenServicio;
 	}
-
-	public List<DetalleFactura> getDetalleFacturas() {
-		return detalleFacturas;
-	}
-
-	public void setDetalleFacturas(List<DetalleFactura> detalleFacturas) {
-		this.detalleFacturas = detalleFacturas;
-	}
-
+	
 }

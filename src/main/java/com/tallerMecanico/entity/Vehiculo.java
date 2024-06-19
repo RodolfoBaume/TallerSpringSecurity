@@ -2,11 +2,6 @@ package com.tallerMecanico.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +15,6 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "vehiculos")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVehiculo")
 public class Vehiculo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +23,6 @@ public class Vehiculo {
 	private String matricula;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "modeloId")
-	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Modelo modelo;
 	private int anioModelo;
 	private String color;
@@ -38,16 +31,28 @@ public class Vehiculo {
 	private TipoMotor tipoMotor;
 	@Column(columnDefinition = "TEXT") // tipo text
 	private String imagen;
-	@JsonIgnoreProperties(ignoreUnknown = true, value= { "vehiculos" })
 	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "clienteId")
-	//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idCliente")
+	@JoinColumn(name = "clienteId")
 	private Cliente cliente;
 	@OneToMany(mappedBy = "vehiculo", fetch = FetchType.LAZY)
     private List<OrdenServicio> ordenServicio;
 	
+	
 	public Vehiculo() {
 		super();
+	}
+
+	public Vehiculo(long idVehiculo, String vin, String matricula, Modelo modelo, int anioModelo, String color,
+			TipoMotor tipoMotor, String imagen) {
+		super();
+		this.idVehiculo = idVehiculo;
+		this.vin = vin;
+		this.matricula = matricula;
+		this.modelo = modelo;
+		this.anioModelo = anioModelo;
+		this.color = color;
+		this.tipoMotor = tipoMotor;
+		this.imagen = imagen;
 	}
 
 	public Vehiculo(long idVehiculo, String vin, String matricula, Modelo modelo, int anioModelo, String color,
@@ -144,5 +149,5 @@ public class Vehiculo {
 	public void setOrdenServicio(List<OrdenServicio> ordenServicio) {
 		this.ordenServicio = ordenServicio;
 	}
-	
+
 }
