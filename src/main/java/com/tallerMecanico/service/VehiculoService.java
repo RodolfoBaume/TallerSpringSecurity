@@ -86,7 +86,7 @@ public class VehiculoService implements IVehiculoService {
 		vehiculoEntity.setImagen(vehiculo.imagen());
 		vehiculoEntity.setModelo(vehiculo.modelo());
 		// vehiculoEntity.setOrdenServicio(vehiculo.ordenServicio());
-		// vehiculoEntity.setCliente(vehiculo.cliente());
+		vehiculoEntity.setCliente(vehiculo.cliente());
 		return vehiculoRepository.save(vehiculoEntity);
 	}
 

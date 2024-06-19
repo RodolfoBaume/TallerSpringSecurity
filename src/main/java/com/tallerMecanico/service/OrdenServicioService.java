@@ -208,7 +208,9 @@ public class OrdenServicioService implements IOrdenServicioService {
     */
 	
 	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(Long idDepartamento) {
-        return ordenServicioRepository.findByDepartamentoId(idDepartamento);
-    }
+        List<IOrdenServicioDepto> lista = ordenServicioRepository.findByDepartamentoId(idDepartamento);
+		System.out.println(">>>>>>>>>>>>>>>>>> " + lista.toString());
+		return lista;
+	}
 
 }

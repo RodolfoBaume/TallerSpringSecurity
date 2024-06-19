@@ -36,6 +36,7 @@ public class OrdenServicio {
 	@ManyToOne
 	@JoinColumn(name = "empleadoId")
 	private Empleado empleado;
+	
 
 	public OrdenServicio() {
 		super();
