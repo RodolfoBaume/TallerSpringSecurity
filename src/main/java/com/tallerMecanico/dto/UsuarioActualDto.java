@@ -4,7 +4,8 @@ public class UsuarioActualDto {
 	private String username;
 	private String password;
 	private String role;
-	
+	private Long idCliente;
+	private Long idEmpleado;
 	
 	public UsuarioActualDto() {
 		super();
@@ -46,6 +47,25 @@ public class UsuarioActualDto {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public Long getIdCliente() {
+		return idCliente;
+	}
+
+
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
+	}
+
+
+	public Long getIdEmpleado() {
+		return idEmpleado;
+	}
+
+
+	public void setIdEmpleado(Long idEmpleado) {
+		this.idEmpleado = idEmpleado;
 	}
 
 	

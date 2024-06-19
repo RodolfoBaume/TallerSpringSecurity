@@ -83,12 +83,15 @@ public class UsuarioAuthService {
 	// usuarioActual
 	public ResponseEntity<UsuarioActualDto> obtenerUsuarioActual(Principal principal) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Usuario user = usuariosRepository.findCustomerByUsername(userDetails.getUsername());
 
 		UsuarioActualDto response = new UsuarioActualDto();
 		response.setUsername(userDetails.getUsername());
 		response.setPassword(userDetails.getPassword()); // No se recomienda exponer la contraseña, solo se utiliza aquí
 															// para ilustrar
 		response.setRole(userDetails.getAuthorities().toArray()[0].toString());
+		response.setIdCliente(user.getCliente() !=null ? user.getCliente().getIdCliente() : 0L);
+		response.setIdEmpleado(user.getEmpleado() != null? user.getEmpleado().getIdEmpleado() : 0L);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
