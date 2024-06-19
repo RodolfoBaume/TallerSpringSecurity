@@ -53,12 +53,18 @@ public class VehiculoController {
 		return vehiculoService.findBy();
 	}
 	
+
 	// Consulta paginación nueva con proyeccion
 	@GetMapping("/vehiculos/page/{page}")
 	public Page<IVehiculoConOrdenClosedView>consultaPage(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("idVehiculo").ascending());
 		return vehiculoService.findBy(pageable);
 	}	
+	
+	@GetMapping("/vehiculos/{id}")
+	public IVehiculoConOrdenClosedView getVehiculoById(@PathVariable("id") Long idVehiculo) {
+        return vehiculoService.findByIdVehiculo(idVehiculo);
+    }
 	
 	// Consulta todos
 	/*
@@ -79,6 +85,7 @@ public class VehiculoController {
 	*/
 
 	// Consulta por id
+	/*
 	@GetMapping("/vehiculos/{id}")
 	public ResponseEntity<?> consultaPorID(@PathVariable Long id) {
 
@@ -98,7 +105,8 @@ public class VehiculoController {
 		}
 		return new ResponseEntity<Vehiculo>(vehiculo, HttpStatus.OK);
 	}
-
+	*/
+	
 	// Eliminar por id
 	@DeleteMapping("/vehiculos/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {

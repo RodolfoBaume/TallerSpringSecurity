@@ -14,9 +14,7 @@ public interface IVehiculoService {
 	List<Vehiculo> findAll();
 	
 	Page<Vehiculo> findAllPage(Pageable pageable);
-	
-	Vehiculo findById(Long idVehiculo);
-	
+		
 	Vehiculo createVehiculo(VehiculoDto vehiculo);
 	
 	Vehiculo deleteVehiculo(Long idVehiculo);
@@ -27,5 +25,6 @@ public interface IVehiculoService {
 	List<IVehiculoConOrdenClosedView> findBy();
 	
 	IVehiculoConOrdenClosedView getVehiculoById(long id);
+	
 	
 }

@@ -18,7 +18,7 @@ import com.tallerMecanico.repository.IVehiculoRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class VehiculoService implements IVehiculoService{
+public class VehiculoService implements IVehiculoService {
 
 	@Autowired
 	private IVehiculoRepository vehiculoRepository;
@@ -28,31 +28,38 @@ public class VehiculoService implements IVehiculoService{
 	public List<Vehiculo> findAll() {
 		return (List<Vehiculo>) vehiculoRepository.findAll(Sort.by("idVehiculo"));
 	}
-	
+
 	// vehiculos con orden de servicio
 	/*
-	@Transactional(readOnly = true)
-	public List<Vehiculo> obtenerTodosLosVehiculosConOrdenServicio() {
-        return vehiculoRepository.findAllWithOrdenServicio();
-    }
-	*/
-	
+	 * @Transactional(readOnly = true) public List<Vehiculo>
+	 * obtenerTodosLosVehiculosConOrdenServicio() { return
+	 * vehiculoRepository.findAllWithOrdenServicio(); }
+	 */
+
 	@Transactional
 	public List<IVehiculoConOrdenClosedView> findBy() {
 		return vehiculoRepository.findBy();
 	}
-	
+
 	@Transactional(readOnly = true)
-    public Page<IVehiculoConOrdenClosedView> findBy(Pageable pageable) {
-        return vehiculoRepository.findBy(pageable);
-    }
+	public Page<IVehiculoConOrdenClosedView> findBy(Pageable pageable) {
+		return vehiculoRepository.findBy(pageable);
+	}
 
 	// vehiculo por id
-	//@Transactional
+	// @Transactional
 	public IVehiculoConOrdenClosedView getVehiculoById(long id) {
-		return vehiculoRepository.findById(id)
+		return vehiculoRepository.findByIdVehiculo(id)
 				.orElseThrow(() -> new EntityNotFoundException("Vehiculo not found with id " + id));
 	}
+	
+	@Transactional(readOnly = true)
+    public IVehiculoConOrdenClosedView findByIdVehiculo(Long idVehiculo) {
+        return vehiculoRepository.findByIdVehiculo(idVehiculo)
+        		.orElseThrow(() -> new EntityNotFoundException("Vehiculo not found with id " + idVehiculo));
+    }
+
+	
 	
 	// consulta todos para paginación
 	@Transactional(readOnly = true)
@@ -65,6 +72,7 @@ public class VehiculoService implements IVehiculoService{
 	public Vehiculo findById(Long idVehiculo) {
 		return vehiculoRepository.findById(idVehiculo).orElse(null);
 	}
+	
 
 	// Crear
 	@Transactional
@@ -77,8 +85,8 @@ public class VehiculoService implements IVehiculoService{
 		vehiculoEntity.setTipoMotor(vehiculo.tipoMotor());
 		vehiculoEntity.setImagen(vehiculo.imagen());
 		vehiculoEntity.setModelo(vehiculo.modelo());
-		//vehiculoEntity.setOrdenServicio(vehiculo.ordenServicio());
-		//vehiculoEntity.setCliente(vehiculo.cliente());
+		// vehiculoEntity.setOrdenServicio(vehiculo.ordenServicio());
+		// vehiculoEntity.setCliente(vehiculo.cliente());
 		return vehiculoRepository.save(vehiculoEntity);
 	}
 
@@ -100,8 +108,9 @@ public class VehiculoService implements IVehiculoService{
 		vehiculoEntity.setTipoMotor(vehiculo.tipoMotor());
 		vehiculoEntity.setImagen(vehiculo.imagen());
 		vehiculoEntity.setModelo(vehiculo.modelo());
-		//vehiculoEntity.setOrdenServicio(vehiculo.ordenServicio());
-		//vehiculoEntity.setCliente(vehiculo.cliente());
+		// vehiculoEntity.setOrdenServicio(vehiculo.ordenServicio());
+		// vehiculoEntity.setCliente(vehiculo.cliente());
 		return vehiculoRepository.save(vehiculoEntity);
 	}
+
 }
