@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tallerMecanico.dto.OrdenServicioDto;
 import com.tallerMecanico.dto.OrdenServicioVehiculoDto;
 import com.tallerMecanico.entity.OrdenServicio;
+import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
 import com.tallerMecanico.service.OrdenServicioService;
 
@@ -202,8 +203,12 @@ public class OrdenServicioController {
 	
 	//Ordenes Servicio por Departamento
 	@GetMapping("/ordenesServicio/departamento/{idDepartamento}")
+	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(@PathVariable Long idDepartamento) {
+        return ordenServicioService.getOrdenesServicioByDepartamento(idDepartamento);
+    }
+	/*
     public List<OrdenServicio> getOrdenesByDepartamento(@PathVariable Long idDepartamento) {
         return ordenServicioService.getOrdenesByDepartamento(idDepartamento);
     }
-
+*/
 }

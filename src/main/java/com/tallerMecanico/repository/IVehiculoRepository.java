@@ -12,6 +12,8 @@ import com.tallerMecanico.projection.IVehiculoClienteClosedView;
 import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
 
 public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
+	
+	List<Vehiculo> findByCliente_IdCliente(Long clienteId);
 
 	List<IVehiculoConOrdenClosedView>findBy();
 	

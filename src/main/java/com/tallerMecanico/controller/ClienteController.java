@@ -48,10 +48,10 @@ public class ClienteController {
 	@Autowired
 	private UsuarioAuthService usuarioService;
 
-	/*
+	
 	@Autowired
 	private IVehiculoRepository vehiculoRepository;
-*/
+
 	
 	// Consulta todos
 	@GetMapping("/clientes")
@@ -96,12 +96,12 @@ public class ClienteController {
 	}
 
 	// Consultar los vehiculos por cliente
-	/*
+	
 	@GetMapping("clientes/{idCliente}/vehiculos")
 	public List<Vehiculo> getVehiculosByCliente(@PathVariable Long idCliente) {
 		return vehiculoRepository.findByCliente_IdCliente(idCliente);
 	}
-*/
+
 	
 	// Eliminar por id
 	/*

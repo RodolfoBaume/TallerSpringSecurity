@@ -17,6 +17,7 @@ import com.tallerMecanico.dto.OrdenServicioVehiculoDto;
 import com.tallerMecanico.dto.VehiculoOrdenDto;
 import com.tallerMecanico.entity.Modelo;
 import com.tallerMecanico.entity.OrdenServicio;
+import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
 import com.tallerMecanico.repository.IOrdenServicioRepository;
 
@@ -200,7 +201,13 @@ public class OrdenServicioService implements IOrdenServicioService {
 	}
 	
 	//OrdenServicio por departamento
+	/*
 	public List<OrdenServicio> getOrdenesByDepartamento(Long idDepartamento) {
+        return ordenServicioRepository.findByDepartamentoId(idDepartamento);
+    }
+    */
+	
+	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(Long idDepartamento) {
         return ordenServicioRepository.findByDepartamentoId(idDepartamento);
     }
 
