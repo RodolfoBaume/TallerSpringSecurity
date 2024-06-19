@@ -10,11 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.projection.IVehiculoClienteClosedView;
+import com.tallerMecanico.projection.IVehiculoClosedView;
 import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
 
 public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 	
-	List<Vehiculo> findByCliente_IdCliente(Long clienteId);
+	List<IVehiculoClosedView>findByCliente_IdCliente(Long clienteId);
 
 	List<IVehiculoConOrdenClosedView>findBy();
 	

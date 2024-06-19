@@ -29,8 +29,8 @@ import com.tallerMecanico.dto.ClienteDto;
 import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.RegistroUsuarioClienteDto;
 import com.tallerMecanico.entity.Cliente;
-import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.projection.IClienteClosedView;
+import com.tallerMecanico.projection.IVehiculoClosedView;
 import com.tallerMecanico.repository.IVehiculoRepository;
 import com.tallerMecanico.service.ClienteService;
 import com.tallerMecanico.service.UsuarioAuthService;
@@ -98,7 +98,7 @@ public class ClienteController {
 	// Consultar los vehiculos por cliente
 	
 	@GetMapping("clientes/{idCliente}/vehiculos")
-	public List<Vehiculo> getVehiculosByCliente(@PathVariable Long idCliente) {
+	public List<IVehiculoClosedView> getVehiculosByCliente(@PathVariable Long idCliente) {
 		return vehiculoRepository.findByCliente_IdCliente(idCliente);
 	}
 
