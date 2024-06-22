@@ -44,8 +44,8 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 	public void run(ApplicationArguments args) throws Exception {
 		// Ejecutar el script SQL
 
-			Boolean demo = false; 
-
+			Boolean demo = true; 
+ 
 				executeSqlScript("data/common/catalogos.sql");
 				loadCsvDataToMarcaTable("data/common/marcaAutos.csv");
 				loadCsvDataToModeloTable("data/common/modelosAutos.csv");
@@ -56,6 +56,9 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 				if (demo){
 
 					executeSqlScript("data/demo/clientes.sql");
+					loadCsvDataToVehiculosTable("data/demo/vehiculos.csv");
+					loadCsvDataToOrdenesTable("data/demo/ordenes.csv");
+
 				}
 		
 	}
@@ -204,20 +207,22 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 					String estatusServicio = data[1].trim();
 					long departamentoId = Long.parseLong(data[2].trim()); // Verificar que este sea el índice correcto
 
-					System.out.println("xxxxxx:  "+idEstatusServicio + " " + estatusServicio + " " + departamentoId);
-
+					
 					// Verificar si el registro ya existe en la tabla
 					String searchQuery = "SELECT COUNT(*) FROM estatus_servicio WHERE id_estatus_servicio = " + idEstatusServicio;
 					int count = jdbcTemplate.queryForObject(searchQuery, Integer.class);
-
+					
 					// Si no existe, insertar el registro en la tabla
 					if (count == 0) {
 						String insertQuery = "INSERT INTO estatus_servicio (id_estatus_servicio,  estatus_servicio, departamento_id) VALUES (" + idEstatusServicio
-								+ ", '" + estatusServicio + "', "  + departamentoId + ")";
+						+ ", '" + estatusServicio + "', "  + departamentoId + ")";
+						System.out.println("- "+idEstatusServicio + " " + estatusServicio + " " + departamentoId);
 						jdbcTemplate.update(insertQuery);
 					}
 				}
 			}
+
+			
 
 			reader.close();
 		} catch (IOException e) {
@@ -225,5 +230,98 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 		}
 	}
 
+
+	// Carga tabla de Vehiculos por medio de archivo CSV
+	private void loadCsvDataToVehiculosTable(String csvFileName) throws SQLException {
+		try {
+			Resource resource = resourceLoader.getResource("classpath:" + csvFileName);
+			InputStream inputStream = resource.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+			// Omitir la primera línea que contiene los encabezados
+			String line = reader.readLine(); // Leer la primera línea y descartarla
+
+			while ((line = reader.readLine()) != null) {
+				String[] data = line.split(",");
+				if (data.length == 9) {
+					long idVehiculo = Long.parseLong(data[0].trim());
+					String anio_modelo = 	data[1].trim();
+					String color = 			data[2].trim();
+					String imagen = 		data[3].trim();
+					String matricula = 		data[4].trim();
+					String vin = 			data[5].trim();
+					String cliente_id = 	data[6].trim();
+					String modelo_id = 		data[7].trim();
+					String tipo_motor_id = 	data[8].trim();
+
+					// Verificar si el registro ya existe en la tabla
+					String searchQuery = "SELECT COUNT(*) FROM vehiculos WHERE id_vehiculo = " + idVehiculo;
+					int count = jdbcTemplate.queryForObject(searchQuery, Integer.class);
+
+					// Si no existe, insertar el registro en la tabla
+					if (count == 0) {
+						String insertQuery = "INSERT INTO vehiculos" 
+						+ "(id_vehiculo, anio_modelo, color, imagen, matricula, vin, cliente_id, modelo_id, tipo_motor_id) VALUES"
+						+ " (" + idVehiculo + ", " + anio_modelo + ", '" + color + "', '" + imagen + "', '" + matricula + "', '" 
+						+ vin + "', " + cliente_id + ", " + modelo_id + ", " + tipo_motor_id
+								+ ")";
+						System.out.println(insertQuery);
+						jdbcTemplate.update(insertQuery);
+					}
+				}
+			}
+
+			reader.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Error al cargar datos desde el archivo CSV a la tabla 'marcas'", e);
+		}
+	}
+
+
+	// Carga tabla de Vehiculos por medio de archivo CSV
+	private void loadCsvDataToOrdenesTable(String csvFileName) throws SQLException {
+		try {
+			Resource resource = resourceLoader.getResource("classpath:" + csvFileName);
+			InputStream inputStream = resource.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+			// Omitir la primera línea que contiene los encabezados
+			String line = reader.readLine(); // Leer la primera línea y descartarla
+
+			while ((line = reader.readLine()) != null) {
+				String[] data = line.split(",");
+				if (data.length == 9) {
+					long idOrdenServicio = Long.parseLong(data[0].trim());
+					String comentarios = 	data[1].trim();
+					String falla = 			data[2].trim();
+					String fecha_orden = 		data[3].trim();
+					String kilometraje = 		data[4].trim();
+					String observaciones = 			data[5].trim();
+					String empleado_id = 	data[6].trim();
+					String estatus_servicio_id = 		data[7].trim();
+					String vehiculo_id = 	data[8].trim();
+
+					// Verificar si el registro ya existe en la tabla
+					String searchQuery = "SELECT COUNT(*) FROM ordenes_servicios WHERE id_orden_servicio = " + idOrdenServicio;
+					int count = jdbcTemplate.queryForObject(searchQuery, Integer.class);
+
+					// Si no existe, insertar el registro en la tabla
+					if (count == 0) {
+						String insertQuery = "INSERT INTO ordenes_servicios" 
+						+ "(id_orden_servicio, comentarios, falla, fecha_orden, kilometraje, observaciones, empleado_id, estatus_servicio_id, vehiculo_id) VALUES"
+						+ " (" + idOrdenServicio + ", '" + comentarios + "', '" + falla + "', '" + fecha_orden + "', '" + kilometraje + "', '" 
+						+ observaciones + "', " + empleado_id + ", " + estatus_servicio_id + ", " + vehiculo_id
+								+ ")";
+						System.out.println(insertQuery);
+						jdbcTemplate.update(insertQuery);
+					}
+				}
+			}
+
+			reader.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Error al cargar datos desde el archivo CSV a la tabla 'marcas'", e);
+		}
+	}
 
 }
