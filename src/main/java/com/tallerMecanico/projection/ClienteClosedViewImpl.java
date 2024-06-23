@@ -10,6 +10,7 @@ public class ClienteClosedViewImpl implements IClienteClosedView {
     private String apellidoMaterno;
     private String domicilio;
     private String telefono;
+    private IUsuarioClosedView usuario;
     private List<IVehiculoClosedView> vehiculos;
 
     // Implementación de los getters y setters
@@ -69,6 +70,15 @@ public class ClienteClosedViewImpl implements IClienteClosedView {
     }
 
     @Override
+    public IUsuarioClosedView getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(IUsuarioClosedView usuario) {
+		this.usuario = usuario;
+	}
+
+	@Override
     public List<IVehiculoClosedView> getVehiculos() {
         return vehiculos;
     }
@@ -76,5 +86,6 @@ public class ClienteClosedViewImpl implements IClienteClosedView {
     public void setVehiculos(List<IVehiculoClosedView> vehiculos) {
         this.vehiculos = vehiculos;
     }
+   
 }
 

@@ -206,9 +206,10 @@ public class OrdenServicioController {
 	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(@PathVariable Long idDepartamento) {
         return ordenServicioService.getOrdenesServicioByDepartamento(idDepartamento);
     }
-	/*
+	
+	@GetMapping("/ordenesServicio/departamento2/{idDepartamento}")
     public List<OrdenServicio> getOrdenesByDepartamento(@PathVariable Long idDepartamento) {
         return ordenServicioService.getOrdenesByDepartamento(idDepartamento);
     }
-*/
+
 }

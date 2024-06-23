@@ -133,6 +133,8 @@ public class ClienteService implements IClienteService {
 		        cliente.setApellidoMaterno(clienteProxy.getApellidoMaterno());
 		        cliente.setDomicilio(clienteProxy.getDomicilio());
 		        cliente.setTelefono(clienteProxy.getTelefono());
+	            cliente.setUsuario(clienteProxy.getUsuario());
+
 
 		        List<IVehiculoClosedView> vehiculos = clienteRepository.findVehiculosByClienteId(cliente.getIdCliente());
 		        cliente.setVehiculos(vehiculos);
@@ -155,6 +157,8 @@ public class ClienteService implements IClienteService {
 	            cliente.setApellidoMaterno(clienteProxy.getApellidoMaterno());
 	            cliente.setDomicilio(clienteProxy.getDomicilio());
 	            cliente.setTelefono(clienteProxy.getTelefono());
+	            cliente.setUsuario(clienteProxy.getUsuario());
+
 
 	            List<IVehiculoClosedView> vehiculos = clienteRepository.findVehiculosByClienteId(cliente.getIdCliente());
 	            cliente.setVehiculos(vehiculos);
@@ -162,6 +166,27 @@ public class ClienteService implements IClienteService {
 	            clientes.add(cliente);
 	        }
 	        return clientes;
+	    }
+		
+		
+		public Page<IClienteClosedView> getAllClientesWithVehiculosPage(Pageable pageable) {
+	        Page<IClienteClosedView> clientesProxies = clienteRepository.findAllClientes(pageable);
+
+	        return clientesProxies.map(clienteProxy -> {
+	            ClienteClosedViewImpl cliente = new ClienteClosedViewImpl();
+	            cliente.setIdCliente(clienteProxy.getIdCliente());
+	            cliente.setNombre(clienteProxy.getNombre());
+	            cliente.setApellidoPaterno(clienteProxy.getApellidoPaterno());
+	            cliente.setApellidoMaterno(clienteProxy.getApellidoMaterno());
+	            cliente.setDomicilio(clienteProxy.getDomicilio());
+	            cliente.setTelefono(clienteProxy.getTelefono());
+	            cliente.setUsuario(clienteProxy.getUsuario());
+
+	            List<IVehiculoClosedView> vehiculos = clienteRepository.findVehiculosByClienteId(cliente.getIdCliente());
+	            cliente.setVehiculos(vehiculos);
+
+	            return cliente;
+	        });
 	    }
 	
 }

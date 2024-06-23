@@ -4,5 +4,5 @@ public interface IEstatusServicioProjection {
 	long getIdEstatusServicio();
 	String getEstatusServicio();
 	
-	IDepartamentoClosedView getDepartamento();
+	//IDepartamentoClosedView getDepartamento();
 }

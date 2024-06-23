@@ -10,6 +10,7 @@ public interface IClienteClosedView {
 	String getApellidoMaterno();
 	String getDomicilio();
 	String getTelefono();
+	IUsuarioClosedView getUsuario();
 	
 	List<IVehiculoClosedView> getVehiculos();
 }

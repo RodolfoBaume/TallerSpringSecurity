@@ -8,6 +8,6 @@ public interface IOrdenServicioView {
     String getFalla();
     String getKilometraje();
     String getObservaciones();
-    //IEstatusServicioProjection getEstatusServicio(); 
+    IEstatusServicioProjection getEstatusServicio(); 
     String getComentarios();
 }

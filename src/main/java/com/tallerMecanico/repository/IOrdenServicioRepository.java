@@ -31,19 +31,22 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
 	@Query("SELECT os FROM OrdenServicio os LEFT JOIN FETCH os.vehiculo")
     List<OrdenServicio> findAllWithVehiculo();
 	
-	/*
+	
 	@Query("SELECT o FROM OrdenServicio o WHERE o.estatusServicio.departamento.idDepartamento = :idDepartamento")
-    List<OrdenServicio> findByDepartamentoId(@Param("idDepartamento") Long idDepartamento);
-	*/
+    List<OrdenServicio> findByDepartamentoId1(@Param("idDepartamento") Long idDepartamento);
 	
 	
+	@Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
+		       "es as estatusServicio, d.departamento as departamento, " +
+		       "v as vehiculo " +
+		       "FROM OrdenServicio os " +
+		       "JOIN os.estatusServicio es " +
+		       "JOIN es.departamento d " +
+		       "JOIN os.vehiculo v " +
+		       "JOIN v.modelo m " +
+		       "JOIN m.marca ma " +
+		       "JOIN os.empleado e " +
+		       "WHERE d.idDepartamento = :idDepartamento")
+		List<IOrdenServicioDepto> findByDepartamentoId(@Param("idDepartamento") Long idDepartamento);
 	
-	@Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, es.estatusServicio as estatusServicio, d.departamento as departamento " +
-	           "FROM OrdenServicio os " +
-	           "JOIN os.estatusServicio es " +
-	           "JOIN es.departamento d " +
-	           "JOIN os.vehiculo v " +
-	           "JOIN os.empleado e " +
-	           "WHERE d.idDepartamento = :idDepartamento")
-	    List<IOrdenServicioDepto> findByDepartamentoId(@Param("idDepartamento") Long idDepartamento);
 }

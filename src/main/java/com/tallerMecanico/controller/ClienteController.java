@@ -66,9 +66,23 @@ public class ClienteController {
         List<IClienteClosedView> clientes = clienteService.getAllClientesWithVehiculos();
         return ResponseEntity.ok(clientes);
     }
+	
+	// paginacion con vehiculo
+	@GetMapping("/clientes/page/{page}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Page<IClienteClosedView>> getAllClientesWithVehiculos(
+        @PathVariable int page, 
+        @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("idCliente").ascending());
+        Page<IClienteClosedView> clientes = clienteService.getAllClientesWithVehiculos(pageable);
+        return ResponseEntity.ok(clientes);
+    }
+	
+	
 
 	// Consulta paginación
-	@GetMapping("/clientes/page/{page}")
+	@GetMapping("/clientes/opcion2/page/{page}")
 	public Page<Cliente> consultaPage(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("idCliente").ascending());
 		return clienteService.findAllPage(pageable);
