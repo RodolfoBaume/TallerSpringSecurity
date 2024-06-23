@@ -47,6 +47,10 @@ public class UsuarioAuthService {
 
 	// register
 	public ResponseEntity<RegistroResponseDto> registrarUsuario(UsuarioDto registroDto, String role) {
+		if(registroDto==null){
+	        return new ResponseEntity<>(new RegistroResponseDto("El registro esta vacio", null), HttpStatus.BAD_REQUEST);
+		}
+
 		if (usuariosRepository.existsByUsername(registroDto.username())) {
 	        return new ResponseEntity<>(new RegistroResponseDto("El usuario ya existe, intenta con otro", null), HttpStatus.BAD_REQUEST);
 		}
@@ -62,6 +66,7 @@ public class UsuarioAuthService {
 	        return new ResponseEntity<>(new RegistroResponseDto("Rol no válido", null), HttpStatus.BAD_REQUEST);
 		}
 
+		System.out.println(">>>>>>ROLES:" +roles.toString());
 		usuarios.setRol(Collections.singletonList(roles));
 		usuariosRepository.save(usuarios);
 
