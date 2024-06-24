@@ -7,12 +7,12 @@ WHERE NOT EXISTS (SELECT * FROM usuarios WHERE username = 'customer@server.com')
 
 -- Insertar en la tabla usuarios_roles si la combinación usuario_id y rol_id no existe
 INSERT INTO usuarios_roles (usuario_id, rol_id) 
-SELECT 3, 2 
+SELECT 3, 3 
 WHERE NOT EXISTS (
     SELECT * 
     FROM usuarios_roles 
     WHERE usuario_id = 3
-    AND rol_id = 2
+    AND rol_id = 3
 );
 
 -- Insertar en la tabla empleados asociando el usuario al empleado correspondiente si no hay duplicados
@@ -33,12 +33,12 @@ WHERE NOT EXISTS (SELECT * FROM usuarios WHERE username = 'pedro@server.com');
 
 -- Insertar en la tabla usuarios_roles si la combinación usuario_id y rol_id no existe
 INSERT INTO usuarios_roles (usuario_id, rol_id) 
-SELECT 4, 2 
+SELECT 4, 3 
 WHERE NOT EXISTS (
     SELECT * 
     FROM usuarios_roles 
     WHERE usuario_id = 4
-    AND rol_id = 2
+    AND rol_id = 3
 );
 
 -- Insertar en la tabla empleados asociando el usuario al empleado correspondiente si no hay duplicados
@@ -69,12 +69,12 @@ WHERE NOT EXISTS (
 
 -- Insertar en la tabla usuarios_roles si la combinación usuario_id y rol_id no existe
 INSERT INTO usuarios_roles (usuario_id, rol_id) 
-SELECT 5, 2 
+SELECT 5, 3 
 WHERE NOT EXISTS (
     SELECT * 
     FROM usuarios_roles 
     WHERE usuario_id = 5
-    AND rol_id = 2
+    AND rol_id = 3
 );
 
 
@@ -95,12 +95,12 @@ WHERE NOT EXISTS (
 
 -- Insertar en la tabla usuarios_roles si la combinación usuario_id y rol_id no existe
 INSERT INTO usuarios_roles (usuario_id, rol_id) 
-SELECT 6, 2 
+SELECT 6, 3 
 WHERE NOT EXISTS (
     SELECT * 
     FROM usuarios_roles 
     WHERE usuario_id = 6
-    AND rol_id = 2
+    AND rol_id = 3
 );
 
 
@@ -111,12 +111,12 @@ WHERE NOT EXISTS (SELECT * FROM usuarios WHERE username = 'carolg@server.com');
 
 -- Insertar en la tabla usuarios_roles si la combinación usuario_id y rol_id no existe
 INSERT INTO usuarios_roles (usuario_id, rol_id) 
-SELECT 7, 2 
+SELECT 7, 3 
 WHERE NOT EXISTS (
     SELECT * 
     FROM usuarios_roles 
     WHERE usuario_id = 7
-    AND rol_id = 2
+    AND rol_id = 3
 );
 
 -- Insertar en la tabla empleados asociando el usuario al empleado correspondiente si no hay duplicados
@@ -136,12 +136,12 @@ WHERE NOT EXISTS (SELECT * FROM usuarios WHERE username = 'jose@server.com');
 
 -- Insertar en la tabla usuarios_roles si la combinación usuario_id y rol_id no existe
 INSERT INTO usuarios_roles (usuario_id, rol_id) 
-SELECT 8, 2 
+SELECT 8, 3 
 WHERE NOT EXISTS (
     SELECT * 
     FROM usuarios_roles 
     WHERE usuario_id = 8
-    AND rol_id = 2
+    AND rol_id = 3
 );
 
 -- Insertar en la tabla empleados asociando el usuario al empleado correspondiente si no hay duplicados
