@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -136,7 +137,9 @@ public class OrdenServicioService implements IOrdenServicioService {
 		ordenServicioEntity.setVehiculo(ordenServicio.vehiculo());
 		ordenServicioEntity.setComentarios(ordenServicio.comentarios());
 		ordenServicioEntity.setEmpleado(ordenServicio.empleado());
+		System.out.println(ordenServicio.toString());
 		return ordenServicioRepository.save(ordenServicioEntity);
+		// return new OrdenServicio();
 	}
 
 	// Eliminar
@@ -164,7 +167,15 @@ public class OrdenServicioService implements IOrdenServicioService {
 	}
 
 	public List<OrdenServicio> obtenerPorEstatusServicio(String estatus) {
-		return ordenServicioRepository.findByEstatusServicio(estatus);
+		List<OrdenServicio> ordenes = null;
+
+		try{
+			ordenes = ordenServicioRepository.findByEstatusServicio(estatus);
+		}catch(DataAccessException e){
+			System.out.println( e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
+			System.out.println("ERROR SERVICIO>>>>>>>>");
+		}
+		return ordenes;
 	}
 
 	public List<OrdenServicioVehiculoDto> getAllOrdenesServicioDTO() {
