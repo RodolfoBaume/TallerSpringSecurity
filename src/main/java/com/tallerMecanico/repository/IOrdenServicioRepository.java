@@ -60,7 +60,7 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
 		       "JOIN os.vehiculo v " +
 		       "JOIN v.modelo m " +
 		       "JOIN m.marca ma " +
-		       "JOIN os.empleado e " +
+		    //    "JOIN os.empleado e " +
 		       "WHERE d.idDepartamento = :idDepartamento")
 		List<IOrdenServicioDepto> findByDepartamentoId(@Param("idDepartamento") Long idDepartamento);
 	
