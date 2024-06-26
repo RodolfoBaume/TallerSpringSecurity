@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.tallerMecanico.dto.OrdenServicioDto;
 import com.tallerMecanico.entity.OrdenServicio;
+import com.tallerMecanico.projection.IOrdenServicioDepto;
 
 public interface IOrdenServicioService {
 
@@ -22,7 +23,7 @@ public interface IOrdenServicioService {
 	
 	OrdenServicio updateOrdenServicio(Long idOrdenServicio, OrdenServicioDto ordenServicio);
 	
-	List<OrdenServicio> obtenerPorEstatusServicio(String estatus);
+	List<IOrdenServicioDepto> obtenerPorEstatusServicio(String estatus);
 	
 	//temporal
 	OrdenServicio buscarOrdenServicioConVehiculo(Long id);

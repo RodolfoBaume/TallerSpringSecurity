@@ -217,7 +217,7 @@ public class OrdenServicioController {
 
 	@GetMapping("/ordenesServicio/estatus/{estatus}")
 	public ResponseEntity<?> obtenerPorEstatus(@PathVariable String estatus) {
-		List<OrdenServicio> servicios = null;
+		List<IOrdenServicioDepto> servicios = null;
 		Map<String, Object> response = new HashMap<>();
 		try{
 			servicios =  ordenServicioService.obtenerPorEstatusServicio(estatus);
@@ -228,7 +228,7 @@ public class OrdenServicioController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
 
-		return new ResponseEntity<List<OrdenServicio>>(servicios, HttpStatus.OK);
+		return new ResponseEntity<List<IOrdenServicioDepto>>(servicios, HttpStatus.OK);
 
 	
 	}

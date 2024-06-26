@@ -43,7 +43,7 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		// Ejecutar el script SQL
-/*
+
 			Boolean demo = true; 
  
 				executeSqlScript("data/common/catalogos.sql");
@@ -61,7 +61,7 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 
 				}
 	
-		*/
+		
 	}
 	
 	

@@ -181,8 +181,9 @@ public class OrdenServicioService implements IOrdenServicioService {
 		return ordenServicioRepository.save(ordenServicioEntity);
 	}
 
-	public List<OrdenServicio> obtenerPorEstatusServicio(String estatus) {
-		List<OrdenServicio> ordenes = null;
+	@Transactional
+	public List<IOrdenServicioDepto> obtenerPorEstatusServicio(String estatus) {
+		List<IOrdenServicioDepto> ordenes = null;
 
 		try{
 			ordenes = ordenServicioRepository.findByEstatusServicio(estatus);

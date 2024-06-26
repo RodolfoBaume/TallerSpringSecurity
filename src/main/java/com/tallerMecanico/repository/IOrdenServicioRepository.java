@@ -26,8 +26,19 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
     List<IOrdenServicioSinDetalle> findAllProjectedBy();
     */
     
-    @Query("SELECT o FROM OrdenServicio o WHERE o.estatusServicio.estatusServicio = :estatus")
-    List<OrdenServicio> findByEstatusServicio(@Param("estatus") String estatus);
+    //@Query("SELECT o FROM OrdenServicio o WHERE o.estatusServicio.estatusServicio = :estatus")
+    @Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
+            "es as estatusServicio, d.departamento as departamento, " +
+            "v as vehiculo " +
+            "FROM OrdenServicio os " +
+            "JOIN os.estatusServicio es " +
+            "JOIN es.departamento d " +
+            "JOIN os.vehiculo v " +
+            "JOIN v.modelo m " +
+            "JOIN m.marca ma " +
+            "JOIN os.empleado e " +
+            "WHERE es.estatusServicio = :estatus")
+    List<IOrdenServicioDepto> findByEstatusServicio(@Param("estatus") String estatus);
 	
 	@Query("SELECT os FROM OrdenServicio os JOIN FETCH os.vehiculo WHERE os.idOrdenServicio = :id")
     OrdenServicio findByIdWithVehiculo(Long id);
