@@ -11,6 +11,11 @@ public class AuthRespuestaDto {
 
 	
 	
+	public AuthRespuestaDto() {
+	}
+
+
+
 	public String getAccessToken() {
 		return accessToken;
 	}

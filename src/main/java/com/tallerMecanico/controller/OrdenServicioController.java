@@ -216,8 +216,21 @@ public class OrdenServicioController {
 	}
 
 	@GetMapping("/ordenesServicio/estatus/{estatus}")
-	public List<OrdenServicio> obtenerPorEstatus(@PathVariable String estatus) {
-		return ordenServicioService.obtenerPorEstatusServicio(estatus);
+	public ResponseEntity<?> obtenerPorEstatus(@PathVariable String estatus) {
+		List<OrdenServicio> servicios = null;
+		Map<String, Object> response = new HashMap<>();
+		try{
+			servicios =  ordenServicioService.obtenerPorEstatusServicio(estatus);
+
+		} catch(DataAccessException e){
+			response.put("mensaje", "No ha sido posible obtener la lista de servicios por status.");
+			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		}
+
+		return new ResponseEntity<List<OrdenServicio>>(servicios, HttpStatus.OK);
+
+	
 	}
 
 	/*
