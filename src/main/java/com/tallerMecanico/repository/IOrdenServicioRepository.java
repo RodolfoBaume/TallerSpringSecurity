@@ -36,7 +36,7 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
             "JOIN os.vehiculo v " +
             "JOIN v.modelo m " +
             "JOIN m.marca ma " +
-            "JOIN os.empleado e " +
+            // "JOIN os.empleado e " +
             "WHERE es.estatusServicio = :estatus")
     List<IOrdenServicioDepto> findByEstatusServicio(@Param("estatus") String estatus);
 	

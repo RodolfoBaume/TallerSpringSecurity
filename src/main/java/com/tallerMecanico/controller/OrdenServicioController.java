@@ -65,6 +65,7 @@ public class OrdenServicioController {
 	
 	@GetMapping("/ordenesServicio/{id}")
     public IOrdenServicioProjection getOrdenServicioById(@PathVariable("id") long ordenServicioId) {
+		// TODO: no trae datos del empleado
         return ordenServicioService.getOrdenServicioById(ordenServicioId);
     }
 
