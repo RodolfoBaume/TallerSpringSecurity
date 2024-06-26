@@ -8,12 +8,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.projection.IVehiculoClienteClosedView;
 import com.tallerMecanico.projection.IVehiculoClosedView;
 import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
 
+@Repository
 public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 	
 	List<IVehiculoClosedView>findByCliente_IdCliente(Long clienteId);

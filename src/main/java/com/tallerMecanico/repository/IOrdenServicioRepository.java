@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.tallerMecanico.entity.OrdenServicio;
 import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
+import com.tallerMecanico.projection.IOrdenServicioSinDetalle;
 
 @Repository
 public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, Long>{
@@ -17,10 +18,13 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
 	@Query("SELECT o FROM OrdenServicio o JOIN FETCH o.vehiculo v JOIN FETCH v.cliente c WHERE o.idOrdenServicio = :idOrdenServicio")
     IOrdenServicioProjection findProjectedById(@Param("idOrdenServicio") Long idOrdenServicio);
 
+	
     @Query("SELECT o FROM OrdenServicio o JOIN FETCH o.vehiculo v JOIN FETCH v.cliente c")
-    List<IOrdenServicioProjection> findAllProjected();
+    List<IOrdenServicioSinDetalle> findAllProjected();
     
-    
+	/*
+    List<IOrdenServicioSinDetalle> findAllProjectedBy();
+    */
     
     @Query("SELECT o FROM OrdenServicio o WHERE o.estatusServicio.estatusServicio = :estatus")
     List<OrdenServicio> findByEstatusServicio(@Param("estatus") String estatus);
@@ -49,4 +53,19 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
 		       "WHERE d.idDepartamento = :idDepartamento")
 		List<IOrdenServicioDepto> findByDepartamentoId(@Param("idDepartamento") Long idDepartamento);
 	
+	/*
+	//Orden con detalle
+	@Query("SELECT os FROM OrdenServicio os " +
+	           "JOIN FETCH os.estatusServicio es " +
+	           "JOIN FETCH os.vehiculo v " +
+	           "LEFT JOIN FETCH os.detalleOrdenServicios dos " +
+	           "WHERE os.idOrdenServicio = :idOrdenServicio")
+	    IOrdenServicioProjection findOrdenServicioById(@Param("idOrdenServicio") Long idOrdenServicio);
+
+	    @Query("SELECT os FROM OrdenServicio os " +
+	           "JOIN FETCH os.estatusServicio es " +
+	           "JOIN FETCH os.vehiculo v " +
+	           "LEFT JOIN FETCH os.detalleOrdenServicios dos")
+	    Page<IOrdenServicioProjection> findAllOrdenServicios(Pageable pageable);
+	*/
 }

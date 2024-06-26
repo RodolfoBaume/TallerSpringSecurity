@@ -1,8 +1,7 @@
 package com.tallerMecanico.projection;
 
 import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 public interface IOrdenServicioProjection {
 	long getIdOrdenServicio();
@@ -13,6 +12,7 @@ public interface IOrdenServicioProjection {
     IEstatusServicioProjection getEstatusServicio(); 
     String getComentarios();
     IVehiculoSinOrden getVehiculo();
+    List<IDetalleOrdenServicioProjection> getDetalleOrdenServicios();
 
     /*
     @JsonProperty("estatusServicio")

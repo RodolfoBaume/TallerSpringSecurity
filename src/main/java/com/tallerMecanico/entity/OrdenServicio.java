@@ -28,7 +28,7 @@ public class OrdenServicio {
 	private EstatusServicio estatusServicio;
 	@OneToOne(mappedBy = "ordenServicio")
 	private Factura factura;
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehiculoId")
 	private Vehiculo vehiculo;	
 	@Column(columnDefinition = "TEXT") // tipo text

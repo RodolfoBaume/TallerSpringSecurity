@@ -17,8 +17,12 @@ import com.tallerMecanico.dto.OrdenServicioVehiculoDto;
 import com.tallerMecanico.dto.VehiculoOrdenDto;
 import com.tallerMecanico.entity.Modelo;
 import com.tallerMecanico.entity.OrdenServicio;
+import com.tallerMecanico.projection.IDetalleOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
+import com.tallerMecanico.projection.IOrdenServicioSinDetalle;
+import com.tallerMecanico.projection.OrdenServicioProjectionImpl;
+import com.tallerMecanico.repository.IDetalleOrdenServicioRepository;
 import com.tallerMecanico.repository.IOrdenServicioRepository;
 
 @Service
@@ -26,22 +30,40 @@ public class OrdenServicioService implements IOrdenServicioService {
 
 	@Autowired
 	private IOrdenServicioRepository ordenServicioRepository;
-
 	@Autowired
-	public OrdenServicioService(IOrdenServicioRepository ordenServicioRepository) {
+	private IDetalleOrdenServicioRepository detalleOrdenServicioRepository;
+	/*
+	 * @Autowired public OrdenServicioService(IOrdenServicioRepository
+	 * ordenServicioRepository) { this.ordenServicioRepository =
+	 * ordenServicioRepository; }
+	 */
+
+	public OrdenServicioService(IOrdenServicioRepository ordenServicioRepository,
+			IDetalleOrdenServicioRepository detalleOrdenServicioRepository) {
 		this.ordenServicioRepository = ordenServicioRepository;
-	}
-	
-	
-	public IOrdenServicioProjection getOrdenServicioById(Long idOrdenServicio) {
-		return ordenServicioRepository.findProjectedById(idOrdenServicio);
+		this.detalleOrdenServicioRepository = detalleOrdenServicioRepository;
 	}
 
-	public List<IOrdenServicioProjection> getAllOrdenesServicio() {
+	public List<IOrdenServicioSinDetalle> getAllOrdenesServicio() {
 		return ordenServicioRepository.findAllProjected();
 	}
-	
 
+	public IOrdenServicioProjection getOrdenServicioById(long ordenServicioId) {
+		OrdenServicio ordenServicio = ordenServicioRepository.findById(ordenServicioId)
+				.orElseThrow();
+		List<IDetalleOrdenServicioProjection> detalles = detalleOrdenServicioRepository
+				.findByOrdenServicio(ordenServicio);
+		return new OrdenServicioProjectionImpl(ordenServicio, detalles);
+	}
+
+	/*
+	 * public Page<IOrdenServicioProjection> getAllOrdenServicios(Pageable pageable)
+	 * { return ordenServicioRepository.findAllOrdenServicios(pageable); }
+	 * 
+	 * public IOrdenServicioProjection getOrdenServicioById(Long idOrdenServicio) {
+	 * return ordenServicioRepository.findOrdenServicioById(idOrdenServicio); }
+	 * 
+	 */
 	// Consulta todos
 	@Transactional(readOnly = true)
 	public List<OrdenServicio> findAll() {
@@ -77,15 +99,11 @@ public class OrdenServicioService implements IOrdenServicioService {
 			dto.setKilometraje(ordenServicio.getKilometraje());
 			dto.setEstatusServicio(ordenServicio.getEstatusServicio());
 			dto.setObservaciones(ordenServicio.getObservaciones());
-			dto.setVehiculo(new VehiculoOrdenDto(
-					ordenServicio.getVehiculo().getIdVehiculo(),
-					ordenServicio.getVehiculo().getVin(), 
-					ordenServicio.getVehiculo().getMatricula(),
+			dto.setVehiculo(new VehiculoOrdenDto(ordenServicio.getVehiculo().getIdVehiculo(),
+					ordenServicio.getVehiculo().getVin(), ordenServicio.getVehiculo().getMatricula(),
 					convertToModeloDto(ordenServicio.getVehiculo().getModelo()),
-					ordenServicio.getVehiculo().getAnioModelo(),
-					ordenServicio.getVehiculo().getColor(), 
-					ordenServicio.getVehiculo().getTipoMotor(),
-					ordenServicio.getVehiculo().getImagen()));
+					ordenServicio.getVehiculo().getAnioModelo(), ordenServicio.getVehiculo().getColor(),
+					ordenServicio.getVehiculo().getTipoMotor(), ordenServicio.getVehiculo().getImagen()));
 			dto.setComentarios(ordenServicio.getComentarios());
 			dto.setEmpleado(ordenServicio.getEmpleado());
 
@@ -93,20 +111,17 @@ public class OrdenServicioService implements IOrdenServicioService {
 		});
 	}
 
-	
 	private ModeloOrdenDto convertToModeloDto(Modelo modelo) {
-        if (modelo == null) {
-            return null;
-        }
-        ModeloOrdenDto dto = new ModeloOrdenDto();
-        dto.setIdModelo(modelo.getIdModelo());
-        dto.setModelo(modelo.getModelo());
-        dto.setMarca(modelo.getMarca());
-        return dto;
-    }
-	
-	
-	
+		if (modelo == null) {
+			return null;
+		}
+		ModeloOrdenDto dto = new ModeloOrdenDto();
+		dto.setIdModelo(modelo.getIdModelo());
+		dto.setModelo(modelo.getModelo());
+		dto.setMarca(modelo.getMarca());
+		return dto;
+	}
+
 	// consulta por id
 	@Transactional(readOnly = true)
 	public OrdenServicio findById(Long idOrdenServicio) {
@@ -181,15 +196,11 @@ public class OrdenServicioService implements IOrdenServicioService {
 			ordenServicioDTO.setEstatusServicio(ordenServicio.getEstatusServicio());
 			ordenServicioDTO.setObservaciones(ordenServicio.getObservaciones());
 			// Aquí puedes setear los datos del vehículo manualmente
-			ordenServicioDTO.setVehiculo(new VehiculoOrdenDto(
-					ordenServicio.getVehiculo().getIdVehiculo(),
-					ordenServicio.getVehiculo().getVin(), 
-					ordenServicio.getVehiculo().getMatricula(),
+			ordenServicioDTO.setVehiculo(new VehiculoOrdenDto(ordenServicio.getVehiculo().getIdVehiculo(),
+					ordenServicio.getVehiculo().getVin(), ordenServicio.getVehiculo().getMatricula(),
 					convertToModeloDto(ordenServicio.getVehiculo().getModelo()),
-					ordenServicio.getVehiculo().getAnioModelo(),
-					ordenServicio.getVehiculo().getColor(), 
-					ordenServicio.getVehiculo().getTipoMotor(),
-					ordenServicio.getVehiculo().getImagen()));
+					ordenServicio.getVehiculo().getAnioModelo(), ordenServicio.getVehiculo().getColor(),
+					ordenServicio.getVehiculo().getTipoMotor(), ordenServicio.getVehiculo().getImagen()));
 			ordenServicioDTO.setComentarios(ordenServicio.getComentarios());
 			// ordenServicioDTO.setEmpleadoNombre(ordenServicio.getEmpleado().getNombre());
 			// // Ejemplo de obtener el nombre del empleado
@@ -199,16 +210,15 @@ public class OrdenServicioService implements IOrdenServicioService {
 
 		return ordenesServicioDTO;
 	}
-	
-	//OrdenServicio por departamento
-	
+
+	// OrdenServicio por departamento
+
 	public List<OrdenServicio> getOrdenesByDepartamento(Long idDepartamento) {
-        return ordenServicioRepository.findByDepartamentoId1(idDepartamento);
-    }
-    
-	
+		return ordenServicioRepository.findByDepartamentoId1(idDepartamento);
+	}
+
 	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(Long idDepartamento) {
-        List<IOrdenServicioDepto> lista = ordenServicioRepository.findByDepartamentoId(idDepartamento);
+		List<IOrdenServicioDepto> lista = ordenServicioRepository.findByDepartamentoId(idDepartamento);
 		System.out.println(">>>>>>>>>>>>>>>>>> " + lista.toString());
 		return lista;
 	}

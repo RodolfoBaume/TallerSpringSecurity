@@ -28,8 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tallerMecanico.dto.OrdenServicioDto;
 import com.tallerMecanico.dto.OrdenServicioVehiculoDto;
 import com.tallerMecanico.entity.OrdenServicio;
+import com.tallerMecanico.projection.IDetalleOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
+import com.tallerMecanico.projection.IOrdenServicioSinDetalle;
 import com.tallerMecanico.service.OrdenServicioService;
 
 @RestController
@@ -41,17 +43,42 @@ public class OrdenServicioController {
 	@Autowired
 	private OrdenServicioService ordenServicioService;
 	
-	@GetMapping("/ordenesServicio/{id}")
+	/*
+	@GetMapping("/ordenes-servicio/page/{page}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Page<IOrdenServicioProjection>> getAllOrdenServicios(
+        @PathVariable int page, 
+        @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("idOrdenServicio").ascending());
+        Page<IOrdenServicioProjection> ordenes = ordenServicioService.getAllOrdenServicios(pageable);
+        return ResponseEntity.ok(ordenes);
+    }
+
+    @GetMapping("/ordenes-servicio/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<IOrdenServicioProjection> getOrdenServicioById(@PathVariable Long id) {
-        IOrdenServicioProjection ordenServicio = ordenServicioService.getOrdenServicioById(id);
-        return ResponseEntity.ok(ordenServicio);
+        IOrdenServicioProjection orden = ordenServicioService.getOrdenServicioById(id);
+        return ResponseEntity.ok(orden);
+    }
+	*/
+	
+	@GetMapping("/ordenesServicio/{id}")
+    public IOrdenServicioProjection getOrdenServicioById(@PathVariable("id") long ordenServicioId) {
+        return ordenServicioService.getOrdenServicioById(ordenServicioId);
     }
 
     @GetMapping("/ordenesServicio")
+    public List<IOrdenServicioSinDetalle> getAllOrdenesServicio() {
+        return ordenServicioService.getAllOrdenesServicio();
+    }
+    
+    /*
     public ResponseEntity<List<IOrdenServicioProjection>> getAllOrdenesServicio() {
         List<IOrdenServicioProjection> ordenesServicio = ordenServicioService.getAllOrdenesServicio();
         return ResponseEntity.ok(ordenesServicio);
     }
+    */
 
 
 	// Consulta todos
