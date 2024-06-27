@@ -58,6 +58,7 @@ public class TallerMecanicoApplication implements ApplicationRunner{
 					executeSqlScript("data/demo/clientes.sql");
 					loadCsvDataToVehiculosTable("data/demo/vehiculos.csv");
 					loadCsvDataToOrdenesTable("data/demo/ordenes.csv");
+					executeSqlScript("data/demo/indexesSync.sql");
 
 				}
 	
