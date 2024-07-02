@@ -117,7 +117,7 @@ public class ClienteService implements IClienteService {
 
 	
 	public List<Cliente> buscarClientesPorNombreApellidoPaternoApellidoMaternoTelefono(String searchTerm) {
-        return clienteRepository.findByNombreApellidoPaternoApellidoMaternoTelefonoLike(searchTerm);
+        return clienteRepository.findByNombreApellidoPaternoApellidoMaternoTelefonoLike(searchTerm.toLowerCase());
     }
 
 	// Clientes paginación con vehiculo

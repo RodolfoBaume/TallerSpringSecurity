@@ -16,7 +16,9 @@ import com.tallerMecanico.projection.IVehiculoClosedView;
 @Repository
 public interface IClienteRepository extends JpaRepository<Cliente, Long>{
 	
-	@Query("SELECT c FROM Cliente c WHERE c.nombre LIKE %?1% OR c.apellidoPaterno LIKE %?1% OR c.apellidoMaterno LIKE %?1% OR c.telefono LIKE %?1%")
+	@Query("SELECT c FROM Cliente c WHERE CONCAT(lower(c.nombre),' ',lower(c.apellidoPaterno)) " 
+		+ " LIKE %?1% OR CONCAT(lower(c.apellidoPaterno),' ',lower(c.apellidoMaterno)) LIKE %?1% "
+		+ " OR c.apellidoMaterno LIKE %?1% OR c.telefono LIKE %?1%")
 	List<Cliente> findByNombreApellidoPaternoApellidoMaternoTelefonoLike(String searchTerm);
 
 	List<IClienteClosedView>findBy();
