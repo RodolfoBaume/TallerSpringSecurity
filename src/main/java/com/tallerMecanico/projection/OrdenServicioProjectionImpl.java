@@ -59,4 +59,9 @@ public class OrdenServicioProjectionImpl implements IOrdenServicioProjection{
 	public List<IDetalleOrdenServicioProjection> getDetalleOrdenServicios() {
 		return detalles;
 	}
+
+	@Override
+	public IEmpleadoOrden getEmpleado() {
+		return new EmpleadoOrdenImpl(ordenServicio.getEmpleado());
+	}
 }

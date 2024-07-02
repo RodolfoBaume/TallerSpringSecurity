@@ -13,6 +13,8 @@ public interface IOrdenServicioProjection {
     String getComentarios();
     IVehiculoSinOrden getVehiculo();
     List<IDetalleOrdenServicioProjection> getDetalleOrdenServicios();
+    IEmpleadoOrden getEmpleado();
+
 
     /*
     @JsonProperty("estatusServicio")
