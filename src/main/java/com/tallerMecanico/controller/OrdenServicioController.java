@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.OrdenServicioDto;
-import com.tallerMecanico.dto.OrdenServicioVehiculoDto;
 import com.tallerMecanico.entity.OrdenServicio;
-import com.tallerMecanico.projection.IDetalleOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioSinDetalle;
@@ -42,45 +40,17 @@ public class OrdenServicioController {
 
 	@Autowired
 	private OrdenServicioService ordenServicioService;
-	
-	/*
-	@GetMapping("/ordenes-servicio/page/{page}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Page<IOrdenServicioProjection>> getAllOrdenServicios(
-        @PathVariable int page, 
-        @RequestParam(defaultValue = "10") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("idOrdenServicio").ascending());
-        Page<IOrdenServicioProjection> ordenes = ordenServicioService.getAllOrdenServicios(pageable);
-        return ResponseEntity.ok(ordenes);
-    }
-
-    @GetMapping("/ordenes-servicio/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<IOrdenServicioProjection> getOrdenServicioById(@PathVariable Long id) {
-        IOrdenServicioProjection orden = ordenServicioService.getOrdenServicioById(id);
-        return ResponseEntity.ok(orden);
-    }
-	*/
-	
 	@GetMapping("/ordenesServicio/{id}")
-    public IOrdenServicioProjection getOrdenServicioById(@PathVariable("id") long ordenServicioId) {
+	public IOrdenServicioProjection getOrdenServicioById(@PathVariable("id") long ordenServicioId) {
 		// TODO: no trae datos del empleado
-        return ordenServicioService.getOrdenServicioById(ordenServicioId);
-    }
+		return ordenServicioService.getOrdenServicioById(ordenServicioId);
+	}
 
-    @GetMapping("/ordenesServicio")
-    public List<IOrdenServicioSinDetalle> getAllOrdenesServicio() {
-        return ordenServicioService.getAllOrdenesServicio();
-    }
-    
-    /*
-    public ResponseEntity<List<IOrdenServicioProjection>> getAllOrdenesServicio() {
-        List<IOrdenServicioProjection> ordenesServicio = ordenServicioService.getAllOrdenesServicio();
-        return ResponseEntity.ok(ordenesServicio);
-    }
-    */
-
+	@GetMapping("/ordenesServicio")
+	public List<IOrdenServicioSinDetalle> getAllOrdenesServicio() {
+		return ordenServicioService.getAllOrdenesServicio();
+	}
 
 	// Consulta todos
 	@GetMapping("/ordenesServicio2")
@@ -89,70 +59,15 @@ public class OrdenServicioController {
 		return ordenServicioService.findAll();
 	}
 
-	// Consulta todos
-	@GetMapping("/ordenesServicio/vehiculo")
-    public ResponseEntity<List<OrdenServicio>> consultarTodos() {
-        List<OrdenServicio> ordenesServicio = ordenServicioService.buscarTodosConVehiculo();
-        /*
-        if (!ordenesServicio.isEmpty()) {
-            return new ResponseEntity<>(ordenesServicio, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        */
-        return new ResponseEntity<>(ordenesServicio, HttpStatus.OK);
-    }
-	
-	// con vehiculo
-	/*
-	@GetMapping("/ordenesServicio")
-    public ResponseEntity<List<OrdenServicioVehiculoDto>> getAllOrdenesServicioDTO() {
-        List<OrdenServicioVehiculoDto> ordenesServicioDTO = ordenServicioService.getAllOrdenesServicioDTO();
-        return ResponseEntity.ok(ordenesServicioDTO);
-    }
-    */
-
 	// Consulta paginación
-	/*
 	@GetMapping("/ordenesServicio/page/{page}")
-	public Page<OrdenServicio> consultaPage(@PathVariable Integer page) {
+	public ResponseEntity<Slice<IOrdenServicioSinDetalle>> consultaPage2(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("idOrdenServicio").ascending());
-		return ordenServicioService.findAllPage(pageable);
+		Slice<IOrdenServicioSinDetalle> result = ordenServicioService.getAllOrdenesServicio(pageable);
+		return ResponseEntity.ok(result);
 	}
-	*/
-	
-	@GetMapping("/ordenesServicio/page/{page}")
-    public ResponseEntity<Page<OrdenServicioVehiculoDto>> consultaPage(@PathVariable Integer page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("idOrdenServicio").ascending());
-        Page<OrdenServicioVehiculoDto> ordenesServicioDTO = ordenServicioService.findAllPageDto(pageable);
-        return ResponseEntity.ok(ordenesServicioDTO);
-    }
-	
-	
-	// Consulta por id
-	/*
-	@GetMapping("/ordenesServicio/{id}")
-	public ResponseEntity<?> consultaPorID(@PathVariable Long id) {
 
-		OrdenServicio ordenServicio = null;
-		String response = "";
-		try {
-			ordenServicio = ordenServicioService.findById(id);
-		} catch (DataAccessException e) {
-			response = "Error al realizar la consulta.";
-			response = response.concat(e.getMessage().concat(e.getMostSpecificCause().toString()));
-			return new ResponseEntity<String>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 
-		if (ordenServicio == null) {
-			response = "La Orden de Servicio con el ID: ".concat(id.toString())
-					.concat(" no existe en la base de datos");
-			return new ResponseEntity<String>(response, HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<OrdenServicio>(ordenServicio, HttpStatus.OK);
-	}
-*/
-	
 	// Eliminar por id
 	@DeleteMapping("/ordenesServicio/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
@@ -216,14 +131,15 @@ public class OrdenServicioController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
+	// filtar por estatus de servicio
 	@GetMapping("/ordenesServicio/estatus/{estatus}")
 	public ResponseEntity<?> obtenerPorEstatus(@PathVariable String estatus) {
 		List<IOrdenServicioDepto> servicios = null;
 		Map<String, Object> response = new HashMap<>();
-		try{
-			servicios =  ordenServicioService.obtenerPorEstatusServicio(estatus);
+		try {
+			servicios = ordenServicioService.obtenerPorEstatusServicio(estatus);
 
-		} catch(DataAccessException e){
+		} catch (DataAccessException e) {
 			response.put("mensaje", "No ha sido posible obtener la lista de servicios por status.");
 			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
@@ -231,26 +147,28 @@ public class OrdenServicioController {
 
 		return new ResponseEntity<List<IOrdenServicioDepto>>(servicios, HttpStatus.OK);
 
+	}
 	
+	// paginacion por estatus
+	@GetMapping("/ordenesServicio/estatus/{estatus}/page/{page}")
+	public ResponseEntity<Page<IOrdenServicioDepto>> consultaPageStatus(@PathVariable String estatus, @PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idOrdenServicio").ascending());
+		Page<IOrdenServicioDepto> result = ordenServicioService.obtenerPorEstatusServicio(estatus, pageable);
+		return ResponseEntity.ok(result);
 	}
 
-	/*
-	 * @GetMapping("/ordenesServicio/estatus/{estatus}") public
-	 * ResponseEntity<List<OrdenServicio>> obtenerPorEstatus(@RequestParam String
-	 * estatus) { List<OrdenServicio> ordenes =
-	 * ordenServicioService.obtenerPorEstatusServicio(estatus); return
-	 * ResponseEntity.ok(ordenes); }
-	 */
-	
-	//Ordenes Servicio por Departamento
+	// Ordenes Servicio por Departamento
 	@GetMapping("/ordenesServicio/departamento/{idDepartamento}")
 	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(@PathVariable Long idDepartamento) {
-        return ordenServicioService.getOrdenesServicioByDepartamento(idDepartamento);
-    }
+		return ordenServicioService.getOrdenesServicioByDepartamento(idDepartamento);
+	}
 	
-	@GetMapping("/ordenesServicio/departamento2/{idDepartamento}")
-    public List<OrdenServicio> getOrdenesByDepartamento(@PathVariable Long idDepartamento) {
-        return ordenServicioService.getOrdenesByDepartamento(idDepartamento);
-    }
+	// Paginacion Ordenes Servicio por Departamento
+	@GetMapping("/ordenesServicio/departamento/{idDepartamento}/page/{page}")
+	public Page<IOrdenServicioDepto> getOrdenesServicioByDepartamento(@PathVariable Long idDepartamento, @PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idOrdenServicio").ascending());
+		return ordenServicioService.getOrdenesServicioByDepartamento(idDepartamento, pageable);
+	}
+	
 
 }

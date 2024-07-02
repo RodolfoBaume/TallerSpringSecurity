@@ -11,7 +11,6 @@ public interface IOrdenServicioSinDetalle {
     IEstatusServicioProjection getEstatusServicio(); 
     String getComentarios();
     IVehiculoSinOrden getVehiculo();
-
 }
 
 
