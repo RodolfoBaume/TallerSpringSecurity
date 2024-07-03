@@ -30,6 +30,10 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 	@Query("SELECT v FROM Vehiculo v WHERE v.id = :idVehiculo")
 	Optional<IVehiculoConOrdenClosedView> findByIdVehiculo(@Param("idVehiculo") long id);
 	
+	//query para clientes
+	@Query("SELECT v FROM Vehiculo v WHERE v.id = :idVehiculo AND v.cliente.id = :idCliente")
+	Optional<IVehiculoConOrdenClosedView> findByIdVehiculoAndClienteId(@Param("idVehiculo") long idVehiculo, @Param("idCliente") long idCliente);
+	
 	@Query("SELECT v FROM Vehiculo v LEFT JOIN FETCH v.tipoMotor tm LEFT JOIN FETCH v.modelo m LEFT JOIN FETCH v.cliente c LEFT JOIN FETCH OrdenServicio os ON v.idVehiculo = os.vehiculo.idVehiculo")
     List<IVehiculoClienteClosedView> findAllVehiculosWithDetails(Pageable pageable);
 

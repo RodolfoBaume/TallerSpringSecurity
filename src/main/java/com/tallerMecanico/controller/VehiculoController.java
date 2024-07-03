@@ -1,5 +1,6 @@
 package com.tallerMecanico.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tallerMecanico.dto.UsuarioActualDto;
 import com.tallerMecanico.dto.VehiculoDto;
 import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
+import com.tallerMecanico.service.UsuarioAuthService;
 import com.tallerMecanico.service.VehiculoService;
 
 @RestController
@@ -38,6 +41,8 @@ public class VehiculoController {
 
 	@Autowired
 	private VehiculoService vehiculoService;
+	@Autowired
+	private UsuarioAuthService usuarioAuthService;
 
 	// Consulta todos
 	/*
@@ -66,6 +71,16 @@ public class VehiculoController {
 	public IVehiculoConOrdenClosedView getVehiculoById(@PathVariable("id") Long idVehiculo) {
         return vehiculoService.findByIdVehiculo(idVehiculo);
     }
+	
+	@GetMapping("/vehiculos/{id}/cliente")
+	public IVehiculoConOrdenClosedView getVehiculoById(@PathVariable("id") Long idVehiculo, Principal principal) {
+	    // Obtener el idCliente del usuario logueado
+	    ResponseEntity<UsuarioActualDto> currentUser = usuarioAuthService.obtenerUsuarioActual(principal);
+	    Long idCliente = currentUser.getBody().getIdCliente();
+
+	    // Usar el idCliente para filtrar los vehículos
+	    return vehiculoService.findByIdVehiculoAndClienteId(idVehiculo, idCliente);
+	}
 	
 	// Consulta todos
 	/*

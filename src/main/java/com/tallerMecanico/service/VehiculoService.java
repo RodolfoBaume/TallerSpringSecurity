@@ -53,13 +53,19 @@ public class VehiculoService implements IVehiculoService {
 				.orElseThrow(() -> new EntityNotFoundException("Vehiculo not found with id " + id));
 	}
 	
+	// para admin o empleados
 	@Transactional(readOnly = true)
     public IVehiculoConOrdenClosedView findByIdVehiculo(Long idVehiculo) {
         return vehiculoRepository.findByIdVehiculo(idVehiculo)
         		.orElseThrow(() -> new EntityNotFoundException("Vehiculo not found with id " + idVehiculo));
     }
 
-	
+	//para clientes
+	@Transactional(readOnly = true)
+	public IVehiculoConOrdenClosedView findByIdVehiculoAndClienteId(Long idVehiculo, Long idCliente) {
+	    return vehiculoRepository.findByIdVehiculoAndClienteId(idVehiculo, idCliente)
+	            .orElseThrow(() -> new EntityNotFoundException("Vehiculo not found with id " + idVehiculo + " for cliente " + idCliente));
+	}
 	
 	// consulta todos para paginación
 	@Transactional(readOnly = true)
