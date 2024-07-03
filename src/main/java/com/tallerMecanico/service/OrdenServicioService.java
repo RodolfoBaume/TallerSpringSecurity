@@ -157,13 +157,6 @@ public class OrdenServicioService implements IOrdenServicioService {
 
 
 	// OrdenServicio por departamento
-
-	/*
-	public List<OrdenServicio> getOrdenesByDepartamento(Long idDepartamento) {
-		return ordenServicioRepository.findByDepartamentoId1(idDepartamento);
-	}
-	*/
-
 	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(Long idDepartamento) {
 		List<IOrdenServicioDepto> lista = ordenServicioRepository.findByDepartamentoId(idDepartamento);
 		System.out.println(">>>>>>>>>>>>>>>>>> " + lista.toString());

@@ -112,5 +112,9 @@ public class VehiculoService implements IVehiculoService {
 		// vehiculoEntity.setCliente(vehiculo.cliente());
 		return vehiculoRepository.save(vehiculoEntity);
 	}
+	
+	public List<IVehiculoConOrdenClosedView> getVehiculosByOrdenServicioEstatus(String estatus) {
+        return vehiculoRepository.findVehiculosByOrdenServicioEstatus(estatus);
+    }
 
 }

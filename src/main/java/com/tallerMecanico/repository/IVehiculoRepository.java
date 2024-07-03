@@ -32,6 +32,9 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 	
 	@Query("SELECT v FROM Vehiculo v LEFT JOIN FETCH v.tipoMotor tm LEFT JOIN FETCH v.modelo m LEFT JOIN FETCH v.cliente c LEFT JOIN FETCH OrdenServicio os ON v.idVehiculo = os.vehiculo.idVehiculo")
     List<IVehiculoClienteClosedView> findAllVehiculosWithDetails(Pageable pageable);
+
 	
-	
+	@Query("SELECT v FROM Vehiculo v JOIN v.ordenServicio os JOIN os.estatusServicio es WHERE es.estatusServicio <> :estatus")
+    List<IVehiculoConOrdenClosedView> findVehiculosByOrdenServicioEstatus(@Param("estatus") String estatus);
+
 }
