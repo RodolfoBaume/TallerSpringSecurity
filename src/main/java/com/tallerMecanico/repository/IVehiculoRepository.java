@@ -42,6 +42,9 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 	@Query("SELECT v FROM Vehiculo v JOIN v.ordenServicio os JOIN os.estatusServicio es WHERE es.estatusServicio <> :estatus")
     List<IVehiculoConOrdenClosedView> findVehiculosByOrdenServicioEstatus(@Param("estatus") String estatus);
 
+	@Query("SELECT v FROM Vehiculo v JOIN v.ordenServicio os JOIN os.estatusServicio es WHERE es.estatusServicio <> :estatus")
+    Page<IVehiculoConOrdenClosedView> findVehiculosByOrdenServicioEstatus(@Param("estatus") String estatus, Pageable pageable);
+
 	//Reporte
 	@Query("SELECT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
 	           "v.anioModelo AS anioModelo, v.color AS color, v.imagen AS imagen, " +

@@ -133,10 +133,17 @@ public class VehiculoService implements IVehiculoService {
 		return vehiculoRepository.save(vehiculoEntity);
 	}
 
+	@Transactional(readOnly = true)
 	public List<IVehiculoConOrdenClosedView> getVehiculosByOrdenServicioEstatus(String estatus) {
 		return vehiculoRepository.findVehiculosByOrdenServicioEstatus(estatus);
 	}
-
+	
+	@Transactional(readOnly = true)
+	public Page<IVehiculoConOrdenClosedView> getVehiculosByOrdenServicioEstatus(String estatus, Pageable pageable){
+		return vehiculoRepository.findVehiculosByOrdenServicioEstatus(estatus, pageable);	
+	}
+	
+	
 	//Reporte
 	public List<IVehiculoSinOrden> getAllVehiculos() {
 		return vehiculoRepository.findAllProjectedBy();
@@ -220,8 +227,7 @@ public class VehiculoService implements IVehiculoService {
 	/*
 	private boolean isValidImageUrl(String imageUrl) {
 		// Implementa la lógica para verificar si la URL de la imagen es válida
-		// Puedes utilizar bibliotecas externas o implementar tu propia lógica de
-		// validación
+
 		return imageUrl != null && !imageUrl.isEmpty();
 	}
 	*/

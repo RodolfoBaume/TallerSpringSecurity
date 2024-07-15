@@ -194,6 +194,14 @@ public class VehiculoController {
         return vehiculoService.getVehiculosByOrdenServicioEstatus(estatus);
     }
 	
+	// Filtra Vehiculos en taller, sin entregar (con paginacion)
+	@GetMapping("/vehiculos/noEntregados/page/{page}")
+    public Page<IVehiculoConOrdenClosedView> getVehiculosNoEntregados(@RequestParam(defaultValue = "r. Entregado") String estatus, @PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idVehiculo").ascending());
+		return vehiculoService.getVehiculosByOrdenServicioEstatus(estatus, pageable);
+	}
+	
+	
 	@GetMapping("/vehiculos/pdf")
     public ResponseEntity<byte[]> generarReporteVehiculos() throws IOException {
         List<IVehiculoSinOrden> vehiculos = vehiculoService.getAllVehiculos();
