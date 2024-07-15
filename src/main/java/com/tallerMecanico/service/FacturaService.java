@@ -38,10 +38,13 @@ public class FacturaService implements IFacturaService {
 		return facturaRepository.findById(idFactura).orElse(null);
 	}
 	
+	
 	@Transactional(readOnly = true)
 	public IFacturaProjection findFacturaById(Long idFactura) {
 		return facturaRepository.findFacturaById(idFactura);
 	}
+	
+	
 	
 	
 	

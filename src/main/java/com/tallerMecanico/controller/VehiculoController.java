@@ -1,5 +1,6 @@
 package com.tallerMecanico.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +33,7 @@ import com.tallerMecanico.dto.UsuarioActualDto;
 import com.tallerMecanico.dto.VehiculoDto;
 import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
+import com.tallerMecanico.projection.IVehiculoSinOrden;
 import com.tallerMecanico.service.UsuarioAuthService;
 import com.tallerMecanico.service.VehiculoService;
 
@@ -188,5 +192,18 @@ public class VehiculoController {
 	@GetMapping("/vehiculos/noEntregados")
     public List<IVehiculoConOrdenClosedView> getVehiculosNoEntregados(@RequestParam(defaultValue = "r. Entregado") String estatus) {
         return vehiculoService.getVehiculosByOrdenServicioEstatus(estatus);
+    }
+	
+	@GetMapping("/vehiculos/pdf")
+    public ResponseEntity<byte[]> generarReporteVehiculos() throws IOException {
+        List<IVehiculoSinOrden> vehiculos = vehiculoService.getAllVehiculos();
+
+        byte[] pdfBytes = vehiculoService.generarPDF(vehiculos);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inline", "reporteVehiculos.pdf");
+
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 }

@@ -1,5 +1,7 @@
 package com.tallerMecanico.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -10,6 +12,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.tallerMecanico.dto.EmpleadoDto;
 import com.tallerMecanico.entity.Empleado;
 import com.tallerMecanico.entity.Usuario;
@@ -113,4 +122,65 @@ public class EmpleadoService implements IEmpleadoService {
 		empleadoEntity.setObservaciones(empleado.observaciones());
 		return empleadoRepository.save(empleadoEntity);
 	}
+	
+	//Reportes
+	public List<Empleado> getAllEmpleados() {
+        return empleadoRepository.findAll();
+    }
+
+    public byte[] generarPDF(List<Empleado> empleados) throws IOException {
+        try {
+            Document document = new Document();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, baos);
+
+            document.open();
+            // Crear un párrafo con el título y centrarlo
+            Paragraph titulo = new Paragraph("Listado de Empleados");
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            document.add(titulo);
+
+            // Agregar salto de línea
+            document.add(Chunk.NEWLINE);
+
+            // Crear una tabla con 9 columnas
+            PdfPTable table = new PdfPTable(9);
+            table.setWidthPercentage(100); // Establecer el ancho de la tabla al 100% del ancho de la página
+
+            // Agregar encabezados
+            table.addCell("ID");
+            table.addCell("Nombre");
+            table.addCell("Apellido Paterno");
+            table.addCell("Apellido Materno");
+            table.addCell("NSS");
+            table.addCell("CURP");
+            table.addCell("RFC");
+            table.addCell("Puesto");
+            table.addCell("Usuario");
+
+            // Agregar datos a la tabla
+            for (Empleado empleado : empleados) {
+                table.addCell(String.valueOf(empleado.getIdEmpleado()));
+                table.addCell(empleado.getNombre());
+                table.addCell(empleado.getApellidoPaterno());
+                table.addCell(empleado.getApellidoMaterno());
+                table.addCell(String.valueOf(empleado.getNss()));
+                table.addCell(empleado.getCurp());
+                table.addCell(empleado.getRfc());
+                table.addCell(empleado.getPuesto());
+                table.addCell(empleado.getUsuario().getUsername()); // Suponiendo que Usuario tiene getUsername()
+            }
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            document.close();
+
+            return baos.toByteArray();
+        } catch (DocumentException e) {
+            // Manejar la excepción
+            e.printStackTrace();
+            return new byte[0];
+        }
+    }
 }

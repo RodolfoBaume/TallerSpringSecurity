@@ -1,5 +1,7 @@
 package com.tallerMecanico.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -13,6 +15,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.tallerMecanico.dto.OrdenServicioDto;
 import com.tallerMecanico.entity.OrdenServicio;
 import com.tallerMecanico.projection.IDetalleOrdenServicioProjection;
@@ -168,4 +177,96 @@ public class OrdenServicioService implements IOrdenServicioService {
 		return ordenServicioRepository.findByDepartamentoId(idDepartamento, pageable);
 	}
 
+	//Reportes 
+	public List<IOrdenServicioProjection> getAllOrdenesServicioRep() {
+        return ordenServicioRepository.findAllProjectedBy();
+    }
+
+    public byte[] generarPDF(List<IOrdenServicioProjection> ordenesServicio) throws IOException {
+        try {
+            Document document = new Document();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, baos);
+
+            document.open();
+            // Crear un párrafo con el título y centrarlo
+            Paragraph titulo = new Paragraph("Listado de Órdenes de Servicio");
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            document.add(titulo);
+
+            // Agregar salto de línea
+            document.add(Chunk.NEWLINE);
+
+            // Crear una tabla con 9 columnas
+            PdfPTable table = new PdfPTable(9);
+            table.setWidthPercentage(100); // Establecer el ancho de la tabla al 100% del ancho de la página
+
+            // Agregar encabezados
+            table.addCell("ID");
+            table.addCell("Fecha Orden");
+            table.addCell("Falla");
+            table.addCell("Kilometraje");
+            table.addCell("Observaciones");
+            table.addCell("Estatus Servicio");
+            table.addCell("Comentarios");
+            table.addCell("Vehículo");
+            table.addCell("Empleado");
+
+            // Agregar datos a la tabla
+            for (IOrdenServicioProjection orden : ordenesServicio) {
+                table.addCell(String.valueOf(orden.getIdOrdenServicio()));
+                table.addCell(orden.getFechaOrden().toString());
+                table.addCell(orden.getFalla());
+                table.addCell(orden.getKilometraje());
+                table.addCell(orden.getObservaciones());
+                table.addCell(orden.getEstatusServicio().getEstatusServicio());
+                table.addCell(orden.getComentarios());
+                table.addCell(orden.getVehiculo().getMatricula());
+                table.addCell(orden.getEmpleado().getNombre() + " " + orden.getEmpleado().getApellidoPaterno());
+            }
+
+            // Agregar la tabla al documento
+            document.add(table);
+
+            // Agregar salto de línea
+            document.add(Chunk.NEWLINE);
+
+            // Agregar detalle de cada orden de servicio
+            for (IOrdenServicioProjection orden : ordenesServicio) {
+                Paragraph detalleTitulo = new Paragraph("Detalles de Orden de Servicio ID: " + orden.getIdOrdenServicio());
+                detalleTitulo.setAlignment(Element.ALIGN_CENTER);
+                document.add(detalleTitulo);
+
+                // Crear una tabla para los detalles
+                PdfPTable detalleTable = new PdfPTable(3);
+                detalleTable.setWidthPercentage(100);
+
+                // Agregar encabezados de detalle
+                detalleTable.addCell("ID Detalle");
+                detalleTable.addCell("Descripción Servicio");
+                detalleTable.addCell("Costo");
+
+                // Agregar datos de detalle
+                for (IDetalleOrdenServicioProjection detalle : orden.getDetalleOrdenServicios()) {
+                    detalleTable.addCell(String.valueOf(detalle.getIdDetalleOrdenServicio()));
+                    detalleTable.addCell(detalle.getDescripcionServicio());
+                    detalleTable.addCell(String.valueOf(detalle.getCosto()));
+                }
+
+                // Agregar la tabla de detalles al documento
+                document.add(detalleTable);
+
+                // Agregar salto de línea
+                document.add(Chunk.NEWLINE);
+            }
+
+            document.close();
+
+            return baos.toByteArray();
+        } catch (DocumentException e) {
+            // Manejar la excepción
+            e.printStackTrace();
+            return new byte[0];
+        }
+    }
 }

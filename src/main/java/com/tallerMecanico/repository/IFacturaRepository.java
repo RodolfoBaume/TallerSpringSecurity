@@ -13,13 +13,15 @@ import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IFacturaProjection;
 
 @Repository
-public interface IFacturaRepository extends JpaRepository<Factura, Long>{
+public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 
-	List<IFacturaProjection>findBy();
-	
+	List<IFacturaProjection> findBy();
+
 	@Query("SELECT f FROM Factura f")
 	Page<IFacturaProjection> findAllFacturas(Pageable pageable);
+
 	
-	@Query("SELECT f FROM Factura f")
-	IFacturaProjection findFacturaById(@Param("idFactura") Long idFactura);
+	@Query("SELECT f FROM Factura f") IFacturaProjection
+	findFacturaById(@Param("idFactura") Long idFactura);
+
 }

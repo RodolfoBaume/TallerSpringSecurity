@@ -1,5 +1,6 @@
 package com.tallerMecanico.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -134,4 +137,18 @@ public class EstatusServicioController {
 		response.put("Estatus Servicio", estatusServicioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
+	
+	//Reporte
+	@GetMapping("/estatusServicios/pdf")
+    public ResponseEntity<byte[]> generarReporteEstatusServicio() throws IOException {
+        List<EstatusServicio> estatusServicios = estatusServicioService.getAllEstatusServicios();
+
+        byte[] pdfBytes = estatusServicioService.generarPDF(estatusServicios);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inline", "reporteEstatusServicio.pdf");
+
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+    }
 }

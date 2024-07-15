@@ -1,5 +1,7 @@
 package com.tallerMecanico.controller;
 
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,15 +29,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.tallerMecanico.dto.ClienteDto;
 import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.RegistroUsuarioClienteDto;
 import com.tallerMecanico.entity.Cliente;
 import com.tallerMecanico.projection.IClienteClosedView;
+import com.tallerMecanico.projection.IClienteProjection;
 import com.tallerMecanico.projection.IVehiculoClosedView;
 import com.tallerMecanico.repository.IVehiculoRepository;
 import com.tallerMecanico.service.ClienteService;
 import com.tallerMecanico.service.UsuarioAuthService;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -238,5 +245,18 @@ public class ClienteController {
     }
     
     
+    @GetMapping("/clientes/pdf")
+    public ResponseEntity<byte[]> generarReporteClientes() throws IOException {
+        List<IClienteProjection> clientes = clienteService.getAllClientes();
+
+        byte[] pdfBytes = clienteService.generarPDF(clientes);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inline", "reporteClientes.pdf");
+
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+    }
+ 
     
 }

@@ -93,4 +93,6 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
 		       "WHERE d.idDepartamento = :idDepartamento")
 	Page<IOrdenServicioDepto> findByDepartamentoId(@Param("idDepartamento") Long idDepartamento, Pageable pageable);
 	
+    List<IOrdenServicioProjection> findAllProjectedBy();
+
 }

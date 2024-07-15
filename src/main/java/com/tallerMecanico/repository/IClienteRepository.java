@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.tallerMecanico.entity.Cliente;
 import com.tallerMecanico.projection.IClienteClosedView;
+import com.tallerMecanico.projection.IClienteProjection;
 import com.tallerMecanico.projection.IVehiculoClosedView;
 
 @Repository
@@ -33,6 +34,11 @@ public interface IClienteRepository extends JpaRepository<Cliente, Long>{
 	
 	@Query("SELECT v FROM Vehiculo v WHERE v.cliente.idCliente = :idCliente")
     List<IVehiculoClosedView> findVehiculosByClienteId(@Param("idCliente") Long idCliente);
+	
+	@Query("SELECT c.idCliente AS idCliente, c.nombre AS nombre, c.apellidoPaterno AS apellidoPaterno, " +
+	           "c.apellidoMaterno AS apellidoMaterno, c.domicilio AS domicilio, c.telefono AS telefono " +
+	           "FROM Cliente c")
+	List<IClienteProjection> findAllProjectedBy();
 
 
 }

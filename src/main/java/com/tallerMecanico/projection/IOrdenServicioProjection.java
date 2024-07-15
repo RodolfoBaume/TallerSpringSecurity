@@ -15,14 +15,6 @@ public interface IOrdenServicioProjection {
     List<IDetalleOrdenServicioProjection> getDetalleOrdenServicios();
     IEmpleadoOrden getEmpleado();
 
-
-    /*
-    @JsonProperty("estatusServicio")
-    default String getEstatusServicioAsString() {
-        IEstatusServicioProjection estatusServicio = getEstatusServicio();
-        return estatusServicio != null ? estatusServicio.getEstatusServicio() : null;
-    }
-    */
 }
 
 

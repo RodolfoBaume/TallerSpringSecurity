@@ -14,6 +14,7 @@ import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.projection.IVehiculoClienteClosedView;
 import com.tallerMecanico.projection.IVehiculoClosedView;
 import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
+import com.tallerMecanico.projection.IVehiculoSinOrden;
 
 @Repository
 public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
@@ -41,4 +42,10 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 	@Query("SELECT v FROM Vehiculo v JOIN v.ordenServicio os JOIN os.estatusServicio es WHERE es.estatusServicio <> :estatus")
     List<IVehiculoConOrdenClosedView> findVehiculosByOrdenServicioEstatus(@Param("estatus") String estatus);
 
+	//Reporte
+	@Query("SELECT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
+	           "v.anioModelo AS anioModelo, v.color AS color, v.imagen AS imagen, " +
+	           "v.tipoMotor AS tipoMotor, v.modelo AS modelo, v.cliente AS cliente " +
+	           "FROM Vehiculo v")
+	List<IVehiculoSinOrden> findAllProjectedBy();
 }
