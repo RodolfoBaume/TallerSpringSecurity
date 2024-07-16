@@ -8,6 +8,6 @@ public interface IFacturaProjection {
 	Date getFechaFactura();
 	double getMonto();
 
-	List<IDetalleFacturaProjection> getDetalleFactura();
+	//List<IDetalleFacturaProjection> getDetalleFactura();
 	
 }

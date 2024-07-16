@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +29,13 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.tallerMecanico.dto.DetalleFacturasDto;
+import com.tallerMecanico.dto.FacturaDetalleDto;
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IFacturaProjection;
 import com.tallerMecanico.projection.IFacturaReporte;
+import com.tallerMecanico.repository.IDetalleFacturaRepository;
 import com.tallerMecanico.repository.IFacturaRepository;
 
 @Service
@@ -38,6 +43,9 @@ public class FacturaService implements IFacturaService {
 
 	@Autowired
 	private IFacturaRepository facturaRepository;
+	
+	@Autowired
+	private IDetalleFacturaRepository detalleFacturaRepository;
 
 	@Override
 	public List<IFacturaProjection> findBy() {
@@ -51,11 +59,26 @@ public class FacturaService implements IFacturaService {
 	}
 
 	// consulta por id
+	
 	@Transactional(readOnly = true)
 	public Factura findById(Long idFactura) {
 		return facturaRepository.findById(idFactura).orElse(null);
 	}
+	
+	//Consulta -----
+	@Transactional(readOnly = true)
+	public List<FacturaDetalleDto> getAllFacturasWithDetalles() {
+        List<FacturaDetalleDto> facturas = detalleFacturaRepository.findAllFacturas();
+        List<DetalleFacturasDto> detalles = detalleFacturaRepository.findAllDetalles();
 
+        Map<Long, List<DetalleFacturasDto>> detallesMap = detalles.stream()
+                .collect(Collectors.groupingBy(DetalleFacturasDto::getFacturaId));
+
+        facturas.forEach(f -> f.setDetalles(detallesMap.get(f.getIdFactura())));
+        return facturas;
+    }
+	
+	
 	@Transactional(readOnly = true)
 	public IFacturaProjection findFacturaById(Long idFactura) {
 		return facturaRepository.findFacturaById(idFactura);

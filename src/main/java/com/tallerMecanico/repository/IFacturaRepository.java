@@ -25,7 +25,14 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 	
 	@Query("SELECT f FROM Factura f") IFacturaProjection
 	findFacturaById(@Param("idFactura") Long idFactura);
+	
+	
+	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto, " +
+	           "df.idDetalleFactura as idDetalleFactura, df.descripcionServicio as descripcionServicio, df.costo as costo " +
+	           "FROM Factura f LEFT JOIN DetalleFactura df ON f.idFactura = df.factura.idFactura")
+	List<IFacturaProjection> findAllWithDetalles();
 
+	
 	@Query("SELECT f.idFactura AS idFactura, f.fechaFactura AS fechaFactura, f.monto AS monto, " +
 	           "c.nombre AS clienteNombre, c.apellidoPaterno AS clienteApellidoPaterno, c.apellidoMaterno AS clienteApellidoMaterno, " +
 	           "v.vin AS vehiculoVin, v.matricula AS vehiculoMatricula, m.modelo AS vehiculoModelo " +

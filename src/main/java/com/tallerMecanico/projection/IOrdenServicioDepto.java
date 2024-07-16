@@ -13,4 +13,7 @@ public interface IOrdenServicioDepto {
     String getDepartamento();
     IVehiculoModelo getVehiculo();
     IEmpleadoOrden getEmpleado();
+    Long getIdFactura();
+    Date getFechaFactura();
+    //double getMonto();
 }

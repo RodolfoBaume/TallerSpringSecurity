@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tallerMecanico.dto.FacturaDetalleDto;
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IFacturaProjection;
@@ -46,12 +47,18 @@ public class FacturaController {
 	@Autowired
 	private FacturaService facturaService;
 
-
+/*
 	@GetMapping("/facturas")
 	@ResponseStatus(HttpStatus.OK)
 	public List<IFacturaProjection>cons(){
 		return facturaService.findBy();
 	}
+*/
+	@GetMapping("/facturas")
+	@ResponseStatus(HttpStatus.OK)
+	public List<FacturaDetalleDto> getAllFacturasWithDetalles() {
+        return facturaService.getAllFacturasWithDetalles();
+    }
 	
 	// Consulta paginación
 	@GetMapping("/facturas/page/{page}")

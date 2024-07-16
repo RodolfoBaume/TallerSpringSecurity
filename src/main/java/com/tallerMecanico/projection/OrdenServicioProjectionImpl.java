@@ -64,4 +64,12 @@ public class OrdenServicioProjectionImpl implements IOrdenServicioProjection{
 	public IEmpleadoOrden getEmpleado() {
 		return new EmpleadoOrdenImpl(ordenServicio.getEmpleado());
 	}
+
+	@Override
+	public IFacturaProjection getFactura() {
+		if (ordenServicio.getFactura() == null) {
+            return null;
+        }
+		return new FacturaOrdenImpl(ordenServicio.getFactura());
+	}
 }

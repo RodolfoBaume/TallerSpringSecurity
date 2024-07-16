@@ -23,6 +23,7 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
 		       "JOIN FETCH o.vehiculo v " +
 		       "JOIN FETCH v.cliente c " +
 		       "JOIN FETCH o.empleado e " + 
+		       "LEFT JOIN FETCH o.factura f " +
 		       "WHERE o.idOrdenServicio = :idOrdenServicio")
 	IOrdenServicioProjection findProjectedById(@Param("idOrdenServicio") Long idOrdenServicio);
 
@@ -32,39 +33,45 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
     @Query("SELECT o FROM OrdenServicio o JOIN FETCH o.vehiculo v JOIN FETCH v.cliente c")
     Slice<IOrdenServicioSinDetalle> findAllProjected(Pageable pageable);
     
-    @Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
+    @Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, " +
+		       "os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
 		       "es as estatusServicio, d.departamento as departamento, " +
 		       "v as vehiculo, " +
-		       "e as empleado " + 
+		       "e as empleado, " +
+		       "f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto " +
 		       "FROM OrdenServicio os " +
 		       "JOIN os.estatusServicio es " +
 		       "JOIN es.departamento d " +
 		       "JOIN os.vehiculo v " +
 		       "JOIN v.modelo m " +
 		       "JOIN m.marca ma " +
-		       "JOIN os.empleado e " + 
-    		   "WHERE es.estatusServicio = :estatus")
+		       "JOIN os.empleado e " +
+		       "LEFT JOIN os.factura f " +
+		       "WHERE es.estatusServicio = :estatus")
     List<IOrdenServicioDepto> findByEstatusServicio(@Param("estatus") String estatus);
 
     
-    @Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
+    @Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, " +
+		       "os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
 		       "es as estatusServicio, d.departamento as departamento, " +
 		       "v as vehiculo, " +
-		       "e as empleado " + 
+		       "e as empleado, " +
+		       "f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto " +
 		       "FROM OrdenServicio os " +
 		       "JOIN os.estatusServicio es " +
 		       "JOIN es.departamento d " +
 		       "JOIN os.vehiculo v " +
 		       "JOIN v.modelo m " +
 		       "JOIN m.marca ma " +
-		       "JOIN os.empleado e " + 
- 		   "WHERE es.estatusServicio = :estatus")
+		       "JOIN os.empleado e " +
+		       "LEFT JOIN os.factura f " +
+		       "WHERE es.estatusServicio = :estatus")
     Page<IOrdenServicioDepto> findByEstatusServicio(@Param("estatus") String estatus, Pageable pageable);    
     
     
 	@Query("SELECT o FROM OrdenServicio o WHERE o.estatusServicio.departamento.idDepartamento = :idDepartamento")
     List<OrdenServicio> findByDepartamentoId1(@Param("idDepartamento") Long idDepartamento);
-	
+	/*
 	@Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
 		       "es as estatusServicio, d.departamento as departamento, " +
 		       "v as vehiculo, " +
@@ -77,19 +84,40 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
 		       "JOIN m.marca ma " +
 		       "JOIN os.empleado e " + 
 		       "WHERE d.idDepartamento = :idDepartamento")
-	List<IOrdenServicioDepto> findByDepartamentoId(@Param("idDepartamento") Long idDepartamento);
-	
-	@Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
+	*/
+	@Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, " +
+		       "os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
 		       "es as estatusServicio, d.departamento as departamento, " +
 		       "v as vehiculo, " +
-		       "e as empleado " + 
+		       "e as empleado, " +
+		       "f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto " +
 		       "FROM OrdenServicio os " +
 		       "JOIN os.estatusServicio es " +
 		       "JOIN es.departamento d " +
 		       "JOIN os.vehiculo v " +
 		       "JOIN v.modelo m " +
 		       "JOIN m.marca ma " +
-		       "JOIN os.empleado e " + 
+		       "JOIN os.empleado e " +
+		       "LEFT JOIN os.factura f " +
+		       "WHERE d.idDepartamento = :idDepartamento")
+	List<IOrdenServicioDepto> findByDepartamentoId(@Param("idDepartamento") Long idDepartamento);
+	
+	
+	
+	@Query("SELECT os.idOrdenServicio as idOrdenServicio, os.fechaOrden as fechaOrden, os.falla as falla, " +
+		       "os.kilometraje as kilometraje, os.observaciones as observaciones, os.comentarios as comentarios, " +
+		       "es as estatusServicio, d.departamento as departamento, " +
+		       "v as vehiculo, " +
+		       "e as empleado, " +
+		       "f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto " +
+		       "FROM OrdenServicio os " +
+		       "JOIN os.estatusServicio es " +
+		       "JOIN es.departamento d " +
+		       "JOIN os.vehiculo v " +
+		       "JOIN v.modelo m " +
+		       "JOIN m.marca ma " +
+		       "JOIN os.empleado e " +
+		       "LEFT JOIN os.factura f " +
 		       "WHERE d.idDepartamento = :idDepartamento")
 	Page<IOrdenServicioDepto> findByDepartamentoId(@Param("idDepartamento") Long idDepartamento, Pageable pageable);
 	

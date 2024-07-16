@@ -14,7 +14,7 @@ public interface IOrdenServicioProjection {
     IVehiculoSinOrden getVehiculo();
     List<IDetalleOrdenServicioProjection> getDetalleOrdenServicios();
     IEmpleadoOrden getEmpleado();
-
+    IFacturaProjection getFactura();
 }
 
 

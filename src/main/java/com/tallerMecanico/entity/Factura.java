@@ -2,8 +2,6 @@ package com.tallerMecanico.entity;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +12,6 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "facturas")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Factura {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
