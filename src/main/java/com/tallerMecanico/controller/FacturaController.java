@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.FacturaDto;
+import com.tallerMecanico.dto.FacturaOrdenDto;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IFacturaClosedView;
 import com.tallerMecanico.projection.IFacturaReporte;
@@ -121,6 +122,13 @@ public class FacturaController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
+	// Crear por OrdenServicio
+	@PostMapping("/facturas/{ordenServicioId}")
+	public ResponseEntity<FacturaOrdenDto> crearFactura(@PathVariable long ordenServicioId) {
+        FacturaOrdenDto facturaDTO = facturaService.crearFactura(ordenServicioId);
+        return new ResponseEntity<>(facturaDTO, HttpStatus.CREATED);
+    }
+	
 	// Crear
 	@PostMapping("/facturas")
 	public ResponseEntity<?> create(@RequestBody FacturaDto factura) {

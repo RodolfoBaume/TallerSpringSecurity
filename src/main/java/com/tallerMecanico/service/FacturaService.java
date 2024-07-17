@@ -29,19 +29,35 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.tallerMecanico.dto.FacturaDto;
+import com.tallerMecanico.dto.FacturaOrdenDto;
+import com.tallerMecanico.entity.DetalleFactura;
+import com.tallerMecanico.entity.DetalleOrdenServicio;
 import com.tallerMecanico.entity.Factura;
+import com.tallerMecanico.entity.OrdenServicio;
 import com.tallerMecanico.projection.FacturaClosedViewImpl;
 import com.tallerMecanico.projection.IDetalleFacturaProjection;
 import com.tallerMecanico.projection.IFacturaClosedView;
 import com.tallerMecanico.projection.IFacturaProjection;
 import com.tallerMecanico.projection.IFacturaReporte;
+import com.tallerMecanico.repository.IDetalleFacturaRepository;
+import com.tallerMecanico.repository.IDetalleOrdenServicioRepository;
 import com.tallerMecanico.repository.IFacturaRepository;
+import com.tallerMecanico.repository.IOrdenServicioRepository;
 
 @Service
 public class FacturaService implements IFacturaService {
 
 	@Autowired
 	private IFacturaRepository facturaRepository;
+	
+	@Autowired
+    private IOrdenServicioRepository ordenServicioRepository;
+
+    @Autowired
+    private IDetalleFacturaRepository detalleFacturaRepository;
+    
+    @Autowired
+    private IDetalleOrdenServicioRepository detalleOrdenServicioRepository;
 	
 
 	@Override
@@ -256,4 +272,43 @@ public class FacturaService implements IFacturaService {
     }
 
 
+    //insercion de factura con ordenServicio
+    @Transactional
+    public FacturaOrdenDto crearFactura(long ordenServicioId) {
+        OrdenServicio ordenServicio = ordenServicioRepository.findById(ordenServicioId)
+                .orElseThrow(() -> new RuntimeException("Orden de Servicio no encontrada"));
+        
+     // Obtener los detalles de la orden de servicio
+        List<DetalleOrdenServicio> detallesOrden = detalleOrdenServicioRepository.findByOrdenServicio_IdOrdenServicio(ordenServicioId);
+
+        // Calcular el monto total de la factura
+        double montoTotal = detallesOrden.stream().mapToDouble(DetalleOrdenServicio::getCosto).sum();
+
+        Factura factura = new Factura();
+        factura.setFechaFactura(new Date()); // Usar la fecha actual para la factura
+        //factura.setMonto(ordenServicio.getDetalleOrdenServicios().stream().mapToDouble(DetalleOrdenServicio::getCosto).sum());
+        factura.setMonto(montoTotal);
+        factura.setOrdenServicio(ordenServicio);
+
+        Factura savedFactura = facturaRepository.save(factura);
+        
+     // Crear los detalles de la factura
+        for (DetalleOrdenServicio detalleOrden : detallesOrden) {
+            DetalleFactura detalleFactura = new DetalleFactura();
+            detalleFactura.setDescripcionServicio(detalleOrden.getDescripcionServicio());
+            detalleFactura.setCosto(detalleOrden.getCosto());
+            detalleFactura.setFactura(savedFactura);
+            detalleFacturaRepository.save(detalleFactura);
+        }
+
+        return convertToDTO(savedFactura);
+    }
+
+    private FacturaOrdenDto convertToDTO(Factura factura) {
+        FacturaOrdenDto facturaDTO = new FacturaOrdenDto();
+        facturaDTO.setIdFactura(factura.getIdFactura());
+        facturaDTO.setFechaFactura(factura.getFechaFactura());
+        facturaDTO.setMonto(factura.getMonto());
+        return facturaDTO;
+    }
 }
