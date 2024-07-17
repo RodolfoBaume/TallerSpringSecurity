@@ -31,10 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tallerMecanico.dto.FacturaDetalleDto;
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.entity.Factura;
-import com.tallerMecanico.projection.IFacturaProjection;
+import com.tallerMecanico.projection.IFacturaClosedView;
 import com.tallerMecanico.projection.IFacturaReporte;
 import com.tallerMecanico.service.FacturaService;
 
@@ -47,25 +46,20 @@ public class FacturaController {
 	@Autowired
 	private FacturaService facturaService;
 
-/*
-	@GetMapping("/facturas")
-	@ResponseStatus(HttpStatus.OK)
-	public List<IFacturaProjection>cons(){
-		return facturaService.findBy();
-	}
-*/
-	@GetMapping("/facturas")
-	@ResponseStatus(HttpStatus.OK)
-	public List<FacturaDetalleDto> getAllFacturasWithDetalles() {
-        return facturaService.getAllFacturasWithDetalles();
-    }
 	
 	// Consulta paginación
 	@GetMapping("/facturas/page/{page}")
-	public Page<IFacturaProjection> consultaPage(@PathVariable Integer page) {
+	public Page<IFacturaClosedView> consultaPage(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("idFactura").ascending());
-		return facturaService.findPage(pageable);
+		return facturaService.getAllFacturasWithDetalle(pageable);
 	}
+	
+	@GetMapping("/facturas")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<IFacturaClosedView>> getAllFacturasWithDetalle() {
+        List<IFacturaClosedView> facturas = facturaService.getAllFacturasWithDetalle();
+        return ResponseEntity.ok(facturas);
+    }
 
 	// Consulta por id
 	/*
@@ -91,25 +85,16 @@ public class FacturaController {
 	
 	*/
 	
-	@GetMapping("/facturas/{id}")
-	public ResponseEntity<?> consultaFacturaPorID(@PathVariable Long id) {
-
-		IFacturaProjection factura = null;
-		String response = "";
-		try {
-			factura = facturaService.findFacturaById(id);
-		} catch (DataAccessException e) {
-			response = "Error al realizar la consulta.";
-			response = response.concat(e.getMessage().concat(e.getMostSpecificCause().toString()));
-			return new ResponseEntity<String>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-		if (factura == null) {
-			response = "La Factura con el ID: ".concat(id.toString()).concat(" no existe en la base de datos");
-			return new ResponseEntity<String>(response, HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<IFacturaProjection>(factura, HttpStatus.OK);
-	}
+	@GetMapping("/facturas/{idFactura}")
+	public ResponseEntity<IFacturaClosedView> getFacturaById(@PathVariable Long idFactura) {
+        IFacturaClosedView factura = facturaService.getFacturaWithDetalleById(idFactura);
+        
+        if (factura == null) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        return ResponseEntity.ok(factura);
+    }
 	
 	
 

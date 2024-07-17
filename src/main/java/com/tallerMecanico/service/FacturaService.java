@@ -4,12 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +28,13 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.tallerMecanico.dto.DetalleFacturasDto;
-import com.tallerMecanico.dto.FacturaDetalleDto;
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.entity.Factura;
+import com.tallerMecanico.projection.FacturaClosedViewImpl;
+import com.tallerMecanico.projection.IDetalleFacturaProjection;
+import com.tallerMecanico.projection.IFacturaClosedView;
 import com.tallerMecanico.projection.IFacturaProjection;
 import com.tallerMecanico.projection.IFacturaReporte;
-import com.tallerMecanico.repository.IDetalleFacturaRepository;
 import com.tallerMecanico.repository.IFacturaRepository;
 
 @Service
@@ -44,45 +43,87 @@ public class FacturaService implements IFacturaService {
 	@Autowired
 	private IFacturaRepository facturaRepository;
 	
-	@Autowired
-	private IDetalleFacturaRepository detalleFacturaRepository;
 
 	@Override
 	public List<IFacturaProjection> findBy() {
 		return facturaRepository.findBy();
 	}
-
+	
+	/*
+	// busca por id solo factura sin detalle
+	@Transactional(readOnly = true)
+	public IFacturaProjection findFacturaById(Long idFactura) {
+		return facturaRepository.findFacturaById(idFactura);
+	}
+	*/
+	
+	//Factura con detalle por Id
+	@Transactional(readOnly = true)
+	public IFacturaClosedView getFacturaWithDetalleById(Long idFactura) {
+	    // Obtener la factura especificada por ID
+	    IFacturaClosedView facturaProxy = facturaRepository.findFacturaById(idFactura);
+	    if (facturaProxy == null) {
+	        return null; // O manejar de otra manera, como lanzar una excepción
+	    }
+	    
+	    // Crear una nueva instancia de FacturaClosedViewImpl y establecer los valores
+	    FacturaClosedViewImpl factura = new FacturaClosedViewImpl();
+	    factura.setIdFactura(facturaProxy.getIdFactura());
+	    factura.setFechaFactura(facturaProxy.getFechaFactura());
+	    factura.setMonto(facturaProxy.getMonto());
+	    
+	    // Obtener los detalles de la factura y establecerlos en la factura
+	    List<IDetalleFacturaProjection> detalleFacturas = facturaRepository.findDetalleFacturaByFacturaId(factura.getIdFactura());
+	    factura.setDetalleFactura(detalleFacturas);
+	    
+	    return factura;
+	}
+	
+	//consulta factura con detalle
+	@Transactional(readOnly = true)
+	public List<IFacturaClosedView> getAllFacturasWithDetalle(){
+		List<IFacturaClosedView> facturasProxies = facturaRepository.findAllFacturas();
+		List<IFacturaClosedView> facturas = new ArrayList<>();
+		
+		for(IFacturaClosedView facturaProxy : facturasProxies) {
+			FacturaClosedViewImpl factura = new FacturaClosedViewImpl();
+			factura.setIdFactura(facturaProxy.getIdFactura());
+			factura.setFechaFactura(facturaProxy.getFechaFactura());
+			factura.setMonto(facturaProxy.getMonto());
+			
+			List<IDetalleFacturaProjection> detalleFacturas = facturaRepository.findDetalleFacturaByFacturaId(factura.getIdFactura());
+			factura.setDetalleFactura(detalleFacturas);
+			
+			facturas.add(factura);
+		}
+		return facturas;
+	}
+	
 	// consulta todos para paginación
 	@Transactional(readOnly = true)
-	public Page<IFacturaProjection> findPage(Pageable pageable) {
-		return facturaRepository.findAllFacturas(pageable);
+	public Page<IFacturaClosedView> getAllFacturasWithDetalle(Pageable pageable){
+		Page<IFacturaClosedView> facturasProxies = facturaRepository.findAllFacturas(pageable);
+		
+		return facturasProxies.map(facturaProxy -> {
+			FacturaClosedViewImpl factura = new FacturaClosedViewImpl();
+			factura.setIdFactura(facturaProxy.getIdFactura());
+			factura.setFechaFactura(facturaProxy.getFechaFactura());
+			factura.setMonto(facturaProxy.getMonto());
+			
+			List<IDetalleFacturaProjection> detalleFacturas = facturaRepository.findDetalleFacturaByFacturaId(factura.getIdFactura());
+			factura.setDetalleFactura(detalleFacturas);
+			
+			return factura;	
+		});
+		
 	}
 
 	// consulta por id
-	
 	@Transactional(readOnly = true)
 	public Factura findById(Long idFactura) {
 		return facturaRepository.findById(idFactura).orElse(null);
 	}
 	
-	//Consulta -----
-	@Transactional(readOnly = true)
-	public List<FacturaDetalleDto> getAllFacturasWithDetalles() {
-        List<FacturaDetalleDto> facturas = detalleFacturaRepository.findAllFacturas();
-        List<DetalleFacturasDto> detalles = detalleFacturaRepository.findAllDetalles();
-
-        Map<Long, List<DetalleFacturasDto>> detallesMap = detalles.stream()
-                .collect(Collectors.groupingBy(DetalleFacturasDto::getFacturaId));
-
-        facturas.forEach(f -> f.setDetalles(detallesMap.get(f.getIdFactura())));
-        return facturas;
-    }
-	
-	
-	@Transactional(readOnly = true)
-	public IFacturaProjection findFacturaById(Long idFactura) {
-		return facturaRepository.findFacturaById(idFactura);
-	}
 
 	// Crear
 	@Transactional
@@ -213,5 +254,6 @@ public class FacturaService implements IFacturaService {
         cell.setPadding(5);
         return cell;
     }
+
 
 }
