@@ -30,6 +30,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.dto.FacturaOrdenDto;
+import com.tallerMecanico.dto.ReporteMesesDto;
 import com.tallerMecanico.entity.DetalleFactura;
 import com.tallerMecanico.entity.DetalleOrdenServicio;
 import com.tallerMecanico.entity.EstatusServicio;
@@ -76,6 +77,13 @@ public class FacturaService implements IFacturaService {
 		return facturaRepository.findFacturaById(idFactura);
 	}
 	*/
+
+
+	@Transactional(readOnly=true)
+	public List<?> obtenerTotalPorMeses(){
+		return facturaRepository.obtenerReportePorMeses();
+
+	}
 	
 	//Factura con detalle por Id
 	@Transactional(readOnly = true)

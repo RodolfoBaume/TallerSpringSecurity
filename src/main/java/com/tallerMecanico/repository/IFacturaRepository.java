@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.tallerMecanico.dto.ReporteMesesDto;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IDetalleFacturaProjection;
 import com.tallerMecanico.projection.IFacturaClosedView;
@@ -31,6 +32,11 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 	IFacturaProjection findFacturaById(@Param("idFactura") Long idFactura);
 	*/
 	
+	@Query(value = "SELECT  sum(monto) as total, date_trunc('month', fecha_factura) as mes\n" + 
+				" FROM facturas  WHERE fecha_factura  BETWEEN '2023/08/01' AND '2024/07/31'\n" + 
+				" Group by date_trunc('month', fecha_factura);", nativeQuery = true)
+	List<?> obtenerReportePorMeses();
+
 	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto " +
 		       "FROM Factura f WHERE f.idFactura = :idFactura")
 	IFacturaClosedView findFacturaById(@Param("idFactura") Long idFactura);

@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.dto.FacturaOrdenDto;
+import com.tallerMecanico.dto.ReporteMesesDto;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IFacturaClosedView;
 import com.tallerMecanico.projection.IFacturaReporte;
@@ -48,6 +49,9 @@ public class FacturaController {
 	private FacturaService facturaService;
 
 	
+
+
+
 	// Consulta paginación
 	@GetMapping("/facturas/page/{page}")
 	public Page<IFacturaClosedView> consultaPage(@PathVariable Integer page) {
@@ -186,4 +190,10 @@ public class FacturaController {
 
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
+	@GetMapping("/facturas/por-meses")
+	public List<?> obtenerTotalPorMeses(){
+
+		return facturaService.obtenerTotalPorMeses();
+
+	}
 }
