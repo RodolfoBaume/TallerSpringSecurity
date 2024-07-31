@@ -196,58 +196,59 @@ public class ClienteService implements IClienteService {
 	}
 
 	// Reporte
-	public List<IClienteProjection> getAllClientes() {
-		return clienteRepository.findAllProjectedBy();
-	}
+	public List<IClienteProjection> getAllClientes(String orderBy, String orderDirection) {
+        Sort.Direction direction = Sort.Direction.fromString(orderDirection);
+        Sort sort = Sort.by(direction, orderBy);
+        return clienteRepository.findAllProjectedBy(sort);
+    }
 
-	public byte[] generarPDF(List<IClienteProjection> clientes) throws IOException {
-		try {
-			Document document = new Document();
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			PdfWriter.getInstance(document, baos);
+    public byte[] generarPDF(List<IClienteProjection> clientes) throws IOException {
+        try {
+            Document document = new Document();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, baos);
 
-			document.open();
-			// Crear un párrafo con el título y centrarlo
-			Paragraph titulo = new Paragraph("Listado de Clientes");
-			titulo.setAlignment(Element.ALIGN_CENTER);
-			document.add(titulo);
+            document.open();
+            // Crear un párrafo con el título y centrarlo
+            Paragraph titulo = new Paragraph("Listado de Clientes");
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            document.add(titulo);
 
-			// Agregar salto de línea
-			document.add(Chunk.NEWLINE);
+            // Agregar salto de línea
+            document.add(Chunk.NEWLINE);
 
-			// Crear una tabla con 6 columnas
-			PdfPTable table = new PdfPTable(6);
-			table.setWidthPercentage(100); // Establecer el ancho de la tabla al 100% del ancho de la página
+            // Crear una tabla con 6 columnas
+            PdfPTable table = new PdfPTable(6);
+            table.setWidthPercentage(100); // Establecer el ancho de la tabla al 100% del ancho de la página
 
-			// Agregar encabezados
-			table.addCell("ID");
-			table.addCell("Nombre");
-			table.addCell("Apellido Paterno");
-			table.addCell("Apellido Materno");
-			table.addCell("Domicilio");
-			table.addCell("Telefono");
+            // Agregar encabezados
+            table.addCell("ID");
+            table.addCell("Nombre");
+            table.addCell("Apellido Paterno");
+            table.addCell("Apellido Materno");
+            table.addCell("Domicilio");
+            table.addCell("Telefono");
 
-			// Agregar datos a la tabla
-			for (IClienteProjection cliente : clientes) {
-				table.addCell(String.valueOf(cliente.getIdCliente()));
-				table.addCell(cliente.getNombre());
-				table.addCell(cliente.getApellidoPaterno());
-				table.addCell(cliente.getApellidoMaterno());
-				table.addCell(cliente.getDomicilio());
-				table.addCell(cliente.getTelefono());
-			}
+            // Agregar datos a la tabla
+            for (IClienteProjection cliente : clientes) {
+                table.addCell(String.valueOf(cliente.getIdCliente()));
+                table.addCell(cliente.getNombre());
+                table.addCell(cliente.getApellidoPaterno());
+                table.addCell(cliente.getApellidoMaterno());
+                table.addCell(cliente.getDomicilio());
+                table.addCell(cliente.getTelefono());
+            }
 
-			// Agregar la tabla al documento
-			document.add(table);
+            // Agregar la tabla al documento
+            document.add(table);
 
-			document.close();
+            document.close();
 
-			return baos.toByteArray();
-		} catch (DocumentException e) {
-			// Manejar la excepción
-			e.printStackTrace();
-			return new byte[0];
-		}
-	}
-
+            return baos.toByteArray();
+        } catch (DocumentException e) {
+            // Manejar la excepción
+            e.printStackTrace();
+            return new byte[0];
+        }
+    }
 }

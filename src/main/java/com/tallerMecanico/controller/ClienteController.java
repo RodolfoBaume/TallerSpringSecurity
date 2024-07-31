@@ -245,9 +245,12 @@ public class ClienteController {
     }
     
     
-    @GetMapping("/clientes/pdf")
-    public ResponseEntity<byte[]> generarReporteClientes() throws IOException {
-        List<IClienteProjection> clientes = clienteService.getAllClientes();
+    @GetMapping("clientes/pdf")
+    public ResponseEntity<byte[]> generarReporteClientes(
+            @RequestParam(defaultValue = "nombre") String orderBy,
+            @RequestParam(defaultValue = "asc") String orderDirection) throws IOException {
+        
+        List<IClienteProjection> clientes = clienteService.getAllClientes(orderBy, orderDirection);
 
         byte[] pdfBytes = clienteService.generarPDF(clientes);
 

@@ -18,15 +18,25 @@ import com.tallerMecanico.projection.IOrdenServicioSinDetalle;
 @Repository
 public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, Long>{
 
-	
+	/*
 	@Query("SELECT o FROM OrdenServicio o " +
 		       "JOIN FETCH o.vehiculo v " +
 		       "JOIN FETCH v.cliente c " +
 		       "JOIN FETCH o.empleado e " + 
 		       "LEFT JOIN FETCH o.factura f " +
+		       "LEFT JOIN FETCH o.detalleOrdenServicios dos " +  
 		       "WHERE o.idOrdenServicio = :idOrdenServicio")
 	IOrdenServicioProjection findProjectedById(@Param("idOrdenServicio") Long idOrdenServicio);
-
+*/
+	@Query("SELECT o FROM OrdenServicio o " +
+	           "JOIN FETCH o.vehiculo v " +
+	           "JOIN FETCH v.cliente c " +
+	           "JOIN FETCH o.empleado e " +
+	           "LEFT JOIN FETCH o.factura f " +
+	           "WHERE o.idOrdenServicio = :idOrdenServicio")
+	    IOrdenServicioProjection findProjectedById(@Param("idOrdenServicio") Long idOrdenServicio);
+	
+	
     @Query("SELECT o FROM OrdenServicio o JOIN FETCH o.vehiculo v JOIN FETCH v.cliente c")
     List<IOrdenServicioSinDetalle> findAllProjected();
     

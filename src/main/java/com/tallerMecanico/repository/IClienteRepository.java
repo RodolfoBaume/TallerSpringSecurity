@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,6 +40,20 @@ public interface IClienteRepository extends JpaRepository<Cliente, Long>{
 	           "c.apellidoMaterno AS apellidoMaterno, c.domicilio AS domicilio, c.telefono AS telefono " +
 	           "FROM Cliente c")
 	List<IClienteProjection> findAllProjectedBy();
-
+	
+	@Query("SELECT c.idCliente AS idCliente, c.nombre AS nombre, c.apellidoPaterno AS apellidoPaterno, " +
+	           "c.apellidoMaterno AS apellidoMaterno, c.domicilio AS domicilio, c.telefono AS telefono " +
+	           "FROM Cliente c")
+	List<IClienteProjection> findAllProjectedBy(Sort sort);
+	
+	@Query("SELECT c.idCliente AS idCliente, c.nombre AS nombre, c.apellidoPaterno AS apellidoPaterno, " +
+	           "c.apellidoMaterno AS apellidoMaterno, c.domicilio AS domicilio, c.telefono AS telefono " +
+	           "FROM Cliente c ORDER BY " +
+	           "CASE WHEN :orderBy = 'nombre' THEN c.nombre " +
+	           "WHEN :orderBy = 'apellidoPaterno' THEN c.apellidoPaterno " +
+	           "WHEN :orderBy = 'apellidoMaterno' THEN c.apellidoMaterno END " +
+	           "ASC, " +
+	           "CASE WHEN :orderDirection = 'desc' THEN 1 ELSE 0 END")
+	List<IClienteProjection> findAllProjectedByOrder(@Param("orderBy") String orderBy, @Param("orderDirection") String orderDirection);
 
 }
