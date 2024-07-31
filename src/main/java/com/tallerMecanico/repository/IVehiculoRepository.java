@@ -46,9 +46,41 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
     Page<IVehiculoConOrdenClosedView> findVehiculosByOrdenServicioEstatus(@Param("estatus") String estatus, Pageable pageable);
 
 	//Reporte
+	/*
 	@Query("SELECT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
 	           "v.anioModelo AS anioModelo, v.color AS color, v.imagen AS imagen, " +
 	           "v.tipoMotor AS tipoMotor, v.modelo AS modelo, v.cliente AS cliente " +
 	           "FROM Vehiculo v")
+	List<IVehiculoSinOrden> findAllProjectedBy();
+	*/
+	
+	@Query("SELECT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
+		       "v.anioModelo AS anioModelo, v.color AS color, v.imagen AS imagen, " +
+		       "v.tipoMotor AS tipoMotor, v.modelo AS modelo, v.cliente AS cliente " +
+		       "FROM Vehiculo v " +
+		       "JOIN v.modelo m " +
+		       "JOIN m.marca ma " +
+		       "WHERE v.anioModelo = :anioModelo AND ma.marca = :marca")
+	List<IVehiculoSinOrden> findByAnioModeloAndMarca(@Param("anioModelo") Integer anioModelo, @Param("marca") String marca);
+
+	@Query("SELECT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
+		       "v.anioModelo AS anioModelo, v.color AS color, v.imagen AS imagen, " +
+		       "v.tipoMotor AS tipoMotor, v.modelo AS modelo, v.cliente AS cliente " +
+		       "FROM Vehiculo v WHERE v.anioModelo = :anioModelo")
+	List<IVehiculoSinOrden> findByAnioModelo(@Param("anioModelo") Integer anioModelo);
+
+	@Query("SELECT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
+		       "v.anioModelo AS anioModelo, v.color AS color, v.imagen AS imagen, " +
+		       "v.tipoMotor AS tipoMotor, v.modelo AS modelo, v.cliente AS cliente " +
+		       "FROM Vehiculo v " +
+		       "JOIN v.modelo m " +
+		       "JOIN m.marca ma " +
+		       "WHERE ma.marca = :marca")
+	List<IVehiculoSinOrden> findByMarca(@Param("marca") String marca);
+
+	@Query("SELECT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
+		       "v.anioModelo AS anioModelo, v.color AS color, v.imagen AS imagen, " +
+		       "v.tipoMotor AS tipoMotor, v.modelo AS modelo, v.cliente AS cliente " +
+		       "FROM Vehiculo v")
 	List<IVehiculoSinOrden> findAllProjectedBy();
 }

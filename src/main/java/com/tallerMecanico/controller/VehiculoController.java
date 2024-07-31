@@ -203,15 +203,17 @@ public class VehiculoController {
 	
 	
 	@GetMapping("/vehiculos/pdf")
-    public ResponseEntity<byte[]> generarReporteVehiculos() throws IOException {
-        List<IVehiculoSinOrden> vehiculos = vehiculoService.getAllVehiculos();
+	public ResponseEntity<byte[]> generarReporteVehiculos(
+	        @RequestParam(required = false) Integer anioModelo,
+	        @RequestParam(required = false) String marca) throws IOException {
+	    List<IVehiculoSinOrden> vehiculos = vehiculoService.getAllVehiculos(anioModelo, marca);
 
-        byte[] pdfBytes = vehiculoService.generarPDF(vehiculos);
+	    byte[] pdfBytes = vehiculoService.generarPDF(vehiculos);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inline", "reporteVehiculos.pdf");
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_PDF);
+	    headers.setContentDispositionFormData("inline", "reporteVehiculos.pdf");
 
-        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-    }
+	    return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
 }

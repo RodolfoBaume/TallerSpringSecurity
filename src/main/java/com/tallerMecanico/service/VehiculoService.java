@@ -145,8 +145,21 @@ public class VehiculoService implements IVehiculoService {
 	
 	
 	//Reporte
+	/*
 	public List<IVehiculoSinOrden> getAllVehiculos() {
 		return vehiculoRepository.findAllProjectedBy();
+	}
+	*/
+	public List<IVehiculoSinOrden> getAllVehiculos(Integer anioModelo, String marca) {
+	    if (anioModelo != null && marca != null) {
+	        return vehiculoRepository.findByAnioModeloAndMarca(anioModelo, marca);
+	    } else if (anioModelo != null) {
+	        return vehiculoRepository.findByAnioModelo(anioModelo);
+	    } else if (marca != null) {
+	        return vehiculoRepository.findByMarca(marca);
+	    } else {
+	        return vehiculoRepository.findAllProjectedBy();
+	    }
 	}
 
 	public byte[] generarPDF(List<IVehiculoSinOrden> vehiculos) throws IOException {
