@@ -9,4 +9,10 @@ public interface IFacturaClosedView {
 	double getMonto();	
 	
 	List<IDetalleFacturaProjection> getDetalleFactura();
+	
+	String getNombre();
+    String getApellidoPaterno();
+    String getApellidoMaterno();
+    String getDomicilio();
+    String getTelefono();
 }

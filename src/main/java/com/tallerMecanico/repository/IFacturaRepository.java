@@ -37,8 +37,20 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 				" Group by date_trunc('month', fecha_factura);", nativeQuery = true)
 	List<?> obtenerReportePorMeses();
 
+	/*
 	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto " +
 		       "FROM Factura f WHERE f.idFactura = :idFactura")
+	IFacturaClosedView findFacturaById(@Param("idFactura") Long idFactura);
+	*/
+	
+	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto, " +
+		       "c.nombre as nombre, c.apellidoPaterno as apellidoPaterno, " +
+		       "c.apellidoMaterno as apellidoMaterno, c.domicilio as domicilio, c.telefono as telefono " +
+		       "FROM Factura f " +
+		       "JOIN f.ordenServicio os " +
+		       "JOIN os.vehiculo v " +
+		       "JOIN v.cliente c " +
+		       "WHERE f.idFactura = :idFactura")
 	IFacturaClosedView findFacturaById(@Param("idFactura") Long idFactura);
 
 	// consulta facturas detalle

@@ -93,17 +93,24 @@ public class FacturaService implements IFacturaService {
 	    if (facturaProxy == null) {
 	        return null; // O manejar de otra manera, como lanzar una excepción
 	    }
-	    
+
 	    // Crear una nueva instancia de FacturaClosedViewImpl y establecer los valores
 	    FacturaClosedViewImpl factura = new FacturaClosedViewImpl();
 	    factura.setIdFactura(facturaProxy.getIdFactura());
 	    factura.setFechaFactura(facturaProxy.getFechaFactura());
 	    factura.setMonto(facturaProxy.getMonto());
-	    
+
+	    // Establecer los datos del cliente
+	    factura.setNombre(facturaProxy.getNombre());
+	    factura.setApellidoPaterno(facturaProxy.getApellidoPaterno());
+	    factura.setApellidoMaterno(facturaProxy.getApellidoMaterno());
+	    factura.setDomicilio(facturaProxy.getDomicilio());
+	    factura.setTelefono(facturaProxy.getTelefono());
+
 	    // Obtener los detalles de la factura y establecerlos en la factura
 	    List<IDetalleFacturaProjection> detalleFacturas = facturaRepository.findDetalleFacturaByFacturaId(factura.getIdFactura());
 	    factura.setDetalleFactura(detalleFacturas);
-	    
+
 	    return factura;
 	}
 	

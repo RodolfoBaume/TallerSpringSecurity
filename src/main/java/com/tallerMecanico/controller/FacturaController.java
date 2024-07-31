@@ -91,15 +91,19 @@ public class FacturaController {
 	*/
 	
 	@GetMapping("/facturas/{idFactura}")
-	public ResponseEntity<IFacturaClosedView> getFacturaById(@PathVariable Long idFactura) {
-        IFacturaClosedView factura = facturaService.getFacturaWithDetalleById(idFactura);
-        
-        if (factura == null) {
-            return ResponseEntity.notFound().build();
-        }
-        
-        return ResponseEntity.ok(factura);
-    }
+	public ResponseEntity<?> getFacturaById(@PathVariable Long idFactura) {
+	    try {
+	        IFacturaClosedView factura = facturaService.getFacturaWithDetalleById(idFactura);
+
+	        if (factura == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Factura no encontrada con id: " + idFactura);
+	        }
+
+	        return ResponseEntity.ok(factura);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener la factura: " + e.getMessage());
+	    }
+	}
 	
 	
 
