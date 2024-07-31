@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.tallerMecanico.entity.OrdenServicio;
+import com.tallerMecanico.projection.IDetalleOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioSinDetalle;
@@ -28,13 +29,31 @@ public interface IOrdenServicioRepository extends JpaRepository<OrdenServicio, L
 		       "WHERE o.idOrdenServicio = :idOrdenServicio")
 	IOrdenServicioProjection findProjectedById(@Param("idOrdenServicio") Long idOrdenServicio);
 */
+	/*
 	@Query("SELECT o FROM OrdenServicio o " +
 	           "JOIN FETCH o.vehiculo v " +
 	           "JOIN FETCH v.cliente c " +
 	           "JOIN FETCH o.empleado e " +
 	           "LEFT JOIN FETCH o.factura f " +
 	           "WHERE o.idOrdenServicio = :idOrdenServicio")
-	    IOrdenServicioProjection findProjectedById(@Param("idOrdenServicio") Long idOrdenServicio);
+	IOrdenServicioProjection findProjectedById(@Param("idOrdenServicio") Long idOrdenServicio);
+	*/
+	
+	@Query("SELECT o FROM OrdenServicio o " +
+		       "JOIN FETCH o.vehiculo v " +
+		       "JOIN FETCH v.cliente c " +
+		       "JOIN FETCH o.empleado e " +
+		       "LEFT JOIN FETCH o.factura f " +
+		       "WHERE o.idOrdenServicio = :idOrdenServicio")
+	IOrdenServicioProjection findProjectedById(@Param("idOrdenServicio") Long idOrdenServicio);
+
+	@Query("SELECT d FROM DetalleOrdenServicio d " +
+		       "WHERE d.ordenServicio.idOrdenServicio = :idOrdenServicio")
+	List<IDetalleOrdenServicioProjection> findDetallesByOrdenServicioId(@Param("idOrdenServicio") Long idOrdenServicio);
+		
+	
+	@Query("SELECT o.idOrdenServicio FROM OrdenServicio o")
+    List<Long> findAllIds();
 	
 	
     @Query("SELECT o FROM OrdenServicio o JOIN FETCH o.vehiculo v JOIN FETCH v.cliente c")

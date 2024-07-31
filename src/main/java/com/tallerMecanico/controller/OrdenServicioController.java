@@ -1,6 +1,7 @@
 package com.tallerMecanico.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import com.tallerMecanico.entity.OrdenServicio;
 import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioSinDetalle;
+import com.tallerMecanico.repository.IOrdenServicioRepository;
 import com.tallerMecanico.service.OrdenServicioService;
 
 @RestController
@@ -43,6 +45,9 @@ public class OrdenServicioController {
 
 	@Autowired
 	private OrdenServicioService ordenServicioService;
+	
+	@Autowired
+	private IOrdenServicioRepository ordenServicioRepository;
 
 	@GetMapping("/ordenesServicio/{id}")
 	public IOrdenServicioProjection getOrdenServicioById(@PathVariable("id") long ordenServicioId) {
@@ -174,16 +179,22 @@ public class OrdenServicioController {
 	}
 	
 	@GetMapping("/ordenesServicio/pdf")
-    public ResponseEntity<byte[]> generarReporteOrdenesServicio() throws IOException {
-        List<IOrdenServicioProjection> ordenesServicio = ordenServicioService.getAllOrdenesServicioRep();
+	public ResponseEntity<byte[]> generarReporteOrdenesServicio() throws IOException {
+	    List<IOrdenServicioProjection> ordenesServicio = new ArrayList<>();
+	    
+	    // Obtener todos los IDs de las órdenes de servicio
+	    List<Long> idsOrdenesServicio = ordenServicioRepository.findAllIds();
+	    
+	    for (Long id : idsOrdenesServicio) {
+	        IOrdenServicioProjection orden = ordenServicioService.findProjectedById(id);
+	        ordenesServicio.add(orden);
+	    }
 
-        byte[] pdfBytes = ordenServicioService.generarPDF(ordenesServicio);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inline", "reporteOrdenesServicio.pdf");
-
-        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-    }
+	    byte[] pdfBytes = ordenServicioService.generarPDF(ordenesServicio);
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_PDF);
+	    headers.setContentDispositionFormData("inline", "reporteOrdenesServicio.pdf");
+	    return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
 
 }

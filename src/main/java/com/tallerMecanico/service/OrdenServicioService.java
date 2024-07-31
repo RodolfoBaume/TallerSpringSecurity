@@ -29,6 +29,8 @@ import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioSinDetalle;
 import com.tallerMecanico.projection.OrdenServicioProjectionImpl;
+import com.tallerMecanico.projection.OrdenServicioProjectionWithDetails;
+import com.tallerMecanico.projection.OrdenServicioProjectionWithDetails;
 import com.tallerMecanico.repository.IDetalleOrdenServicioRepository;
 import com.tallerMecanico.repository.IOrdenServicioRepository;
 
@@ -178,8 +180,21 @@ public class OrdenServicioService implements IOrdenServicioService {
 	}
 
 	//Reportes 
+	/*
 	public List<IOrdenServicioProjection> getAllOrdenesServicioRep() {
         return ordenServicioRepository.findAllProjectedBy();
+    }
+    */
+	
+	public IOrdenServicioProjection findProjectedById(Long idOrdenServicio) {
+        IOrdenServicioProjection ordenServicio = ordenServicioRepository.findProjectedById(idOrdenServicio);
+        List<IDetalleOrdenServicioProjection> detalles = ordenServicioRepository.findDetallesByOrdenServicioId(idOrdenServicio);
+        
+        // Aquí puedes utilizar un DTO para combinar los datos si la proyección no permite setters
+        OrdenServicioProjectionWithDetails result = new OrdenServicioProjectionWithDetails(ordenServicio);
+        result.setDetalleOrdenServicios(detalles);
+
+        return result;
     }
 
     public byte[] generarPDF(List<IOrdenServicioProjection> ordenesServicio) throws IOException {
