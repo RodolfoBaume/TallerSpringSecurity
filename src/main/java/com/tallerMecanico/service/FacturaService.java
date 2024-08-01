@@ -31,6 +31,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.dto.FacturaOrdenDto;
 import com.tallerMecanico.dto.ReporteMesesDto;
+import com.tallerMecanico.dto.VentasPorMesDTO;
 import com.tallerMecanico.entity.DetalleFactura;
 import com.tallerMecanico.entity.DetalleOrdenServicio;
 import com.tallerMecanico.entity.EstatusServicio;
@@ -342,4 +343,17 @@ public class FacturaService implements IFacturaService {
  		facturaDTO.setMonto(factura.getMonto());
  		return facturaDTO;
  	}
+ 	
+ 	
+ 	public List<VentasPorMesDTO> obtenerVentasPorMes() {
+        return facturaRepository.findVentasPorMes();
+    }
+    
+ 	/*
+ 	public List<VentasPorMesDTO> getVentasPorMes() {
+        return facturaRepository.findVentasPorMes().entrySet().stream()
+                .map(entry -> new VentasPorMesDTO(entry.getKey().getMonthValue(), entry.getValue()))
+                .toList();
+    }
+    */
 }

@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.dto.FacturaOrdenDto;
 import com.tallerMecanico.dto.ReporteMesesDto;
+import com.tallerMecanico.dto.VentasPorMesDTO;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IFacturaClosedView;
 import com.tallerMecanico.projection.IFacturaReporte;
@@ -200,4 +201,11 @@ public class FacturaController {
 		return facturaService.obtenerTotalPorMeses();
 
 	}
+	
+	
+	@GetMapping("/facturas/ventas-por-mes")
+    public List<VentasPorMesDTO> getVentasPorMes() {
+        return facturaService.obtenerVentasPorMes();
+    }
+	
 }

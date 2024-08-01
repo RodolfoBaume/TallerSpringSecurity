@@ -1,7 +1,9 @@
 package com.tallerMecanico.repository;
 
+import java.time.YearMonth;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.tallerMecanico.dto.ReporteMesesDto;
+import com.tallerMecanico.dto.VentasPorMesDTO;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IDetalleFacturaProjection;
 import com.tallerMecanico.projection.IFacturaClosedView;
@@ -36,7 +39,22 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 				" FROM facturas  WHERE fecha_factura  BETWEEN '2023/08/01' AND '2024/07/31'\n" + 
 				" Group by date_trunc('month', fecha_factura);", nativeQuery = true)
 	List<?> obtenerReportePorMeses();
+	
+	/*
+	@Query("SELECT YEAR(f.fechaFactura) as year, MONTH(f.fechaFactura) as month, SUM(f.monto) as total " +
+            "FROM Factura f " +
+            "GROUP BY YEAR(f.fechaFactura), MONTH(f.fechaFactura)")
+	List<VentasPorMesDTO> findVentasPorMes();
+    //Map<YearMonth, Double> findVentasPorMes();
+	*/
 
+	@Query("SELECT new com.tallerMecanico.dto.VentasPorMesDTO(YEAR(f.fechaFactura), MONTH(f.fechaFactura), SUM(f.monto)) " +
+	           "FROM Factura f " +
+	           "GROUP BY YEAR(f.fechaFactura), MONTH(f.fechaFactura)")
+	List<VentasPorMesDTO> findVentasPorMes();
+	
+	
+	
 	/*
 	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto " +
 		       "FROM Factura f WHERE f.idFactura = :idFactura")
