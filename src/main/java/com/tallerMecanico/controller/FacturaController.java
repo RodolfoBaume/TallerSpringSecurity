@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.dto.FacturaOrdenDto;
-import com.tallerMecanico.dto.ReporteMesesDto;
 import com.tallerMecanico.dto.VentasPorMesDTO;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IFacturaClosedView;
@@ -204,8 +204,10 @@ public class FacturaController {
 	
 	
 	@GetMapping("/facturas/ventas-por-mes")
-    public List<VentasPorMesDTO> getVentasPorMes() {
-        return facturaService.obtenerVentasPorMes();
+    public List<VentasPorMesDTO> getVentasPorMes(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaInicio,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaFin) {
+        return facturaService.obtenerVentasPorMes(fechaInicio, fechaFin);
     }
 	
 }

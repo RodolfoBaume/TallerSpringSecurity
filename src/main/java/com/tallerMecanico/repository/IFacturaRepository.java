@@ -50,8 +50,9 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 
 	@Query("SELECT new com.tallerMecanico.dto.VentasPorMesDTO(YEAR(f.fechaFactura), MONTH(f.fechaFactura), SUM(f.monto)) " +
 	           "FROM Factura f " +
+	           "WHERE f.fechaFactura BETWEEN :fechaInicio AND :fechaFin " +
 	           "GROUP BY YEAR(f.fechaFactura), MONTH(f.fechaFactura)")
-	List<VentasPorMesDTO> findVentasPorMes();
+	List<VentasPorMesDTO> findVentasPorMes(@Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
 	
 	
 	

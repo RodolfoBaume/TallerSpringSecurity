@@ -4,11 +4,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -345,8 +348,30 @@ public class FacturaService implements IFacturaService {
  	}
  	
  	
- 	public List<VentasPorMesDTO> obtenerVentasPorMes() {
-        return facturaRepository.findVentasPorMes();
+ 	public List<VentasPorMesDTO> obtenerVentasPorMes(Date fechaInicio, Date fechaFin) {
+        List<VentasPorMesDTO> ventasPorMes = facturaRepository.findVentasPorMes(fechaInicio, fechaFin);
+        return rellenarMesesFaltantes(ventasPorMes, fechaInicio, fechaFin);
+    }
+
+    private List<VentasPorMesDTO> rellenarMesesFaltantes(List<VentasPorMesDTO> ventasPorMes, Date fechaInicio, Date fechaFin) {
+        Map<String, VentasPorMesDTO> ventasMap = ventasPorMes.stream()
+            .collect(Collectors.toMap(
+                dto -> dto.getYear() + "-" + dto.getMonth(),
+                dto -> dto
+            ));
+
+        List<VentasPorMesDTO> resultado = new ArrayList<>();
+
+        LocalDate inicio = new java.sql.Date(fechaInicio.getTime()).toLocalDate();
+        LocalDate fin = new java.sql.Date(fechaFin.getTime()).toLocalDate();
+
+        for (LocalDate date = inicio.withDayOfMonth(1); !date.isAfter(fin); date = date.plusMonths(1)) {
+            String key = date.getYear() + "-" + date.getMonthValue();
+            VentasPorMesDTO dto = ventasMap.getOrDefault(key, new VentasPorMesDTO(date.getYear(), date.getMonthValue(), 0.0));
+            resultado.add(dto);
+        }
+
+        return resultado;
     }
     
  	/*
