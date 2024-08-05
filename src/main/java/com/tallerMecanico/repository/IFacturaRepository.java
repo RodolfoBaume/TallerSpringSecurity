@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.tallerMecanico.dto.ReporteMesesDto;
+import com.tallerMecanico.dto.VentasPorDiaDTO;
 import com.tallerMecanico.dto.VentasPorMesDTO;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IDetalleFacturaProjection;
@@ -48,6 +49,7 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
     //Map<YearMonth, Double> findVentasPorMes();
 	*/
 
+	//ventas mensuales por rango
 	@Query("SELECT new com.tallerMecanico.dto.VentasPorMesDTO(YEAR(f.fechaFactura), MONTH(f.fechaFactura), SUM(f.monto)) " +
 	           "FROM Factura f " +
 	           "WHERE f.fechaFactura BETWEEN :fechaInicio AND :fechaFin " +
@@ -55,6 +57,14 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 	List<VentasPorMesDTO> findVentasPorMes(@Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
 	
 	
+	
+	//ventas diarias por mes
+	@Query("SELECT new com.tallerMecanico.dto.VentasPorDiaDTO(DAY(f.fechaFactura), MONTH(f.fechaFactura), YEAR(f.fechaFactura), SUM(f.monto)) " +
+	           "FROM Factura f " +
+	           "WHERE f.fechaFactura BETWEEN :fechaInicio AND :fechaFin " +
+	           "GROUP BY DAY(f.fechaFactura), MONTH(f.fechaFactura), YEAR(f.fechaFactura)")
+	List<VentasPorDiaDTO> findVentasPorDia(@Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
+
 	
 	/*
 	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto " +

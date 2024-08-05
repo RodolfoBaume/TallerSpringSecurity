@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.dto.FacturaOrdenDto;
 import com.tallerMecanico.dto.ReporteMesesDto;
+import com.tallerMecanico.dto.VentasPorDiaDTO;
 import com.tallerMecanico.dto.VentasPorMesDTO;
 import com.tallerMecanico.entity.DetalleFactura;
 import com.tallerMecanico.entity.DetalleOrdenServicio;
@@ -348,6 +350,7 @@ public class FacturaService implements IFacturaService {
  	}
  	
  	
+ 	// ventas mensuales
  	public List<VentasPorMesDTO> obtenerVentasPorMes(Date fechaInicio, Date fechaFin) {
         List<VentasPorMesDTO> ventasPorMes = facturaRepository.findVentasPorMes(fechaInicio, fechaFin);
         return rellenarMesesFaltantes(ventasPorMes, fechaInicio, fechaFin);
@@ -374,11 +377,34 @@ public class FacturaService implements IFacturaService {
         return resultado;
     }
     
- 	/*
- 	public List<VentasPorMesDTO> getVentasPorMes() {
-        return facturaRepository.findVentasPorMes().entrySet().stream()
-                .map(entry -> new VentasPorMesDTO(entry.getKey().getMonthValue(), entry.getValue()))
-                .toList();
+ 	//ventas diarias
+    
+    public List<VentasPorDiaDTO> obtenerVentasPorDia(int year, int month) {
+        LocalDate inicio = LocalDate.of(year, month, 1);
+        LocalDate fin = inicio.withDayOfMonth(inicio.lengthOfMonth());
+
+        Date fechaInicio = Date.from(inicio.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fechaFin = Date.from(fin.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        List<VentasPorDiaDTO> ventasPorDia = facturaRepository.findVentasPorDia(fechaInicio, fechaFin);
+        return rellenarDiasFaltantes(ventasPorDia, inicio, fin);
     }
-    */
+
+    private List<VentasPorDiaDTO> rellenarDiasFaltantes(List<VentasPorDiaDTO> ventasPorDia, LocalDate inicio, LocalDate fin) {
+        Map<String, VentasPorDiaDTO> ventasMap = ventasPorDia.stream()
+            .collect(Collectors.toMap(
+                dto -> dto.getYear() + "-" + dto.getMonth() + "-" + dto.getDay(),
+                dto -> dto
+            ));
+
+        List<VentasPorDiaDTO> resultado = new ArrayList<>();
+
+        for (LocalDate date = inicio; !date.isAfter(fin); date = date.plusDays(1)) {
+            String key = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
+            VentasPorDiaDTO dto = ventasMap.getOrDefault(key, new VentasPorDiaDTO(date.getDayOfMonth(), date.getMonthValue(), date.getYear(), 0.0));
+            resultado.add(dto);
+        }
+
+        return resultado;
+    }
 }

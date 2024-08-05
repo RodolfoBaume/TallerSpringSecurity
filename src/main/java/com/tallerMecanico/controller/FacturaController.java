@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.dto.FacturaOrdenDto;
+import com.tallerMecanico.dto.VentasPorDiaDTO;
 import com.tallerMecanico.dto.VentasPorMesDTO;
 import com.tallerMecanico.entity.Factura;
 import com.tallerMecanico.projection.IFacturaClosedView;
@@ -208,6 +209,13 @@ public class FacturaController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaInicio,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaFin) {
         return facturaService.obtenerVentasPorMes(fechaInicio, fechaFin);
+    }
+	
+	@GetMapping("/facturas/ventas-por-dia")
+	public List<VentasPorDiaDTO> getVentasPorDia(
+            @RequestParam int year,
+            @RequestParam int month) {
+        return facturaService.obtenerVentasPorDia(year, month);
     }
 	
 }
