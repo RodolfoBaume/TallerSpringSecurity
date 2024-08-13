@@ -60,7 +60,7 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 		       "FROM Vehiculo v " +
 		       "JOIN v.modelo m " +
 		       "JOIN m.marca ma " +
-		       "WHERE v.anioModelo = :anioModelo AND ma.marca = :marca")
+		       "WHERE v.anioModelo = :anioModelo AND upper(ma.marca) = upper(:marca)")
 	List<IVehiculoSinOrden> findByAnioModeloAndMarca(@Param("anioModelo") Integer anioModelo, @Param("marca") String marca);
 
 	@Query("SELECT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
@@ -75,7 +75,7 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 		       "FROM Vehiculo v " +
 		       "JOIN v.modelo m " +
 		       "JOIN m.marca ma " +
-		       "WHERE ma.marca = :marca")
+		       "WHERE upper(ma.marca) = upper(:marca)")
 	List<IVehiculoSinOrden> findByMarca(@Param("marca") String marca);
 
 	@Query("SELECT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +

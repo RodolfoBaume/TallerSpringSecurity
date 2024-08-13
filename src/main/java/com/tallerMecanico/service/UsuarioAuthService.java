@@ -2,6 +2,8 @@ package com.tallerMecanico.service;
 
 import java.security.Principal;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tallerMecanico.dto.AuthRespuestaDto;
 import com.tallerMecanico.dto.LoginDto;
+import com.tallerMecanico.dto.PasswordDto;
 import com.tallerMecanico.dto.RegistroDto;
 import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.UsuarioActualDto;
@@ -101,4 +105,29 @@ public class UsuarioAuthService {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	// Cambiar Password
+	@Transactional
+	public ResponseEntity<?> cambiarPassword(Principal principal, PasswordDto passwordDto) {
+		Map<String, Object> resp = new HashMap<>();
+
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+						passwordDto.getCurrentPassword()));
+
+
+		try {
+			resp.put("mensaje", "La Contraseña ha sido cambiada");
+			this.usuariosRepository.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()), userDetails.getUsername());
+		} catch (Exception e) {
+			resp.put("mensaje", "No es posible cambiar el password");
+
+			return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.FORBIDDEN);
+		}
+
+		System.out.println("usuario valido: " + authentication.isAuthenticated());
+		return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.OK);
+
+	}
 }
