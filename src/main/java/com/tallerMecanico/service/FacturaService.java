@@ -34,7 +34,6 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.tallerMecanico.dto.FacturaDto;
 import com.tallerMecanico.dto.FacturaOrdenDto;
-import com.tallerMecanico.dto.ReporteMesesDto;
 import com.tallerMecanico.dto.VentasPorDiaDTO;
 import com.tallerMecanico.dto.VentasPorMesDTO;
 import com.tallerMecanico.entity.DetalleFactura;

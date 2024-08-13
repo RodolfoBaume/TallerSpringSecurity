@@ -1,5 +1,6 @@
 package com.tallerMecanico.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,4 +84,14 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 		       "v.tipoMotor AS tipoMotor, v.modelo AS modelo, v.cliente AS cliente " +
 		       "FROM Vehiculo v")
 	List<IVehiculoSinOrden> findAllProjectedBy();
+	
+	
+	@Query("SELECT DISTINCT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
+		       "v.anioModelo AS anioModelo, v.color AS color, v.imagen AS imagen, " +
+		       "v.tipoMotor AS tipoMotor, v.modelo AS modelo, v.cliente AS cliente " +
+		       "FROM Vehiculo v " +
+		       "JOIN OrdenServicio os ON os.vehiculo = v " +
+		       "WHERE os.fechaOrden BETWEEN :fechaInicio AND :fechaFin")
+	List<IVehiculoSinOrden> findVehiculosAtendidosPorPeriodo(@Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
+
 }

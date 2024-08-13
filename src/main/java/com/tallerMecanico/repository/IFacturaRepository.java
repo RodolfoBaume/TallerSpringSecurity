@@ -1,9 +1,7 @@
 package com.tallerMecanico.repository;
 
-import java.time.YearMonth;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.tallerMecanico.dto.ReporteMesesDto;
 import com.tallerMecanico.dto.VentasPorDiaDTO;
 import com.tallerMecanico.dto.VentasPorMesDTO;
 import com.tallerMecanico.entity.Factura;

@@ -2,6 +2,7 @@ package com.tallerMecanico.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -208,11 +210,26 @@ public class VehiculoController {
 	        @RequestParam(required = false) String marca) throws IOException {
 	    List<IVehiculoSinOrden> vehiculos = vehiculoService.getAllVehiculos(anioModelo, marca);
 
-	    byte[] pdfBytes = vehiculoService.generarPDF(vehiculos);
+	    byte[] pdfBytes = vehiculoService.generarPDF(vehiculos, null, null);
 
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_PDF);
 	    headers.setContentDispositionFormData("inline", "reporteVehiculos.pdf");
+
+	    return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
+	
+	@GetMapping("/vehiculos/atendidosPdf")
+	public ResponseEntity<byte[]> generarReporteVehiculosAtendidos(
+	        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fechaInicio,
+	        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fechaFin) throws IOException {
+	    List<IVehiculoSinOrden> vehiculos = vehiculoService.getVehiculosAtendidosPorPeriodo(fechaInicio, fechaFin);
+
+	    byte[] pdfBytes = vehiculoService.generarPDF(vehiculos, fechaInicio, fechaFin);
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_PDF);
+	    headers.setContentDispositionFormData("inline", "reporteVehiculosAtendidos.pdf");
 
 	    return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 	}

@@ -4,6 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -161,80 +164,82 @@ public class VehiculoService implements IVehiculoService {
 	        return vehiculoRepository.findAllProjectedBy();
 	    }
 	}
+	
+	public byte[] generarPDF(List<IVehiculoSinOrden> vehiculos, LocalDate fechaInicio, LocalDate fechaFin) throws IOException {
+	    try {
+	        Document document = new Document();
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        PdfWriter.getInstance(document, baos);
 
-	public byte[] generarPDF(List<IVehiculoSinOrden> vehiculos) throws IOException {
-		try {
-			Document document = new Document();
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			PdfWriter.getInstance(document, baos);
+	        document.open();
 
-			document.open();
-			// Crear un párrafo con el título y centrarlo
-			Paragraph titulo = new Paragraph("Listado de Vehículos");
-			titulo.setAlignment(Element.ALIGN_CENTER);
-			document.add(titulo);
+	        // Crear un párrafo con el título y centrarlo
+	        Paragraph titulo = new Paragraph("Listado de Vehículos");
+	        titulo.setAlignment(Element.ALIGN_CENTER);
+	        document.add(titulo);
 
-			// Agregar salto de línea
-			document.add(Chunk.NEWLINE);
+	        // Agregar subtítulo con el rango de fechas si existen
+	        if (fechaInicio != null && fechaFin != null) {
+	            Paragraph subtitulo = new Paragraph("Período: " + fechaInicio + " - " + fechaFin);
+	            subtitulo.setAlignment(Element.ALIGN_CENTER);
+	            document.add(subtitulo);
+	        }
 
-			// Crear una tabla con 9 columnas
-			PdfPTable table = new PdfPTable(9);
-			table.setWidthPercentage(100); // Establecer el ancho de la tabla al 100% del ancho de la página
+	        // Agregar salto de línea
+	        document.add(Chunk.NEWLINE);
 
-			// Agregar encabezados
-			table.addCell("ID");
-			table.addCell("VIN");
-			table.addCell("Matrícula");
-			table.addCell("Año Modelo");
-			table.addCell("Color");
-			table.addCell("Imagen");
-			table.addCell("Tipo Motor");
-			table.addCell("Modelo");
-			table.addCell("Cliente");
+	        // Crear una tabla con 9 columnas
+	        PdfPTable table = new PdfPTable(9);
+	        table.setWidthPercentage(100); // Establecer el ancho de la tabla al 100% del ancho de la página
 
-			// Agregar datos a la tabla
-			for (IVehiculoSinOrden vehiculo : vehiculos) {
-				table.addCell(String.valueOf(vehiculo.getIdVehiculo()));
-				table.addCell(vehiculo.getVin());
-				table.addCell(vehiculo.getMatricula());
-				table.addCell(String.valueOf(vehiculo.getAnioModelo()));
-				table.addCell(vehiculo.getColor());
-				//table.addCell(vehiculo.getImagen());
-				
-				 // Agregar celda de imagen si el archivo es válido
-                if (isValidImageFile(vehiculo.getImagen())) {
-                    try {
-                        Image imagen = Image.getInstance(vehiculo.getImagen());
-                        imagen.scaleToFit(50, 50); // Ajustar el tamaño de la imagen
-                        PdfPCell imagenCell = new PdfPCell(imagen, true);
-                        table.addCell(imagenCell);
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                        table.addCell(""); // Agregar una celda vacía en caso de error
-                    }
-                } else {
-                    // Si el archivo de la imagen no es válido, agregar una celda vacía
-                    table.addCell("");
-                }
-				
-				table.addCell(vehiculo.getTipoMotor().getTipoMotor()); // Suponiendo que ITipoMotorClosedView tiene
-																			// getDescripcion()
-				table.addCell(vehiculo.getModelo().getModelo()); // Suponiendo que IModeloClosedView tiene
-																		// getDescripcion()
-				table.addCell(vehiculo.getCliente().getNombre() + " " + vehiculo.getCliente().getApellidoPaterno());
-			}
+	        // Agregar encabezados
+	        table.addCell("ID");
+	        table.addCell("VIN");
+	        table.addCell("Matrícula");
+	        table.addCell("Año Modelo");
+	        table.addCell("Color");
+	        table.addCell("Imagen");
+	        table.addCell("Tipo Motor");
+	        table.addCell("Modelo");
+	        table.addCell("Cliente");
 
-			// Agregar la tabla al documento
-			document.add(table);
+	        // Agregar datos a la tabla
+	        for (IVehiculoSinOrden vehiculo : vehiculos) {
+	            table.addCell(String.valueOf(vehiculo.getIdVehiculo()));
+	            table.addCell(vehiculo.getVin());
+	            table.addCell(vehiculo.getMatricula());
+	            table.addCell(String.valueOf(vehiculo.getAnioModelo()));
+	            table.addCell(vehiculo.getColor());
 
-			document.close();
+	            if (isValidImageFile(vehiculo.getImagen())) {
+	                try {
+	                    Image imagen = Image.getInstance(vehiculo.getImagen());
+	                    imagen.scaleToFit(50, 50); // Ajustar el tamaño de la imagen
+	                    PdfPCell imagenCell = new PdfPCell(imagen, true);
+	                    table.addCell(imagenCell);
+	                } catch (MalformedURLException e) {
+	                    e.printStackTrace();
+	                    table.addCell(""); // Agregar una celda vacía en caso de error
+	                }
+	            } else {
+	                table.addCell("");
+	            }
 
-			return baos.toByteArray();
-		} catch (DocumentException e) {
-			// Manejar la excepción
-			e.printStackTrace();
-			return new byte[0];
-		}
+	            table.addCell(vehiculo.getTipoMotor().getTipoMotor());
+	            table.addCell(vehiculo.getModelo().getModelo());
+	            table.addCell(vehiculo.getCliente().getNombre() + " " + vehiculo.getCliente().getApellidoPaterno());
+	        }
+
+	        // Agregar la tabla al documento
+	        document.add(table);
+
+	        document.close();
+
+	        return baos.toByteArray();
+	    } catch (DocumentException e) {
+	        e.printStackTrace();
+	        return new byte[0];
+	    }
 	}
 	
 	/*
@@ -250,4 +255,11 @@ public class VehiculoService implements IVehiculoService {
         File file = new File(imagePath);
         return file.exists() && !file.isDirectory();
     }
+
+	public List<IVehiculoSinOrden> getVehiculosAtendidosPorPeriodo(LocalDate fechaInicio, LocalDate fechaFin) {
+	    Date fechaInicioDate = Date.from(fechaInicio.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	    Date fechaFinDate = Date.from(fechaFin.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	    return vehiculoRepository.findVehiculosAtendidosPorPeriodo(fechaInicioDate, fechaFinDate);
+	}
+
 }
