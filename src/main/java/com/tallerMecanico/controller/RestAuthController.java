@@ -1,6 +1,8 @@
 package com.tallerMecanico.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tallerMecanico.dto.AuthRespuestaDto;
 import com.tallerMecanico.dto.LoginDto;
+import com.tallerMecanico.dto.PasswordDto;
 import com.tallerMecanico.dto.RegistroResponseDto;
 import com.tallerMecanico.dto.UsuarioActualDto;
 import com.tallerMecanico.dto.UsuarioDto;
@@ -84,4 +87,22 @@ public class RestAuthController {
         return currentUser;
     }
 
+    @PostMapping("/new-credentials")
+    public ResponseEntity<?> newCredentials(Principal principal, @RequestBody PasswordDto passwordDto) {
+        ResponseEntity<?> response = null;
+        Map<String, Object> resp = new HashMap<>();
+
+        try {
+            response = usuarioAuthService.cambiarPassword(principal, passwordDto);
+            // dtoLogin.setUsername(currentUser.getBody().getUsername());
+            // dtoLogin.setPassword(passwordDto.getCurrentPassword());
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            resp.put("mensaje", "Controller.-No es posible cambiar el password");
+            return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.FORBIDDEN);
+        }
+
+        return response;
+    }
 }
