@@ -49,7 +49,7 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 	//ventas mensuales por rango
 	@Query("SELECT new com.tallerMecanico.dto.VentasPorMesDTO(YEAR(f.fechaFactura), MONTH(f.fechaFactura), SUM(f.monto)) " +
 	           "FROM Factura f " +
-	           "WHERE f.fechaFactura BETWEEN :fechaInicio AND :fechaFin " +
+	           "WHERE DATE(f.fechaFactura) BETWEEN :fechaInicio AND :fechaFin " +
 	           "GROUP BY YEAR(f.fechaFactura), MONTH(f.fechaFactura)")
 	List<VentasPorMesDTO> findVentasPorMes(@Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
 	
@@ -58,9 +58,10 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 	//ventas diarias por mes
 	@Query("SELECT new com.tallerMecanico.dto.VentasPorDiaDTO(DAY(f.fechaFactura), MONTH(f.fechaFactura), YEAR(f.fechaFactura), SUM(f.monto)) " +
 	           "FROM Factura f " +
-	           "WHERE f.fechaFactura BETWEEN :fechaInicio AND :fechaFin " +
+	           "WHERE DATE(f.fechaFactura) BETWEEN :fechaInicio AND :fechaFin " +
 	           "GROUP BY DAY(f.fechaFactura), MONTH(f.fechaFactura), YEAR(f.fechaFactura)")
-	List<VentasPorDiaDTO> findVentasPorDia(@Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
+    List<VentasPorDiaDTO> findVentasPorDia(@Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
+
 
 	
 	/*
