@@ -15,6 +15,7 @@ import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.projection.IVehiculoClienteClosedView;
 import com.tallerMecanico.projection.IVehiculoClosedView;
 import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
+import com.tallerMecanico.projection.IVehiculoReporte;
 import com.tallerMecanico.projection.IVehiculoSinOrden;
 
 @Repository
@@ -86,12 +87,19 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 	List<IVehiculoSinOrden> findAllProjectedBy();
 	
 	
-	@Query("SELECT DISTINCT v.idVehiculo AS idVehiculo, v.vin AS vin, v.matricula AS matricula, " +
-		       "v.anioModelo AS anioModelo, v.color AS color, v.imagen AS imagen, " +
-		       "v.tipoMotor AS tipoMotor, v.modelo AS modelo, v.cliente AS cliente " +
+	@Query("SELECT v.vin AS vin, v.matricula AS matricula, v.anioModelo AS anioModelo, " +
+		       "v.color AS color, tm.tipoMotor AS tipoMotor, m.modelo AS modelo, " +
+		       "CONCAT(c.nombre, ' ', c.apellidoPaterno) AS cliente, " +
+		       "COUNT(os.idOrdenServicio) AS numeroServicio, " +
+		       "SUM(dos.costo) AS costoTotal " +
 		       "FROM Vehiculo v " +
-		       "JOIN OrdenServicio os ON os.vehiculo = v " +
-		       "WHERE os.fechaOrden BETWEEN :fechaInicio AND :fechaFin")
-	List<IVehiculoSinOrden> findVehiculosAtendidosPorPeriodo(@Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
+		       "LEFT JOIN v.ordenServicio os " +
+		       "JOIN v.cliente c " +
+		       "JOIN v.modelo m " +
+		       "JOIN v.tipoMotor tm " +
+		       "LEFT JOIN DetalleOrdenServicio dos ON dos.ordenServicio.idOrdenServicio = os.idOrdenServicio " + // Cambiado a JOIN
+		       "WHERE os.fechaOrden BETWEEN :fechaInicio AND :fechaFin " +
+		       "GROUP BY v.vin, v.matricula, v.anioModelo, v.color, tm.tipoMotor, m.modelo, c.nombre, c.apellidoPaterno")
+	    List<IVehiculoReporte> findVehiculosAtendidosPorPeriodo(@Param("fechaInicio") Date fechaInicioDate, @Param("fechaFin") Date fechaFinDate);
 
 }

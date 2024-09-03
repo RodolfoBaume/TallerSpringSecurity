@@ -29,6 +29,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.tallerMecanico.dto.VehiculoDto;
 import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
+import com.tallerMecanico.projection.IVehiculoReporte;
 import com.tallerMecanico.projection.IVehiculoSinOrden;
 import com.tallerMecanico.repository.IVehiculoRepository;
 
@@ -165,6 +166,7 @@ public class VehiculoService implements IVehiculoService {
 	    }
 	}
 	
+	/*
 	public byte[] generarPDF(List<IVehiculoSinOrden> vehiculos, LocalDate fechaInicio, LocalDate fechaFin) throws IOException {
 	    try {
 	        Document document = new Document();
@@ -241,6 +243,72 @@ public class VehiculoService implements IVehiculoService {
 	        return new byte[0];
 	    }
 	}
+	*/
+	
+	
+	public byte[] generarPDF(List<IVehiculoReporte> vehiculos, LocalDate fechaInicio, LocalDate fechaFin) throws IOException {
+	    try {
+	        Document document = new Document();
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        PdfWriter.getInstance(document, baos);
+
+	        document.open();
+
+	        // Crear un párrafo con el título y centrarlo
+	        Paragraph titulo = new Paragraph("Listado de Vehículos");
+	        titulo.setAlignment(Element.ALIGN_CENTER);
+	        document.add(titulo);
+
+	        // Agregar subtítulo con el rango de fechas si existen
+	        if (fechaInicio != null && fechaFin != null) {
+	            Paragraph subtitulo = new Paragraph("Período: " + fechaInicio + " - " + fechaFin);
+	            subtitulo.setAlignment(Element.ALIGN_CENTER);
+	            document.add(subtitulo);
+	        }
+
+	        // Agregar salto de línea
+	        document.add(Chunk.NEWLINE);
+
+	        // Crear una tabla con 9 columnas
+	        PdfPTable table = new PdfPTable(9);
+	        table.setWidthPercentage(100); // Establecer el ancho de la tabla al 100% del ancho de la página
+
+	        // Agregar encabezados
+	        table.addCell("VIN");
+	        table.addCell("Matrícula");
+	        table.addCell("Año Modelo");
+	        table.addCell("Color");
+	        table.addCell("Tipo Motor");
+	        table.addCell("Modelo");
+	        table.addCell("Cliente");
+	        table.addCell("Número de Servicio");
+	        table.addCell("Costo Total");
+
+	        // Agregar datos a la tabla
+	        for (IVehiculoReporte vehiculo : vehiculos) {
+	            table.addCell(vehiculo.getVin());
+	            table.addCell(vehiculo.getMatricula());
+	            table.addCell(String.valueOf(vehiculo.getAnioModelo()));
+	            table.addCell(vehiculo.getColor());
+	            table.addCell(vehiculo.getTipoMotor());
+	            table.addCell(vehiculo.getModelo());
+	            table.addCell(vehiculo.getCliente());
+	            table.addCell(String.valueOf(vehiculo.getNumeroServicio()));
+	            table.addCell(vehiculo.getCostoTotal() != null ? String.valueOf(vehiculo.getCostoTotal()) : "0.00"); // Manejo de nulos
+	        }
+
+	        // Agregar la tabla al documento
+	        document.add(table);
+
+	        document.close();
+
+	        return baos.toByteArray();
+	    } catch (DocumentException e) {
+	        e.printStackTrace();
+	        return new byte[0];
+	    }
+	}
+	
 	
 	/*
 	private boolean isValidImageUrl(String imageUrl) {
@@ -256,10 +324,9 @@ public class VehiculoService implements IVehiculoService {
         return file.exists() && !file.isDirectory();
     }
 
-	public List<IVehiculoSinOrden> getVehiculosAtendidosPorPeriodo(LocalDate fechaInicio, LocalDate fechaFin) {
-	    Date fechaInicioDate = Date.from(fechaInicio.atStartOfDay(ZoneId.systemDefault()).toInstant());
-	    Date fechaFinDate = Date.from(fechaFin.atStartOfDay(ZoneId.systemDefault()).toInstant());
-	    return vehiculoRepository.findVehiculosAtendidosPorPeriodo(fechaInicioDate, fechaFinDate);
-	}
+	public List<IVehiculoReporte> obtenerReporteVehiculos(Date fechaInicio, Date fechaFin) {
+        return vehiculoRepository.findVehiculosAtendidosPorPeriodo(fechaInicio, fechaFin);
+    }
+
 
 }
