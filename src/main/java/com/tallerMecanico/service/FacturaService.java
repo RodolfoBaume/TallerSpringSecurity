@@ -130,6 +130,11 @@ public class FacturaService implements IFacturaService {
 			factura.setIdFactura(facturaProxy.getIdFactura());
 			factura.setFechaFactura(facturaProxy.getFechaFactura());
 			factura.setMonto(facturaProxy.getMonto());
+			factura.setNombre(facturaProxy.getNombre());
+			factura.setApellidoPaterno(facturaProxy.getApellidoPaterno());
+			factura.setApellidoMaterno(facturaProxy.getApellidoMaterno());
+			factura.setDomicilio(facturaProxy.getDomicilio());
+			factura.setTelefono(facturaProxy.getTelefono());
 			
 			List<IDetalleFacturaProjection> detalleFacturas = facturaRepository.findDetalleFacturaByFacturaId(factura.getIdFactura());
 			factura.setDetalleFactura(detalleFacturas);
@@ -149,6 +154,11 @@ public class FacturaService implements IFacturaService {
 			factura.setIdFactura(facturaProxy.getIdFactura());
 			factura.setFechaFactura(facturaProxy.getFechaFactura());
 			factura.setMonto(facturaProxy.getMonto());
+			factura.setNombre(facturaProxy.getNombre());
+			factura.setApellidoPaterno(facturaProxy.getApellidoPaterno());
+			factura.setApellidoMaterno(facturaProxy.getApellidoMaterno());
+			factura.setDomicilio(facturaProxy.getDomicilio());
+			factura.setTelefono(facturaProxy.getTelefono());
 			
 			List<IDetalleFacturaProjection> detalleFacturas = facturaRepository.findDetalleFacturaByFacturaId(factura.getIdFactura());
 			factura.setDetalleFactura(detalleFacturas);

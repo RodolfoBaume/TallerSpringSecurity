@@ -81,11 +81,24 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 	IFacturaClosedView findFacturaById(@Param("idFactura") Long idFactura);
 
 	// consulta facturas detalle
-	@Query("SELECT f FROM Factura f")
+	//@Query("SELECT f FROM Factura f")
+	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto, " +
+		       "c.nombre as nombre, c.apellidoPaterno as apellidoPaterno, " +
+		       "c.apellidoMaterno as apellidoMaterno, c.domicilio as domicilio, c.telefono as telefono " +
+		       "FROM Factura f " +
+		       "JOIN f.ordenServicio os " +
+		       "JOIN os.vehiculo v " +
+		       "JOIN v.cliente c ")
 	List<IFacturaClosedView> findAllFacturas();
 
 	// consulta facturas detalle
-	@Query("SELECT f FROM Factura f")
+	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto, " +
+		       "c.nombre as nombre, c.apellidoPaterno as apellidoPaterno, " +
+		       "c.apellidoMaterno as apellidoMaterno, c.domicilio as domicilio, c.telefono as telefono " +
+		       "FROM Factura f " +
+		       "JOIN f.ordenServicio os " +
+		       "JOIN os.vehiculo v " +
+		       "JOIN v.cliente c ")
 	Page<IFacturaClosedView> findAllFacturas(Pageable pageable);
 
 	@Query("SELECT df FROM DetalleFactura df WHERE df.factura.idFactura = :idFactura")
