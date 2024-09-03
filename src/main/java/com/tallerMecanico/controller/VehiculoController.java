@@ -39,6 +39,7 @@ import com.tallerMecanico.dto.VehiculoDto;
 import com.tallerMecanico.entity.Vehiculo;
 import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
 import com.tallerMecanico.projection.IVehiculoReporte;
+import com.tallerMecanico.projection.IVehiculoSinOrden;
 import com.tallerMecanico.service.UsuarioAuthService;
 import com.tallerMecanico.service.VehiculoService;
 
@@ -200,24 +201,22 @@ public class VehiculoController {
 		return vehiculoService.getVehiculosByOrdenServicioEstatus(estatus, pageable);
 	}
 
-	/*
-	 * @GetMapping("/vehiculos/pdf") public ResponseEntity<byte[]>
-	 * generarReporteVehiculos(
-	 * 
-	 * @RequestParam(required = false) Integer anioModelo,
-	 * 
-	 * @RequestParam(required = false) String marca) throws IOException {
-	 * List<IVehiculoSinOrden> vehiculos =
-	 * vehiculoService.getAllVehiculos(anioModelo, marca);
-	 * 
-	 * byte[] pdfBytes = vehiculoService.generarPDF(vehiculos, null, null);
-	 * 
-	 * HttpHeaders headers = new HttpHeaders();
-	 * headers.setContentType(MediaType.APPLICATION_PDF);
-	 * headers.setContentDispositionFormData("inline", "reporteVehiculos.pdf");
-	 * 
-	 * return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK); }
-	 */
+	@GetMapping("/vehiculos/pdf")
+	public ResponseEntity<byte[]> generarReporteVehiculos(
+
+			@RequestParam(required = false) Integer anioModelo,
+
+			@RequestParam(required = false) String marca) throws IOException {
+		List<IVehiculoSinOrden> vehiculos = vehiculoService.getAllVehiculos(anioModelo, marca);
+
+		byte[] pdfBytes = vehiculoService.generarPDF1(vehiculos, null, null);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		headers.setContentDispositionFormData("inline", "reporteVehiculos.pdf");
+
+		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
 
 	/*
 	 * @GetMapping("/vehiculos/atendidosPdf") public ResponseEntity<byte[]>
@@ -244,8 +243,8 @@ public class VehiculoController {
 	public ResponseEntity<List<IVehiculoReporte>> generarReporte(
 			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaInicio,
 			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaFin) {
-			List<IVehiculoReporte> reporte = vehiculoService.obtenerReporteVehiculos(fechaInicio, fechaFin);
-			return ResponseEntity.ok(reporte);
+		List<IVehiculoReporte> reporte = vehiculoService.obtenerReporteVehiculos(fechaInicio, fechaFin);
+		return ResponseEntity.ok(reporte);
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -253,27 +252,27 @@ public class VehiculoController {
 	public ResponseEntity<String> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
 		return ResponseEntity.badRequest().body("Error de tipo: " + ex.getMessage());
 	}
-	
-	
-	@GetMapping("/vehiculos/atendidosPdf")
-    public ResponseEntity<byte[]> generarReportePdf(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaInicio,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaFin) throws IOException {
-        
-        List<IVehiculoReporte> vehiculos = vehiculoService.obtenerReporteVehiculos(fechaInicio, fechaFin);
-        byte[] pdfBytes = vehiculoService.generarPDF(vehiculos, fechaInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), fechaFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inline", "reporteClientes.pdf");
 
-        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-        
-        /*
-        return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=reporte_vehiculos.pdf")
-                .body(pdfBytes);
-                */
-    }
+	@GetMapping("/vehiculos/atendidosPdf")
+	public ResponseEntity<byte[]> generarReportePdf(
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaInicio,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaFin) throws IOException {
+
+		List<IVehiculoReporte> vehiculos = vehiculoService.obtenerReporteVehiculos(fechaInicio, fechaFin);
+		byte[] pdfBytes = vehiculoService.generarPDF(vehiculos,
+				fechaInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+				fechaFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		headers.setContentDispositionFormData("inline", "reporteClientes.pdf");
+
+		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+
+		/*
+		 * return ResponseEntity.ok() .header("Content-Disposition",
+		 * "attachment; filename=reporte_vehiculos.pdf") .body(pdfBytes);
+		 */
+	}
 
 }

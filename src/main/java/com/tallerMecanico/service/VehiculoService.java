@@ -166,8 +166,8 @@ public class VehiculoService implements IVehiculoService {
 	    }
 	}
 	
-	/*
-	public byte[] generarPDF(List<IVehiculoSinOrden> vehiculos, LocalDate fechaInicio, LocalDate fechaFin) throws IOException {
+	
+	public byte[] generarPDF1(List<IVehiculoSinOrden> vehiculos, LocalDate fechaInicio, LocalDate fechaFin) throws IOException {
 	    try {
 	        Document document = new Document();
 	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -243,7 +243,7 @@ public class VehiculoService implements IVehiculoService {
 	        return new byte[0];
 	    }
 	}
-	*/
+	
 	
 	
 	public byte[] generarPDF(List<IVehiculoReporte> vehiculos, LocalDate fechaInicio, LocalDate fechaFin) throws IOException {
