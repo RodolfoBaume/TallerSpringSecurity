@@ -69,7 +69,7 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 		       "FROM Factura f WHERE f.idFactura = :idFactura")
 	IFacturaClosedView findFacturaById(@Param("idFactura") Long idFactura);
 	*/
-	
+	/*
 	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto, " +
 		       "c.nombre as nombre, c.apellidoPaterno as apellidoPaterno, " +
 		       "c.apellidoMaterno as apellidoMaterno, c.domicilio as domicilio, c.telefono as telefono " +
@@ -77,6 +77,21 @@ public interface IFacturaRepository extends JpaRepository<Factura, Long> {
 		       "JOIN f.ordenServicio os " +
 		       "JOIN os.vehiculo v " +
 		       "JOIN v.cliente c " +
+		       "WHERE f.idFactura = :idFactura")
+		       */
+	
+	@Query("SELECT f.idFactura as idFactura, f.fechaFactura as fechaFactura, f.monto as monto, " +
+		       "c.nombre as nombre, c.apellidoPaterno as apellidoPaterno, " +
+		       "c.apellidoMaterno as apellidoMaterno, c.domicilio as domicilio, c.telefono as telefono, " +
+		       "v.vin as vin, v.matricula as matricula, m.modelo as modelo, ma.marca as marca, " +
+		       "v.anioModelo as anioModelo, v.color as color, tm.tipoMotor as tipoMotor " +
+		       "FROM Factura f " +
+		       "JOIN f.ordenServicio os " +
+		       "JOIN os.vehiculo v " +
+		       "JOIN v.cliente c " +
+		       "JOIN v.modelo m " +
+		       "JOIN m.marca ma " +
+		       "JOIN v.tipoMotor tm " +
 		       "WHERE f.idFactura = :idFactura")
 	IFacturaClosedView findFacturaById(@Param("idFactura") Long idFactura);
 

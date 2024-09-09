@@ -111,6 +111,13 @@ public class FacturaService implements IFacturaService {
 	    factura.setApellidoMaterno(facturaProxy.getApellidoMaterno());
 	    factura.setDomicilio(facturaProxy.getDomicilio());
 	    factura.setTelefono(facturaProxy.getTelefono());
+	    factura.setVin(facturaProxy.getVin());
+	    factura.setMatricula(facturaProxy.getMatricula());
+	    factura.setModelo(facturaProxy.getModelo());
+	    factura.setMarca(facturaProxy.getMarca());
+	    factura.setAnioModelo(facturaProxy.getAnioModelo());
+	    factura.setColor(facturaProxy.getColor());
+	    factura.setTipoMotor(facturaProxy.getTipoMotor());
 
 	    // Obtener los detalles de la factura y establecerlos en la factura
 	    List<IDetalleFacturaProjection> detalleFacturas = facturaRepository.findDetalleFacturaByFacturaId(factura.getIdFactura());

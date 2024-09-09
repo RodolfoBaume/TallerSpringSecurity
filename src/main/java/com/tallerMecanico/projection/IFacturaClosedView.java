@@ -15,4 +15,13 @@ public interface IFacturaClosedView {
     String getApellidoMaterno();
     String getDomicilio();
     String getTelefono();
+    
+    //datos del vehiculo
+    String getVin();
+    String getMatricula();
+    String getModelo();
+    String getMarca();
+    int getAnioModelo();
+    String getColor();
+    String getTipoMotor();
 }
