@@ -168,13 +168,13 @@ public class OrdenServicioController {
 	// Ordenes Servicio por Departamento
 	@GetMapping("/ordenesServicio/departamento/{idDepartamento}")
 	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(@PathVariable Long idDepartamento) {
-		return ordenServicioService.getOrdenesServicioByDepartamento(idDepartamento);
+		return ordenServicioService.getOrdenesServicioByDepartamento(idDepartamento, Sort.by(Sort.Direction.DESC, "idOrdenServicio"));
 	}
 	
 	// Paginacion Ordenes Servicio por Departamento
 	@GetMapping("/ordenesServicio/departamento/{idDepartamento}/page/{page}")
 	public Page<IOrdenServicioDepto> getOrdenesServicioByDepartamento(@PathVariable Long idDepartamento, @PathVariable Integer page) {
-		Pageable pageable = PageRequest.of(page, 10, Sort.by("idOrdenServicio").ascending());
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idOrdenServicio").descending());
 		return ordenServicioService.getOrdenesServicioByDepartamento(idDepartamento, pageable);
 	}
 	

@@ -28,6 +28,7 @@ import com.tallerMecanico.projection.IDetalleOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioDepto;
 import com.tallerMecanico.projection.IOrdenServicioProjection;
 import com.tallerMecanico.projection.IOrdenServicioSinDetalle;
+import com.tallerMecanico.projection.IVehiculoConOrdenClosedView;
 import com.tallerMecanico.projection.OrdenServicioProjectionImpl;
 import com.tallerMecanico.projection.OrdenServicioProjectionWithDetails;
 import com.tallerMecanico.projection.OrdenServicioProjectionWithDetails;
@@ -168,13 +169,13 @@ public class OrdenServicioService implements IOrdenServicioService {
 
 
 	// OrdenServicio por departamento
-	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(Long idDepartamento) {
-		List<IOrdenServicioDepto> lista = ordenServicioRepository.findByDepartamentoId(idDepartamento);
-		System.out.println(">>>>>>>>>>>>>>>>>> " + lista.toString());
-		return lista;
+	@Transactional(readOnly = true)
+	public List<IOrdenServicioDepto> getOrdenesServicioByDepartamento(Long idDepartamento, Sort sort) {
+		return ordenServicioRepository.findByDepartamentoId(idDepartamento, sort);
 	}
 	
 	// paginacion OrdenesServicio por departamento
+	@Transactional(readOnly = true)
 	public Page<IOrdenServicioDepto> getOrdenesServicioByDepartamento(Long idDepartamento, Pageable pageable){
 		return ordenServicioRepository.findByDepartamentoId(idDepartamento, pageable);
 	}

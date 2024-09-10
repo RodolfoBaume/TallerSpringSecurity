@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -42,7 +43,7 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Long>{
 
 	
 	@Query("SELECT v FROM Vehiculo v JOIN v.ordenServicio os JOIN os.estatusServicio es WHERE es.estatusServicio <> :estatus")
-    List<IVehiculoConOrdenClosedView> findVehiculosByOrdenServicioEstatus(@Param("estatus") String estatus);
+    List<IVehiculoConOrdenClosedView> findVehiculosByOrdenServicioEstatus(@Param("estatus") String estatus, Sort sort);
 
 	@Query("SELECT v FROM Vehiculo v JOIN v.ordenServicio os JOIN os.estatusServicio es WHERE es.estatusServicio <> :estatus")
     Page<IVehiculoConOrdenClosedView> findVehiculosByOrdenServicioEstatus(@Param("estatus") String estatus, Pageable pageable);

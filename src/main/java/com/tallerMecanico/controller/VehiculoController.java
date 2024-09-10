@@ -71,7 +71,7 @@ public class VehiculoController {
 	// Consulta paginación nueva con proyeccion
 	@GetMapping("/vehiculos/page/{page}")
 	public Page<IVehiculoConOrdenClosedView> consultaPage(@PathVariable Integer page) {
-		Pageable pageable = PageRequest.of(page, 10, Sort.by("idVehiculo").ascending());
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idVehiculo").descending());
 		return vehiculoService.findBy(pageable);
 	}
 
@@ -187,17 +187,25 @@ public class VehiculoController {
 	}
 
 	// Filtra Vehiculos en taller, sin entregar
+	/*
 	@GetMapping("/vehiculos/noEntregados")
 	public List<IVehiculoConOrdenClosedView> getVehiculosNoEntregados(
 			@RequestParam(defaultValue = "r. Entregado") String estatus) {
 		return vehiculoService.getVehiculosByOrdenServicioEstatus(estatus);
+	}
+	*/
+	
+	@GetMapping("/vehiculos/noEntregados")
+	public List<IVehiculoConOrdenClosedView> getVehiculosNoEntregados(
+	        @RequestParam(defaultValue = "r. Entregado") String estatus) {
+	    return vehiculoService.getVehiculosByOrdenServicioEstatus(estatus, Sort.by(Sort.Direction.DESC, "idVehiculo"));
 	}
 
 	// Filtra Vehiculos en taller, sin entregar (con paginacion)
 	@GetMapping("/vehiculos/noEntregados/page/{page}")
 	public Page<IVehiculoConOrdenClosedView> getVehiculosNoEntregados(
 			@RequestParam(defaultValue = "r. Entregado") String estatus, @PathVariable Integer page) {
-		Pageable pageable = PageRequest.of(page, 10, Sort.by("idVehiculo").ascending());
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("idVehiculo").descending());
 		return vehiculoService.getVehiculosByOrdenServicioEstatus(estatus, pageable);
 	}
 

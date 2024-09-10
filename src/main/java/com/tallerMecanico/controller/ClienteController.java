@@ -81,7 +81,7 @@ public class ClienteController {
         @PathVariable int page, 
         @RequestParam(defaultValue = "10") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("idCliente").ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("idCliente").descending());
         Page<IClienteClosedView> clientes = clienteService.getAllClientesWithVehiculos(pageable);
         return ResponseEntity.ok(clientes);
     }

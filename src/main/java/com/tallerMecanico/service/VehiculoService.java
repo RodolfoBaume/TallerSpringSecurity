@@ -138,8 +138,8 @@ public class VehiculoService implements IVehiculoService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<IVehiculoConOrdenClosedView> getVehiculosByOrdenServicioEstatus(String estatus) {
-		return vehiculoRepository.findVehiculosByOrdenServicioEstatus(estatus);
+	public List<IVehiculoConOrdenClosedView> getVehiculosByOrdenServicioEstatus(String estatus, Sort sort) {
+		return vehiculoRepository.findVehiculosByOrdenServicioEstatus(estatus, sort);
 	}
 	
 	@Transactional(readOnly = true)
